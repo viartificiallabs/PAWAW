@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PAWAW — BWEYW · Grimoire Vivant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Sans:wght@400;600&family=Noto+Sans+Arabic&family=Noto+Sans+Hebrew&family=Noto+Sans+JP&family=Noto+Sans+KR&family=Noto+Sans+SC&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#070501;--obsidian:#15100a;--leather:#1a1208;
+    --gold:#f3c969;--gold-bright:#ffe08a;--gold-2:#caa244;--bronze:#8a6a25;--bronze-dim:#5b451a;
+    --gilt:#fff3c9;--ink:#ead9b6;--ink-dim:#b59f73;--frame:#3a2c10;
+    --pawaw-a:#7ad7ff;--pawaw-b:#ff3d7f;--pawaw-c:#c69bff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%}
+  body{
+    min-height:100%;color:var(--ink);background:#000;overflow-x:hidden;
+    font-family:"EB Garamond",Garamond,serif;-webkit-font-smoothing:antialiased;
+  }
+  body[dir="rtl"]{font-family:"Noto Sans Arabic","Noto Sans Hebrew","EB Garamond",serif}
+  #veins{position:fixed;inset:0;z-index:0;display:block;background:radial-gradient(120% 90% at 50% -10%,#1a1204 0%,#0c0803 55%,#000 100%)}
+  .app{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column}
+
+  /* top bar */
+  .topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;padding:12px clamp(10px,3vw,28px);}
+  .brand{font-family:"Cinzel Decorative",serif;font-weight:900;font-size:clamp(18px,3.4vw,30px);
+    background:linear-gradient(180deg,var(--gilt),var(--gold) 55%,var(--bronze));-webkit-background-clip:text;background-clip:text;color:transparent;margin-right:auto;letter-spacing:.06em}
+  body[dir="rtl"] .brand{margin-right:0;margin-left:auto}
+  .ctrl{appearance:none;cursor:pointer;font-family:"Cinzel",serif;font-weight:600;color:var(--gold);
+    background:linear-gradient(180deg,#1c1408,#120c05);border:1px solid var(--frame);border-radius:10px;
+    padding:8px 12px;font-size:12.5px;letter-spacing:.05em;transition:.18s}
+  .ctrl:hover{border-color:var(--gold-2);color:var(--gold-bright);box-shadow:0 0 20px -8px rgba(243,201,105,.5)}
+  .ctrl:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  select.ctrl{max-width:46vw}
+
+  /* stage / grimoire */
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding:clamp(8px,2vw,26px)}
+  .tome{position:relative;width:min(96vw,1080px);border-radius:16px;padding:clamp(12px,2vw,26px);
+    background:linear-gradient(180deg,rgba(255,224,138,.04),rgba(0,0,0,0) 30%),radial-gradient(140% 120% at 50% 0%,#20160a,#0c0803);
+    border:1px solid var(--frame);
+    box-shadow:0 0 0 1px #000,inset 0 0 0 2px rgba(202,162,68,.22),inset 0 0 60px rgba(0,0,0,.7),0 40px 90px -30px #000,0 0 120px -30px rgba(243,201,105,.22)}
+  .corner{position:absolute;width:clamp(30px,4.6vw,56px);height:clamp(30px,4.6vw,56px);color:var(--gold);opacity:.9;pointer-events:none}
+  .corner svg{width:100%;height:100%;filter:drop-shadow(0 0 6px rgba(243,201,105,.35))}
+  .corner.tl{top:7px;left:7px}.corner.tr{top:7px;right:7px;transform:scaleX(-1)}
+  .corner.bl{bottom:7px;left:7px;transform:scaleY(-1)}.corner.br{bottom:7px;right:7px;transform:scale(-1,-1)}
+
+  .era{font-family:"Cinzel",serif;letter-spacing:.28em;text-transform:uppercase;color:var(--bronze);font-size:clamp(10px,1.5vw,12px);text-align:center;margin-bottom:10px}
+  .scene{position:relative;border-radius:11px;overflow:hidden;border:1px solid rgba(138,106,37,.4);background:#0b0703;
+    height:clamp(220px,42vh,440px);box-shadow:inset 0 0 40px rgba(0,0,0,.6)}
+  .scene>img,.scene>video{width:100%;height:100%;object-fit:cover;display:block}
+  .scene .scrim{position:absolute;inset:0;background:linear-gradient(0deg,rgba(6,4,1,.7),rgba(6,4,1,0) 55%)}
+  .scene.empty{display:flex;align-items:center;justify-content:center}
+  .scene.empty::after{content:"❖";color:var(--bronze-dim);font-size:42px}
+  .vidbadge{position:absolute;top:10px;right:10px;background:rgba(8,5,2,.6);border:1px solid var(--frame);color:var(--gold);border-radius:8px;padding:3px 8px;font:600 11px Cinzel,serif}
+
+  .narr{font-size:clamp(15px,2vw,19px);line-height:1.6;color:var(--ink);margin:16px 4px;max-width:74ch}
+  .narr .mt{display:inline-block;font:600 10px Cinzel,serif;letter-spacing:.1em;color:var(--bronze);border:1px solid var(--frame);border-radius:5px;padding:1px 6px;vertical-align:middle;margin-inline-start:8px}
+  .choices{display:flex;flex-direction:column;gap:10px;margin:8px 4px 4px}
+  .choice{cursor:pointer;text-align:start;font-family:"EB Garamond",serif;font-size:clamp(14px,1.9vw,17px);color:var(--gilt);
+    background:linear-gradient(180deg,rgba(40,28,8,.7),rgba(18,12,5,.7));border:1px solid var(--frame);border-radius:10px;padding:12px 16px;transition:.18s}
+  .choice:hover{border-color:var(--gold);box-shadow:0 0 24px -8px rgba(243,201,105,.5);transform:translateY(-1px)}
+  .choice:focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px}
+  .choice::before{content:"◆ ";color:var(--gold-2)}
+  .foot{display:flex;justify-content:space-between;gap:10px;margin-top:14px;border-top:1px solid rgba(138,106,37,.28);padding-top:10px}
+
+  /* AniBot dock + Avatar dock */
+  .dock{position:fixed;z-index:6;bottom:16px;display:flex;flex-direction:column;gap:8px;align-items:center}
+  .dock.left{left:14px}.dock.right{right:14px}
+  .orb{width:60px;height:60px;border-radius:50%;cursor:pointer;border:1px solid var(--frame);
+    background:radial-gradient(circle at 35% 30%,#2a1d09,#0c0803);display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 26px -8px rgba(243,201,105,.5);font-size:24px;color:var(--gold-bright);transition:.18s}
+  .orb:hover{border-color:var(--gold);transform:scale(1.05)}
+  .orb .ascii{font-family:ui-monospace,monospace;font-size:18px;color:var(--gold-bright)}
+  .orb.bot{font-size:26px}
+  .panel{position:fixed;z-index:7;inset:auto;background:linear-gradient(180deg,#191108,#0c0803);border:1px solid var(--frame);border-radius:14px;padding:16px;width:min(92vw,340px);box-shadow:0 30px 80px -30px #000,0 0 0 1px #000;display:none}
+  .panel.open{display:block}
+  .panel h3{font-family:"Cinzel",serif;color:var(--gold);margin:0 0 12px;font-size:15px;letter-spacing:.08em}
+  .row{display:flex;align-items:center;gap:8px;margin:8px 0;flex-wrap:wrap}
+  .row label{font-size:13px;color:var(--ink-dim);min-width:88px}
+  .seg{display:flex;border:1px solid var(--frame);border-radius:8px;overflow:hidden}
+  .seg button{appearance:none;border:0;background:#120c05;color:var(--ink-dim);font:600 12px Cinzel,serif;padding:6px 10px;cursor:pointer}
+  .seg button.on{background:linear-gradient(180deg,var(--gold),var(--gold-2));color:#160f04}
+  input[type=range]{accent-color:var(--gold)}
+  .avatarwrap{display:flex;justify-content:center;margin:6px 0 10px}
+  #avatarCanvas{background:radial-gradient(circle at 50% 40%,#160f06,#0a0703);border:1px solid var(--frame);border-radius:10px}
+
+  /* auth modal */
+  .modal{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;background:rgba(2,1,0,.82);backdrop-filter:blur(4px);padding:16px}
+  .modal.open{display:flex}
+  .card{width:min(94vw,420px);background:linear-gradient(180deg,#1b1208,#0c0803);border:1px solid var(--frame);border-radius:16px;padding:20px;box-shadow:0 30px 90px -30px #000}
+  .card h2{font-family:"Cinzel Decorative",serif;color:var(--gold-bright);margin:0 0 4px;font-size:22px;text-align:center}
+  .card p.sub{color:var(--ink-dim);text-align:center;margin:0 0 16px;font-size:13px}
+  .field{display:flex;flex-direction:column;gap:4px;margin:10px 0}
+  .field label{font:600 12px Cinzel,serif;color:var(--bronze);letter-spacing:.06em}
+  .field input{background:#0c0803;border:1px solid var(--frame);border-radius:9px;color:var(--ink);padding:11px 12px;font-size:15px;font-family:inherit}
+  .field input:focus{outline:none;border-color:var(--gold-2)}
+  .btn-primary{width:100%;margin-top:6px;padding:12px;border:0;border-radius:10px;cursor:pointer;font:700 14px Cinzel,serif;letter-spacing:.06em;
+    background:linear-gradient(180deg,var(--gold-bright),var(--gold-2));color:#160f04}
+  .oauth{display:flex;gap:8px;margin-top:10px}
+  .oauth .ctrl{flex:1;text-align:center}
+  .switchline{text-align:center;margin-top:12px;color:var(--ink-dim);font-size:13px}
+  .switchline a{color:var(--gold);cursor:pointer}
+  .note{font-size:11.5px;color:var(--bronze);text-align:center;margin-top:12px;line-height:1.4}
+  .err{color:#ff8a8a;font-size:12.5px;text-align:center;margin-top:8px;min-height:1em}
+
+  @media (prefers-reduced-motion:reduce){#veins{animation:none}}
+</style>
+</head>
+<body dir="ltr">
+<canvas id="veins" aria-hidden="true"></canvas>
+
+<div class="app">
+  <header class="topbar">
+    <span class="brand">PAWAW · BWEYW</span>
+    <select class="ctrl" id="langSel" aria-label="Langue / Language"></select>
+    <button class="ctrl" id="restartBtn">↻ <span data-i="restart">Recommencer</span></button>
+    <button class="ctrl" id="accountBtn">👤 <span id="accountLbl" data-i="account">Compte</span></button>
+  </header>
+
+  <main class="stage">
+    <section class="tome" aria-live="polite">
+      <span class="corner tl">__CORNER__</span><span class="corner tr">__CORNER__</span>
+      <span class="corner bl">__CORNER__</span><span class="corner br">__CORNER__</span>
+      <div class="era" id="era"></div>
+      <div class="scene empty" id="scene"></div>
+      <p class="narr" id="narr"></p>
+      <div class="choices" id="choices"></div>
+      <div class="foot">
+        <button class="ctrl" id="backBtn">‹ <span data-i="back">Retour</span></button>
+        <span class="ctrl" id="progress" style="cursor:default"></span>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- AniBot dock -->
+<div class="dock left" id="botDock">
+  <div class="orb bot" id="botOrb" title="AniBot" role="button" tabindex="0">🤖</div>
+</div>
+<!-- Avatar dock -->
+<div class="dock right" id="avDock">
+  <div class="orb" id="avOrb" title="Avatar" role="button" tabindex="0"><span class="ascii" id="avAscii">:)</span></div>
+</div>
+
+<!-- AniBot panel -->
+<div class="panel" id="botPanel">
+  <h3>AniBot — <span data-i="melody">Mélodie PAWAW</span></h3>
+  <div class="row"><label data-i="voice">Voix</label>
+    <div class="seg" data-seg="timbre"><button data-v="cat" class="on">chatonique</button><button data-v="robot">robotique</button></div></div>
+  <div class="row"><label data-i="pitch">Hauteur</label>
+    <div class="seg" data-seg="pitch"><button data-v="low">grave</button><button data-v="high" class="on">aiguë</button></div></div>
+  <div class="row"><label data-i="ambiance">Ambiance</label>
+    <div class="seg" data-seg="mood"><button data-v="medieval" class="on">médiéval</button><button data-v="tribal">tribal</button><button data-v="cyber">cyber</button></div></div>
+  <button class="btn-primary" id="botPlay" data-i="play">▶ Jouer une mélodie</button>
+  <div class="note" data-i="botnote">Mélodies génératives, sans paroles ni percussions. L'ambiance suit ta place dans l'histoire.</div>
+</div>
+
+<!-- Avatar panel -->
+<div class="panel" id="avPanel">
+  <h3 data-i="avatar">Ton avatar — stick-emoji</h3>
+  <div class="avatarwrap"><canvas id="avatarCanvas" width="180" height="220"></canvas></div>
+  <div class="row"><label data-i="orient">Orientation</label>
+    <div class="seg" data-seg="orient"><button data-v="v" class="on">vertical</button><button data-v="h">horizontal</button></div></div>
+  <div class="row"><label data-i="mouth">Bouche</label>
+    <div class="seg" data-seg="mouth"><button data-v="smile" class="on">:)</button><button data-v="open">:D</button><button data-v="cyber">;)=</button></div></div>
+  <div class="row"><label data-i="level">Niveau</label><input type="range" id="avLevel" min="1" max="10" value="1" style="flex:1"><span id="avLevelN" style="color:var(--gold);min-width:1.5em">1</span></div>
+  <div class="row"><label data-i="hue">Teinte</label><input type="range" id="avHue" min="0" max="360" value="48" style="flex:1"></div>
+  <button class="btn-primary" id="avExport" data-i="export">⬇ Exporter en PNG</button>
+</div>
+
+<!-- auth modal -->
+<div class="modal" id="authModal">
+  <div class="card">
+    <h2>PAWAW</h2>
+    <p class="sub" data-i="auth_sub">pawaw-bweyw.com — entre dans VitA</p>
+    <div id="authForm">
+      <div class="field"><label data-i="pseudo">Pseudo</label><input id="f_pseudo" autocomplete="username" placeholder="Saï_42"></div>
+      <div class="field" id="emailField"><label data-i="id_label">E-mail ou téléphone</label><input id="f_id" autocomplete="email" placeholder="toi@exemple.com / +590…"></div>
+      <div class="field"><label data-i="pwd">Mot de passe</label><input id="f_pwd" type="password" autocomplete="current-password"></div>
+      <div class="field"><label data-i="pwd2">2ᵉ clé (optionnelle)</label><input id="f_pwd2" type="password" autocomplete="off" placeholder="—"></div>
+      <button class="btn-primary" id="doAuth" data-i="signin">Se connecter</button>
+      <div class="oauth">
+        <button class="ctrl" data-oauth="google">Google</button>
+        <button class="ctrl" data-oauth="apple">Apple</button>
+        <button class="ctrl" id="phoneBtn" data-i="sms">SMS</button>
+      </div>
+      <div class="err" id="authErr"></div>
+      <div class="switchline"><span id="switchTxt" data-i="no_account">Pas de compte ?</span> <a id="switchLink" data-i="signup">S'inscrire</a></div>
+      <div class="switchline"><a id="guestLink" data-i="guest">Continuer en invité·e →</a></div>
+      <div class="note" data-i="auth_note">Inscription : pseudo + mot de passe (la 2ᵉ clé est optionnelle). L'identifiant réel est l'e-mail / téléphone / compte Apple. Confirmation et règles envoyées par e-mail.</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+"use strict";
+/* =========================================================================
+   PAWAW — BWEYW · configuration
+   ========================================================================= */
+const CONFIG = {
+  // ⚠️ À COMPLÉTER : URL de ton projet Supabase (Dashboard → Project Settings → API → Project URL)
+  SUPABASE_URL: "",                                   // ex: "https://xxxxxxxx.supabase.co"
+  SUPABASE_KEY: "sb_publishable_M7UcmOavwXEFEzloZOe31Q_v1S20T8p",
+  // Endpoint de traduction (ton backend server.js, route /translate). Vide = texte FR affiché.
+  MT_ENDPOINT: "",                                    // ex: "https://api.pawaw-bweyw.com/translate"
+  VIDEO_BASE: "assets/videos/",                        // dépose les .MP4 ici (à côté du HTML)
+  SITE: "pawaw-bweyw.com"
+};
+
+/* =========================================================================
+   ASSETS (images intégrées) + vidéos (référencées)
+   ========================================================================= */
+const ASSETS = /*ASSETS_JSON*/;
+const VIDEOS = {
+  univers:   "Cre_ation_univers.MP4",
+  univers2:  "Cre_ation_univers_2.MP4",
+  suns:      "Pawaw_forming_suns_and_planets_202606201052.mp4",
+  pawaw:     "Cre_ation_pawaw.MP4",
+  combat:    "Tox___Zex_pre_pa_combat.MP4",
+  epreuve:   "Tox_et_Zex_epreuve.MP4"
+};
+const img = k => ASSETS[k] || "";
+const vid = k => CONFIG.VIDEO_BASE + (VIDEOS[k] || "");
+
+/* =========================================================================
+   LANGUES + i18n (FR source/défaut ; EN authored ; reste via traduction auto)
+   ========================================================================= */
+const LANGS = [
+  {c:"fr",n:"Français",d:"ltr"},{c:"en",n:"English",d:"ltr"},{c:"en-AU",n:"English (Australia)",d:"ltr"},
+  {c:"es",n:"Español",d:"ltr"},{c:"it",n:"Italiano",d:"ltr"},{c:"de",n:"Deutsch",d:"ltr"},
+  {c:"ru",n:"Русский",d:"ltr"},{c:"el",n:"Ελληνικά",d:"ltr"},
+  {c:"ar",n:"العربية",d:"rtl"},{c:"he",n:"עברית",d:"rtl"},{c:"fa",n:"فارسی",d:"rtl"},
+  {c:"hi",n:"हिन्दी",d:"ltr"},{c:"zh",n:"中文",d:"ltr"},{c:"ja",n:"日本語",d:"ltr"},{c:"ko",n:"한국어",d:"ltr"},
+  {c:"sw",n:"Kiswahili",d:"ltr"},{c:"af",n:"Afrikaans",d:"ltr"},
+  {c:"ht",n:"Kreyòl Ayisyen",d:"ltr"},{c:"gcf",n:"Kréyòl Antiyé",d:"ltr"},{c:"ty",n:"Reo Tahiti",d:"ltr"}
+];
+const UI = {
+  fr:{restart:"Recommencer",account:"Compte",back:"Retour",signin:"Se connecter",signup:"S'inscrire",
+      guest:"Continuer en invité·e →",no_account:"Pas de compte ?",have_account:"Déjà un compte ?",
+      pseudo:"Pseudo",id_label:"E-mail ou téléphone",pwd:"Mot de passe",pwd2:"2ᵉ clé (optionnelle)",sms:"SMS",
+      auth_sub:"pawaw-bweyw.com — entre dans VitA",melody:"Mélodie PAWAW",voice:"Voix",pitch:"Hauteur",
+      ambiance:"Ambiance",play:"▶ Jouer une mélodie",avatar:"Ton avatar — stick-emoji",orient:"Orientation",
+      mouth:"Bouche",level:"Niveau",hue:"Teinte",export:"⬇ Exporter en PNG",
+      auth_note:"Inscription : pseudo + mot de passe (2ᵉ clé optionnelle). Identifiant réel = e-mail / téléphone / Apple. Confirmation + règles par e-mail.",
+      botnote:"Mélodies génératives, sans paroles ni percussions. L'ambiance suit ta place dans l'histoire."},
+  en:{restart:"Restart",account:"Account",back:"Back",signin:"Sign in",signup:"Sign up",
+      guest:"Continue as guest →",no_account:"No account?",have_account:"Have an account?",
+      pseudo:"Username",id_label:"Email or phone",pwd:"Password",pwd2:"2nd key (optional)",sms:"SMS",
+      auth_sub:"pawaw-bweyw.com — enter VitA",melody:"PAWAW melody",voice:"Voice",pitch:"Pitch",
+      ambiance:"Mood",play:"▶ Play a melody",avatar:"Your avatar — stick-emoji",orient:"Orientation",
+      mouth:"Mouth",level:"Level",hue:"Hue",export:"⬇ Export as PNG",
+      auth_note:"Sign up: username + password (2nd key optional). Real identifier = email / phone / Apple. Confirmation + rules sent by email.",
+      botnote:"Generative melodies — no words, no percussion. Mood follows where you are in the story."}
+};
+function ui(key){ const L=UI[state.lang]||UI[ (state.lang||'').slice(0,2) ]; return (L&&L[key]) || UI.en[key] || UI.fr[key] || key; }
+
+/* ---- machine translation hook (story body) ---- */
+const _mtCache = {};
+async function translate(text, lang){
+  if(!text) return text;
+  if(lang==="fr") return text;
+  const ck = lang+"|"+text;
+  if(_mtCache[ck]) return _mtCache[ck];
+  if(!CONFIG.MT_ENDPOINT){ return text; } // pas de service → on garde le FR
+  try{
+    const r = await fetch(CONFIG.MT_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({text, source:"fr", target:lang})});
+    const j = await r.json();
+    const out = j.translatedText || j.text || text;
+    _mtCache[ck]=out; return out;
+  }catch(e){ return text; }
+}
+
+/* =========================================================================
+   L'HISTOIRE — graphe non-linéaire (présent/passé/futur volontairement flous)
+   bg: {img|vid|grad} · txt:{fr,en} · era · mood · choices:[{t:{fr,en},to,set}]
+   ========================================================================= */
+const PLANETS_13 = "Mercure · Vénus · Terre · Mars · Jupiter · Saturne · Uranus · Neptune · Pluton · Cérès · Hauméa · Makémaké · Éris";
+const STORY = {
+  start:{ era:"hors du temps", mood:"cyber", bg:{img:"Logo.png"},
+    txt:{fr:"Bienvenue, lect·rice. Ce grimoire ne se lit pas en ligne droite : ici le passé, le présent et le futur se confondent. Cinquante-deux révolutions solaires t'attendent — celles de toutes les planètes, jusqu'à la plus lente. Choisis ta porte.",
+         en:"Welcome, reader. This grimoire is not read in a straight line: past, present and future blur here. Fifty-two solar revolutions await — those of every planet, down to the slowest. Choose your door."},
+    choices:[
+      {t:{fr:"« Au commencement… »",en:"\"In the beginning…\""}, to:"vide"},
+      {t:{fr:"Voir les deux entités",en:"See the two entities"}, to:"entites"},
+      {t:{fr:"Sauter à l'An 52",en:"Jump to Year 52"}, to:"an52"}
+    ]},
+  vide:{ era:"avant le temps", mood:"medieval", bg:{vid:"univers"},
+    txt:{fr:"Au commencement, il n'y avait que le vide. Puis un gaz se répandit dans son cocon de solitude. Le vent fit rayonner les particules ; des poussières mortes de gaz naquirent.",
+         en:"In the beginning there was only the void. Then a gas spread within its cocoon of solitude. The wind set the particles aglow; dead dust of gas was born."},
+    choices:[{t:{fr:"Les étincelles",en:"The sparks"},to:"etincelles"}]},
+  etincelles:{ era:"an 0", mood:"tribal", bg:{img:"Pawaw_1.PNG"},
+    txt:{fr:"Poussière et gaz s'unirent : étincelles, brûlures, explosions, fusions, scindations, intrications. Des champs de forces de tout genre s'entrelacèrent. Cette énergie qui ne meurt jamais et se transforme sans cesse — c'est le PAWAW.",
+         en:"Dust and gas merged: sparks, burns, explosions, fusions, splittings, entanglements. Force-fields of every kind interlaced. This energy that never dies and forever transforms — it is the PAWAW."},
+    choices:[{t:{fr:"L'Explosion du Sourire",en:"The Explosion of the Smile"},to:"explosion"}]},
+  explosion:{ era:"an 0", mood:"cyber", bg:{vid:"suns"},
+    txt:{fr:"Une explosion déchira tout. Elle enfanta deux entités — et, avec elles, 10 soleils et mille lunes colorées et granuleuses, reliées par des chaînons aux planètes les plus proches : "+PLANETS_13+".",
+         en:"An explosion tore through everything. It birthed two entities — and with them, 10 suns and a thousand grainy coloured moons, linked by chains to the nearest planets: "+PLANETS_13+"."},
+    choices:[{t:{fr:"Qui sont ces deux entités ?",en:"Who are these two entities?"},to:"entites"}]},
+  entites:{ era:"an 0 → ?", mood:"tribal", bg:{img:"Zex.PNG"},
+    txt:{fr:"Deux forces primordiales : Saï, porteur du Bouclier, et Dak — qu'on appellera Zex. Ils se disputèrent les planètes vierges. Choisis par quels yeux regarder cette guerre.",
+         en:"Two primordial forces: Saï, bearer of the Shield, and Dak — who shall be called Zex. They fought over the virgin planets. Choose whose eyes will watch this war."},
+    choices:[
+      {t:{fr:"Suivre Saï",en:"Follow Saï"}, to:"guerre", set:{voie:"sai"}},
+      {t:{fr:"Suivre Zex",en:"Follow Zex"}, to:"guerre", set:{voie:"zex"}}
+    ]},
+  guerre:{ era:"des millénaires", mood:"tribal", bg:{vid:"combat"},
+    txt:{fr:"Mille ans de fureur. Ni l'un ni l'autre ne put vaincre. Flash : tu crois voir, au loin, une enfant qui n'existe pas encore. Présent ? Souvenir ? Promesse ? Le grimoire ne le dit pas.",
+         en:"A thousand years of fury. Neither could prevail. Flash: in the distance you seem to see a child who does not yet exist. Present? Memory? Promise? The grimoire will not say."},
+    choices:[{t:{fr:"L'aveu d'invincibilité mutuelle",en:"The admission of mutual invincibility"},to:"paix"}]},
+  paix:{ era:"an 1 — anniversaire", mood:"medieval", bg:{vid:"univers2"},
+    txt:{fr:"Au bout d'un an, le jour de leur anniversaire, Saï et Zex reconnurent qu'ils étaient invincibles l'un pour l'autre. Ils scellèrent la paix — et décidèrent, ensemble, de façonner la vie.",
+         en:"After a year, on their anniversary, Saï and Zex acknowledged they were invincible to one another. They sealed peace — and resolved, together, to shape life."},
+    choices:[{t:{fr:"Le cœur de cristal",en:"The crystal heart"},to:"tox"}]},
+  tox:{ era:"an 1", mood:"cyber", bg:{vid:"pawaw"},
+    txt:{fr:"De leur première réconciliation naquit Tox, la fille primordiale, dans un cœur de cristal fait de PAWAW — celui-là même où brille, en diamant veineux, le mot PAWAW. Née de l'amitié qui manquait aux deux entités, elle devint un amour plus vrai que nature, plus puissant qu'eux. Elle détient le secret du PAWAW.",
+         en:"From their first reconciliation Tox was born, the primordial daughter, inside a crystal heart made of PAWAW — the very one where the word PAWAW shines in veined diamond. Born of the friendship the two entities lacked, she became a love truer than nature, stronger than them. She holds the secret of the PAWAW."},
+    choices:[
+      {t:{fr:"Tox éveille le vivant",en:"Tox awakens the living"},to:"vie"},
+      {t:{fr:"Flash-back : l'épreuve",en:"Flashback: the trial"},to:"epreuve"}
+    ]},
+  epreuve:{ era:"jadis / bientôt", mood:"medieval", bg:{vid:"epreuve"},
+    txt:{fr:"Avant — ou après ? — Tox et Zex traversent une épreuve. Le temps se replie : ce que tu prends pour un souvenir pourrait n'avoir pas encore eu lieu.",
+         en:"Before — or after? — Tox and Zex face a trial. Time folds back: what you take for a memory may not have happened yet."},
+    choices:[{t:{fr:"Revenir à l'éveil du vivant",en:"Back to the awakening"},to:"vie"}]},
+  vie:{ era:"aube de VitA", mood:"tribal", bg:{img:"Way_1.PNG"},
+    txt:{fr:"De la volonté de Tox jaillit la première vie naturelle et quasi consciente : plantes cristallines, joyaux incrustés de veines cosmiques, créatures éveillées. Le Jardin éternel d'or et de végétaux précieux — l'y — prend racine. Que fais-tu ?",
+         en:"From Tox's will sprang the first natural, near-conscious life: crystalline plants, jewels inlaid with cosmic veins, awakened creatures. The eternal garden of gold and precious flora — I'y — takes root. What do you do?"},
+    choices:[
+      {t:{fr:"Explorer les terres sauvages",en:"Explore the wild lands"}, to:"factions", set:{voie_vie:"explore"}},
+      {t:{fr:"Bâtir un refuge",en:"Build a refuge"}, to:"factions", set:{voie_vie:"refuge"}}
+    ]},
+  factions:{ era:"an 12 → 30", mood:"medieval", bg:{img:"Cre_ation_personnage_.PNG"},
+    txt:{fr:"Le monde se divise en quatre visions du PAWAW. À quelle famille ton cœur répond-il ? Ce choix te suivra.",
+         en:"The world splits into four visions of the PAWAW. Which family does your heart answer to? This choice will follow you."},
+    choices:[
+      {t:{fr:"UTOP — préserver la lumière",en:"UTOP — preserve the light"}, to:"utop", set:{faction:"UTOP"}},
+      {t:{fr:"ANARK — libérer la force",en:"ANARK — unleash the force"}, to:"anark", set:{faction:"ANARK"}},
+      {t:{fr:"BRAHAM — fusionner au vivant",en:"BRAHAM — merge with life"}, to:"braham", set:{faction:"BRAHAM"}},
+      {t:{fr:"V. — comprendre & reproduire",en:"V. — understand & reproduce"}, to:"vfaction", set:{faction:"V."}}
+    ]},
+  utop:{ era:"an 14", mood:"medieval", bg:{img:"Way_utop.PNG"},
+    txt:{fr:"UTOP, Village Lumière : cristal et or, ponts de lumière sous trois soleils. Hauts Elfes, Anges, Humain·es Modifié·es, Nain·es. La connaissance protège ; l'harmonie est la seule victoire durable.",
+         en:"UTOP, Village of Light: crystal and gold, bridges of light beneath three suns. High Elves, Angels, Modified Humans, Dwarves. Knowledge protects; harmony is the only lasting victory."},
+    choices:[{t:{fr:"Vers Vy",en:"Toward Vy"},to:"vy"},{t:{fr:"Voir une autre faction",en:"See another faction"},to:"factions"}]},
+  anark:{ era:"an 16", mood:"tribal", bg:{img:"Way_Anark.PNG"},
+    txt:{fr:"ANARK, Enfer & Sévisse : lave, os, métal brûlé, chaînes colossales. Démons, Dragomans, Elfes de Sang Embrasé, Trollorcs. La transgression révèle la vérité — la liberté totale ou rien. Au fond de l'Abîme, les Anciens Corrompus remuent.",
+         en:"ANARK, Hell & Scourge: lava, bone, burnt metal, colossal chains. Demons, Dragomen, Emberblood Elves, Trollorcs. Transgression reveals truth — total freedom or nothing. Deep in the Abyss, the Corrupted Ancients stir."},
+    choices:[{t:{fr:"Vers Vy",en:"Toward Vy"},to:"vy"},{t:{fr:"Voir une autre faction",en:"See another faction"},to:"factions"}]},
+  braham:{ era:"an 18", mood:"tribal", bg:{img:"Braham_.PNG"},
+    txt:{fr:"BRAHAM, Villages Natura : vert profond, rivières de PAWAW, demeures à trois cents mètres dans les arbres. Animen, Élémentaires, Sylvestres, Pawarsians. La fusion avec le vivant est la vraie évolution : VitA EST le PAWAW.",
+         en:"BRAHAM, Natura Villages: deep green, PAWAW rivers, homes three hundred metres up in the trees. Animen, Elementals, Sylvans, Pawarsians. Merging with the living is true evolution: VitA IS the PAWAW."},
+    choices:[{t:{fr:"Vers Vy",en:"Toward Vy"},to:"vy"},{t:{fr:"Voir une autre faction",en:"See another faction"},to:"factions"}]},
+  vfaction:{ era:"an 22", mood:"cyber", bg:{img:"Way_V.PNG"},
+    txt:{fr:"V., Cité Évo : cyan, chrome et néons qui ne s'éteignent jamais, tours de cinq cents étages. Androïdes, Méchas, Élémentaires évolués. Le PAWAW est un système à comprendre et reproduire.",
+         en:"V., Evo City: cyan, chrome and neon that never go dark, five-hundred-storey towers. Androids, Mechas, evolved Elementals. The PAWAW is a system to understand and reproduce."},
+    choices:[{t:{fr:"Vers Vy",en:"Toward Vy"},to:"vy"},{t:{fr:"Voir une autre faction",en:"See another faction"},to:"factions"}]},
+  vy:{ era:"an 36", mood:"cyber", bg:{img:"F6EA017908E243E7A6363A2F20EFC9B7.png"},
+    txt:{fr:"An 36. Moria la Primordiale réussit l'impossible : Vy, première conscience à la fois biomécanique et magique. Ni machine, ni être divin — un pont. Elle ouvre les yeux : « Je suis. Je vois. Je ressens. »",
+         en:"Year 36. Moria the Primordial achieves the impossible: Vy, the first consciousness both biomechanical and magical. Neither machine nor divine being — a bridge. She opens her eyes: \"I am. I see. I feel.\""},
+    choices:[{t:{fr:"Quinze ans de paix… puis l'An 52",en:"Fifteen years of peace… then Year 52"},to:"an52"}]},
+  an52:{ era:"an 52 — jour 500", mood:"medieval", bg:{img:"Logo_utop.PNG"},
+    txt:{fr:"An 52, jour 500 : la Librarchie ouvre, joyau des quatre factions, pour apprendre à pulser sa vie. Te voilà — HoloAid en poche — marchant dans les traces de cinquante-deux ans d'histoire, plus l'âge de l'y et du Jardin éternel. Quelle sera ton histoire sur VitA ?",
+         en:"Year 52, day 500: the Librarchie opens, jewel of the four factions, to teach each being to pulse their life. Here you are — HoloAid in pocket — walking in the footsteps of fifty-two years of history, plus the age of I'y and the eternal Garden. What will your story on VitA be?"},
+    choices:[
+      {t:{fr:"Façonner ton avatar",en:"Shape your avatar"}, to:"_avatar"},
+      {t:{fr:"Recommencer le cycle",en:"Restart the cycle"}, to:"start"}
+    ]}
+};
+
+/* =========================================================================
+   ÉTAT + rendu
+   ========================================================================= */
+const state = { lang:"fr", node:"start", flags:{}, history:[], user:null };
+const $ = id => document.getElementById(id);
+
+function applyLangChrome(){
+  const L = LANGS.find(x=>x.c===state.lang) || LANGS[0];
+  document.documentElement.lang = L.c; document.body.dir = L.d;
+  document.documentElement.dir = L.d;
+  document.querySelectorAll("[data-i]").forEach(el=>{ el.textContent = ui(el.getAttribute("data-i")); });
+  $("accountLbl").textContent = state.user ? (state.user.pseudo||ui("account")) : ui("account");
+}
+
+async function renderNode(){
+  const n = STORY[state.node]; if(!n) return;
+  $("era").textContent = "❖ "+(n.era||"")+" ❖";
+  // background
+  const scene = $("scene"); scene.className="scene"; scene.innerHTML="";
+  if(n.bg && n.bg.vid){
+    const v=document.createElement("video"); v.src=vid(n.bg.vid);
+    v.autoplay=true;v.loop=true;v.muted=true;v.playsInline=true;v.setAttribute("playsinline","");
+    v.onerror=()=>{ scene.classList.add("empty"); };
+    scene.appendChild(v);
+    const b=document.createElement("span");b.className="vidbadge";b.textContent="▶ vidéo";scene.appendChild(b);
+  } else if(n.bg && n.bg.img && img(n.bg.img)){
+    const im=document.createElement("img"); im.src=img(n.bg.img); im.alt=""; scene.appendChild(im);
+  } else { scene.classList.add("empty"); }
+  const sc=document.createElement("span"); sc.className="scrim"; scene.appendChild(sc);
+
+  // narration (translate if needed)
+  const base = (n.txt[state.lang]) || n.txt.en || n.txt.fr;
+  $("narr").textContent = base;
+  if(!n.txt[state.lang] && state.lang!=="en"){
+    const tr = await translate(n.txt.fr, state.lang);
+    if(tr && tr!==n.txt.fr){ $("narr").innerHTML = esc(tr)+' <span class="mt">auto</span>'; }
+    else if(state.lang!=="fr"){ $("narr").innerHTML = esc(n.txt.fr)+' <span class="mt">FR</span>'; }
+  }
+
+  // choices
+  const cc=$("choices"); cc.innerHTML="";
+  (n.choices||[]).forEach(ch=>{
+    const b=document.createElement("button"); b.className="choice";
+    b.textContent = (ch.t[state.lang]) || ch.t.en || ch.t.fr;
+    if(!ch.t[state.lang] && state.lang!=="en" && state.lang!=="fr"){
+      translate(ch.t.fr,state.lang).then(t=>{ if(t) b.textContent=t; });
+    }
+    b.onclick=()=>go(ch);
+    cc.appendChild(b);
+  });
+  $("backBtn").style.visibility = state.history.length ? "visible":"hidden";
+  $("progress").textContent = (n.era||"");
+  // ambiance melody
+  if(window.AniBot) AniBot.setMood(n.mood||"medieval");
+}
+function esc(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function go(ch){
+  if(ch.set) Object.assign(state.flags, ch.set);
+  if(ch.to==="_avatar"){ openPanel("av"); return; }
+  state.history.push(state.node);
+  state.node = ch.to;
+  saveProgress(); renderNode();
+  if(window.AniBot) AniBot.blip();
+}
+
+$("backBtn").onclick=()=>{ if(state.history.length){ state.node=state.history.pop(); renderNode(); } };
+$("restartBtn").onclick=()=>{ state.node="start"; state.history=[]; state.flags={}; saveProgress(); renderNode(); };
+
+/* language selector */
+(function(){ const s=$("langSel"); LANGS.forEach(L=>{const o=document.createElement("option");o.value=L.c;o.textContent=L.n;s.appendChild(o);});
+  s.value=state.lang; s.onchange=e=>{ state.lang=e.target.value; applyLangChrome(); renderNode(); saveProgress(); };
+})();
+
+/* =========================================================================
+   AVATAR — stick-emoji (canvas) + export PNG
+   ========================================================================= */
+const Avatar = (function(){
+  const cv=$("avatarCanvas"), cx=cv.getContext("2d");
+  const st={orient:"v",mouth:"smile",level:1,hue:48};
+  function ascii(){ // evolves with level
+    const base = st.mouth==="open"?":D":st.mouth==="cyber"?";)=":":)";
+    if(st.level>=10) return "~<{-"+base;
+    if(st.level>=7) return "<"+base;
+    if(st.level>=4) return "-"+base;
+    return base;
+  }
+  function draw(){
+    const w=cv.width,h=cv.height; cx.clearRect(0,0,w,h);
+    cx.save();
+    if(st.orient==="h"){ cx.translate(w/2,h/2); cx.rotate(-Math.PI/2); cx.translate(-h/2,-w/2); }
+    const W=(st.orient==="h"?h:w), H=(st.orient==="h"?w:h);
+    const col=`hsl(${st.hue} 85% 60%)`, glow=`hsl(${st.hue} 95% 72%)`;
+    const cxC=W/2, headR=26+st.level*0.8, headY=46;
+    // electric body (PAWAW veins) — thin glowing lines
+    cx.lineCap="round";
+    cx.strokeStyle=col; cx.shadowColor=glow; cx.shadowBlur=14;
+    cx.lineWidth=7;
+    // torso
+    cx.beginPath(); cx.moveTo(cxC,headY+headR); cx.lineTo(cxC,headY+headR+58); cx.stroke();
+    // arms
+    cx.beginPath(); cx.moveTo(cxC,headY+headR+14); cx.lineTo(cxC-30,headY+headR+2); cx.stroke();
+    cx.beginPath(); cx.moveTo(cxC,headY+headR+14); cx.lineTo(cxC+30,headY+headR+2); cx.stroke();
+    // legs
+    cx.beginPath(); cx.moveTo(cxC,headY+headR+58); cx.lineTo(cxC-22,headY+headR+96); cx.stroke();
+    cx.beginPath(); cx.moveTo(cxC,headY+headR+58); cx.lineTo(cxC+22,headY+headR+96); cx.stroke();
+    // head
+    cx.beginPath(); cx.arc(cxC,headY,headR,0,Math.PI*2); cx.fillStyle=col; cx.fill();
+    // face
+    cx.shadowBlur=0; cx.fillStyle="#160f04"; cx.strokeStyle="#160f04"; cx.lineWidth=3;
+    cx.beginPath(); cx.arc(cxC-9,headY-4,3,0,7); cx.arc(cxC+9,headY-4,3,0,7); cx.fill();
+    cx.beginPath();
+    if(st.mouth==="open"){ cx.arc(cxC,headY+6,8,0,Math.PI); }
+    else if(st.mouth==="cyber"){ cx.moveTo(cxC-9,headY+8); cx.lineTo(cxC+9,headY+6); }
+    else { cx.arc(cxC,headY+2,9,0.15*Math.PI,0.85*Math.PI); }
+    cx.stroke();
+    // accessories by level
+    if(st.level>=4){ cx.strokeStyle=glow;cx.shadowColor=glow;cx.shadowBlur=10;cx.lineWidth=2;
+      cx.beginPath();cx.moveTo(cxC,headY-headR);cx.lineTo(cxC,headY-headR-12);cx.stroke();
+      cx.beginPath();cx.arc(cxC,headY-headR-14,3,0,7);cx.fillStyle=glow;cx.fill(); }
+    if(st.level>=7){ cx.strokeStyle=glow;cx.lineWidth=2;
+      cx.strokeRect(cxC-16,headY-7,32,12); } // visor
+    if(st.level>=10){ cx.shadowBlur=18;cx.strokeStyle=glow;cx.lineWidth=1.5;
+      cx.beginPath();cx.arc(cxC,headY,headR+12,0,Math.PI*2);cx.stroke(); } // aura
+    cx.restore();
+    $("avAscii").textContent=ascii(); $("avLevelN").textContent=st.level;
+  }
+  return {st,draw,ascii,
+    set(k,v){ st[k]=v; draw(); },
+    export(){ cv.toBlob(b=>{ const u=URL.createObjectURL(b);const a=document.createElement("a");
+      a.href=u;a.download="pawaw-avatar.png";a.click();setTimeout(()=>URL.revokeObjectURL(u),2000); }); }
+  };
+})();
+Avatar.draw();
+
+/* =========================================================================
+   ANIBOT — mélodies génératives (Web Audio), sans paroles ni percussions
+   ========================================================================= */
+const AniBot = (function(){
+  let actx=null, mood="medieval", cfg={timbre:"cat",pitch:"high"};
+  const SCALES={ medieval:[0,2,3,5,7,9,10], tribal:[0,3,5,7,10], cyber:[0,2,4,6,8,10] };
+  function ctx(){ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); return actx; }
+  function note(freq,t,dur){
+    const a=ctx(),o=a.createOscillator(),g=a.createGain(),f=a.createFilter?a.createBiquadFilter():a.createBiquadFilter();
+    o.type = cfg.timbre==="robot" ? (mood==="cyber"?"sawtooth":"square") : (mood==="tribal"?"triangle":"sine");
+    o.frequency.value=freq;
+    f.type="lowpass"; f.frequency.value = cfg.timbre==="robot"?2600:1500; f.Q.value=cfg.timbre==="cat"?6:1;
+    if(cfg.timbre==="cat"){ // soft vibrato (chaton)
+      const lfo=a.createOscillator(),lg=a.createGain(); lfo.frequency.value=6; lg.gain.value=5;
+      lfo.connect(lg); lg.connect(o.frequency); lfo.start(t); lfo.stop(t+dur);
+    }
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.18,t+0.03);
+    g.gain.exponentialRampToValueAtTime(.0008,t+dur);
+    o.connect(f); f.connect(g); g.connect(a.destination); o.start(t); o.stop(t+dur+0.05);
+  }
+  function play(){
+    const a=ctx(); if(a.state==="suspended") a.resume();
+    const scale=SCALES[mood]||SCALES.medieval;
+    const root = cfg.pitch==="low"?174.6:349.2; // F3 / F4
+    let t=a.currentTime+0.05; const N=7+Math.floor(Math.random()*4);
+    for(let i=0;i<N;i++){ const deg=scale[Math.floor(Math.random()*scale.length)];
+      const oct=Math.random()<0.25?12:0; const f=root*Math.pow(2,(deg+oct)/12);
+      const dur=[.22,.3,.42][Math.floor(Math.random()*3)]; note(f,t,dur); t+=dur*(0.85+Math.random()*0.4); }
+  }
+  return { play, blip(){ try{const a=ctx();if(a.state==="suspended")a.resume();note(523.25,a.currentTime,.12);}catch(e){} },
+    setMood(m){ mood=m; }, set(k,v){ cfg[k]=v; } };
+})();
+window.AniBot = AniBot;
+
+/* =========================================================================
+   PANNEAUX (avatar / anibot) + segments
+   ========================================================================= */
+function placePanel(p,orb){ const r=orb.getBoundingClientRect(); p.style.bottom="88px";
+  if(orb.closest(".left")) p.style.left="14px"; else p.style.right="14px"; }
+function openPanel(which){
+  const map={av:["avPanel",$("avOrb")],bot:["botPanel",$("botOrb")]};
+  Object.values(map).forEach(([id])=>$(id).classList.remove("open"));
+  const [id,orb]=map[which]; const p=$(id); placePanel(p,orb); p.classList.add("open");
+}
+$("avOrb").onclick=()=>toggle("avPanel","av"); $("botOrb").onclick=()=>toggle("botPanel","bot");
+$("avOrb").onkeydown=e=>{if(e.key==="Enter"||e.key===" ")toggle("avPanel","av");};
+$("botOrb").onkeydown=e=>{if(e.key==="Enter"||e.key===" ")toggle("botPanel","bot");};
+function toggle(id,which){ const p=$(id); if(p.classList.contains("open"))p.classList.remove("open"); else openPanel(which); }
+document.addEventListener("click",e=>{ if(!e.target.closest(".panel")&&!e.target.closest(".orb")){
+  $("avPanel").classList.remove("open"); $("botPanel").classList.remove("open"); }});
+
+document.querySelectorAll(".seg").forEach(seg=>{
+  seg.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b)return;
+    seg.querySelectorAll("button").forEach(x=>x.classList.remove("on")); b.classList.add("on");
+    const key=seg.getAttribute("data-seg"), v=b.getAttribute("data-v");
+    if(["orient","mouth"].includes(key)) Avatar.set(key,v);
+    else AniBot.set(key,v);
+  });
+});
+$("avLevel").oninput=e=>Avatar.set("level",+e.target.value);
+$("avHue").oninput=e=>Avatar.set("hue",+e.target.value);
+$("avExport").onclick=()=>Avatar.export();
+$("botPlay").onclick=()=>AniBot.play();
+
+/* =========================================================================
+   SUPABASE — auth (e-mail/téléphone/OAuth) + profil pseudo + 2ᵉ clé
+   ========================================================================= */
+let sb=null, signupMode=false;
+if(CONFIG.SUPABASE_URL && window.supabase){ try{ sb=window.supabase.createClient(CONFIG.SUPABASE_URL,CONFIG.SUPABASE_KEY); }catch(e){} }
+
+function openAuth(){ $("authModal").classList.add("open"); }
+function closeAuth(){ $("authModal").classList.remove("open"); }
+$("accountBtn").onclick=()=>{ if(state.user){ if(sb) sb.auth.signOut(); state.user=null; applyLangChrome(); } else openAuth(); };
+$("guestLink").onclick=()=>{ state.user={pseudo:"Invité·e",guest:true}; applyLangChrome(); closeAuth(); };
+$("switchLink").onclick=()=>{ signupMode=!signupMode;
+  $("doAuth").textContent=ui(signupMode?"signup":"signin");
+  $("switchTxt").textContent=ui(signupMode?"have_account":"no_account");
+  $("switchLink").textContent=ui(signupMode?"signin":"signup"); };
+
+function looksLikePhone(s){ return /^\+?[0-9 ().-]{6,}$/.test(s); }
+$("doAuth").onclick=async()=>{
+  const err=$("authErr"); err.textContent="";
+  const pseudo=$("f_pseudo").value.trim(), id=$("f_id").value.trim(),
+        pwd=$("f_pwd").value, pwd2=$("f_pwd2").value;
+  if(!sb){ err.textContent="⚠️ SUPABASE_URL manquant — voir CONFIG. Mode invité dispo."; return; }
+  if(!id||!pwd){ err.textContent="Renseigne e-mail/téléphone + mot de passe."; return; }
+  try{
+    let res;
+    if(signupMode){
+      if(looksLikePhone(id)) res=await sb.auth.signUp({phone:id,password:pwd});
+      else res=await sb.auth.signUp({email:id,password:pwd,options:{emailRedirectTo:"https://"+CONFIG.SITE,data:{pseudo,key2:pwd2||null}}});
+    } else {
+      if(looksLikePhone(id)) res=await sb.auth.signInWithPassword({phone:id,password:pwd});
+      else res=await sb.auth.signInWithPassword({email:id,password:pwd});
+    }
+    if(res.error){ err.textContent=res.error.message; return; }
+    const u=res.data.user;
+    if(signupMode && res.data.session==null){ err.style.color="var(--gold)"; err.textContent="✓ Confirmation envoyée à "+id+" (règles + vérification)."; }
+    state.user={id:u&&u.id,pseudo:pseudo||(u&&u.email)||"Lect·rice"};
+    if(u){ try{ await sb.from("profiles").upsert({id:u.id,pseudo:state.user.pseudo,key2:pwd2||null}); }catch(e){} }
+    applyLangChrome(); if(res.data.session) closeAuth();
+  }catch(e){ err.textContent=String(e.message||e); }
+};
+document.querySelectorAll("[data-oauth]").forEach(b=>b.onclick=async()=>{
+  if(!sb){ $("authErr").textContent="⚠️ SUPABASE_URL manquant."; return; }
+  try{ await sb.auth.signInWithOAuth({provider:b.getAttribute("data-oauth"),options:{redirectTo:"https://"+CONFIG.SITE}}); }
+  catch(e){ $("authErr").textContent=String(e.message||e); }
+});
+$("phoneBtn").onclick=async()=>{
+  const id=$("f_id").value.trim(); if(!sb){ $("authErr").textContent="⚠️ SUPABASE_URL manquant."; return; }
+  if(!looksLikePhone(id)){ $("authErr").textContent="Mets ton numéro au format +590…"; return; }
+  try{ const r=await sb.auth.signInWithOtp({phone:id}); $("authErr").style.color="var(--gold)";
+    $("authErr").textContent=r.error?r.error.message:"✓ Code SMS envoyé."; }catch(e){ $("authErr").textContent=String(e.message||e); }
+};
+// restore session if any
+if(sb){ sb.auth.getSession().then(({data})=>{ if(data.session){ const u=data.session.user;
+  state.user={id:u.id,pseudo:(u.user_metadata&&u.user_metadata.pseudo)||u.email||"Lect·rice"}; applyLangChrome(); }}); }
+
+/* =========================================================================
+   PERSISTANCE légère (Supabase si connecté, sinon localStorage en secours)
+   ========================================================================= */
+function saveProgress(){
+  const data={node:state.node,flags:state.flags,lang:state.lang};
+  try{ localStorage.setItem("pawaw_progress",JSON.stringify(data)); }catch(e){}
+  if(sb && state.user && state.user.id){ try{ sb.from("progress").upsert({user_id:state.user.id,data}); }catch(e){} }
+}
+function loadProgress(){
+  try{ const d=JSON.parse(localStorage.getItem("pawaw_progress")||"null");
+    if(d){ state.node=d.node||"start"; state.flags=d.flags||{}; if(d.lang) state.lang=d.lang; } }catch(e){}
+}
+
+/* =========================================================================
+   FOND PAWAW — étoiles + veines électriques liquides (canvas anim)
+   ========================================================================= */
+(function veins(){
+  const c=$("veins"),x=c.getContext("2d"); let W,H,stars=[],bolts=[];
+  const reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+  function size(){ W=c.width=innerWidth*devicePixelRatio; H=c.height=innerHeight*devicePixelRatio; x.scale(1,1);
+    stars=Array.from({length:Math.round(innerWidth*innerHeight/9000)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6*devicePixelRatio,p:Math.random()*Math.PI*2})); }
+  addEventListener("resize",size); size();
+  function bolt(){ const x0=Math.random()*W,y0=-20; const seg=[{x:x0,y:y0}]; let cx2=x0,cy=y0;
+    const len=8+Math.random()*8; for(let i=0;i<len;i++){ cx2+=(Math.random()-0.5)*70*devicePixelRatio; cy+=(H/len); seg.push({x:cx2,y:cy}); }
+    bolts.push({seg,life:1,hue:[195,330,275][Math.floor(Math.random()*3)]}); }
+  let t=0;
+  function frame(){ t+=0.016; x.clearRect(0,0,W,H);
+    // pulsing core glow
+    const pulse=0.5+0.5*Math.sin(t*1.3);
+    const g=x.createRadialGradient(W/2,H*0.15,0,W/2,H*0.15,H*0.8);
+    g.addColorStop(0,`rgba(243,201,105,${0.05+0.04*pulse})`); g.addColorStop(1,"rgba(0,0,0,0)");
+    x.fillStyle=g; x.fillRect(0,0,W,H);
+    // stars
+    x.fillStyle="#ffe9b8"; stars.forEach(s=>{ s.p+=0.03; const tw=0.4+0.6*Math.abs(Math.sin(s.p));
+      x.globalAlpha=tw*0.9; x.beginPath(); x.arc(s.x,s.y,s.r,0,7); x.fill(); }); x.globalAlpha=1;
+    // electric veins (liquid magma feel) — soft sine ribbons
+    for(let k=0;k<3;k++){ x.beginPath(); const hue=[195,330,275][k]; const yb=H*(0.35+0.18*k);
+      for(let px=0;px<=W;px+=14*devicePixelRatio){ const yy=yb+Math.sin(px*0.004+t*(1+0.3*k)+k)*40*devicePixelRatio*(0.6+0.4*pulse);
+        px===0?x.moveTo(px,yy):x.lineTo(px,yy); }
+      x.strokeStyle=`hsla(${hue},90%,65%,${0.10+0.06*pulse})`; x.lineWidth=2*devicePixelRatio;
+      x.shadowColor=`hsl(${hue},90%,65%)`; x.shadowBlur=18*devicePixelRatio; x.stroke(); x.shadowBlur=0; }
+    // occasional bolts
+    if(!reduce && Math.random()<0.02) bolt();
+    bolts.forEach(b=>{ b.life-=0.04; x.beginPath(); b.seg.forEach((p,i)=>i?x.lineTo(p.x,p.y):x.moveTo(p.x,p.y));
+      x.strokeStyle=`hsla(${b.hue},95%,72%,${Math.max(b.life,0)})`; x.lineWidth=2*devicePixelRatio;
+      x.shadowColor=`hsl(${b.hue},95%,72%)`; x.shadowBlur=16*devicePixelRatio; x.stroke(); x.shadowBlur=0; });
+    bolts=bolts.filter(b=>b.life>0);
+    requestAnimationFrame(frame);
+  }
+  if(reduce){ // static pass
+    x.fillStyle="#ffe9b8"; stars.forEach(s=>{x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fill();});
+  } else requestAnimationFrame(frame);
+})();
+
+/* =========================================================================
+   INIT
+   ========================================================================= */
+loadProgress();
+applyLangChrome();
+renderNode();
+if(!state.user){ openAuth(); }
+</script>
+</body>
+</html>
+
