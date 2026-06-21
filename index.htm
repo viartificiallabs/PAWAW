@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#000">
+<title>CODEX VITA — PAWAW · Grimoire Alchimique | Épisode 00</title>
+<style>
+/* ══════════════════════════════════════════════════════
+   CODEX VITA — PAWAW · Design médiéval-alchimique-cyber
+   Noir pur · Or · Arc-en-ciel · Foudre pulsante
+══════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+:root{
+  --or:#d4af37; --or2:#ffd700; --or3:#8b6914; --noi:#000;
+  --sep:rgba(212,175,55,.28); --sep2:rgba(212,175,55,.55);
+  --rb1:#ff006e; --rb2:#9d4edd; --rb3:#00cfff; --rb4:#00ff88; --rb5:#ffd700;
+  --bois-a:#2e0f03; --bois-b:#5a2a0a; --bois-c:#7a4018; --bois-d:#4a1e07;
+  --hh:82px; --ctrl:68px;
+  --r:rgba(212,175,55,.15);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Palatino Linotype',Georgia,serif;background:#000;color:var(--or);overflow-x:hidden}
+
+/* ── FOUDRE VEINEUSE ────────────────────────────────── */
+#bg-lightning{position:fixed;inset:0;pointer-events:none;z-index:1;background:#000;overflow:hidden}
+.vein{position:absolute;inset:0;opacity:0;mix-blend-mode:screen;filter:blur(1.4px) drop-shadow(0 0 8px currentColor)}
+@keyframes v1{0%,100%{opacity:0}46%{opacity:0}50%{opacity:.7}54%{opacity:0}}
+@keyframes v2{0%,100%{opacity:0}48%{opacity:0}51%{opacity:.55}54%{opacity:0}}
+.vein:nth-child(1){animation:v1 2.5s 0s infinite}
+.vein:nth-child(2){animation:v1 3.2s .4s infinite}
+.vein:nth-child(3){animation:v2 4.1s .8s infinite}
+.vein:nth-child(4){animation:v1 2.8s 1.2s infinite}
+.vein:nth-child(5){animation:v2 5.5s 1.8s infinite}
+.vein:nth-child(6){animation:v1 3.7s 2.1s infinite}
+.vein:nth-child(7){animation:v2 4.6s 0.6s infinite}
+
+/* ── ARC-EN-CIEL PULSE ──────────────────────────────── */
+@keyframes rbPulse{
+  0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}
+}
+@keyframes rbText{
+  0%{color:var(--rb1)}17%{color:var(--rb2)}34%{color:var(--rb3)}51%{color:var(--rb4)}68%{color:var(--rb5)}85%{color:var(--rb1)}100%{color:var(--rb2)}
+}
+@keyframes shimmer{to{background-position:300% 0}}
+@keyframes gearSpin{to{transform:rotate(360deg)}}
+@keyframes gearSpinR{to{transform:rotate(-360deg)}}
+@keyframes goldGlow{0%,100%{text-shadow:0 0 8px var(--or)}50%{text-shadow:0 0 24px var(--or2),0 0 40px var(--or)}}
+@keyframes bounceArr{from{transform:translateY(0)}to{transform:translateY(7px)}}
+@keyframes combatShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ── HEADER FIXE ────────────────────────────────────── */
+#header{
+  position:fixed;top:0;left:0;width:100%;height:var(--hh);z-index:200;
+  display:flex;align-items:center;gap:0;
+  background:linear-gradient(180deg,#000 85%,rgba(0,0,0,.3) 100%);
+  padding:0 20px;
+}
+#header::after{
+  content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--or3) 10%,var(--or) 30%,var(--or2) 50%,var(--or) 70%,var(--or3) 90%,transparent);
+  box-shadow:0 0 16px rgba(212,175,55,.6);
+}
+#header>*+*{border-left:1px solid var(--sep)}
+#header>*{padding:0 16px}
+#header img.logo{height:54px;width:auto;border-radius:6px;box-shadow:0 0 18px rgba(100,160,255,.5);padding:0;margin-right:16px}
+#header .titles{display:flex;flex-direction:column;gap:3px}
+#header .brand{
+  font-size:26px;font-weight:bold;letter-spacing:6px;
+  background:linear-gradient(90deg,var(--rb3),var(--rb2),var(--rb1),var(--rb5),var(--rb4),var(--rb3));
+  background-size:400% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shimmer 4s linear infinite;
+}
+#header .slogan{font-size:10.5px;letter-spacing:1.8px;color:var(--or2);animation:goldGlow 3s ease-in-out infinite}
+#header .slogan b{color:var(--rb1)}
+#header .ep{font-size:10px;color:#9fb8e8;letter-spacing:1px;opacity:.8;line-height:1.8;text-align:right}
+#header .ep span{display:block;color:var(--or);font-size:12px;letter-spacing:2px}
+#lang-wrap{display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+#lang-wrap label{font-size:9px;letter-spacing:1px;color:#9fb8e8;text-transform:uppercase}
+#lang{background:#0c0c0c;color:var(--or);border:1px solid var(--or);border-radius:16px;padding:5px 11px;font-family:inherit;font-size:12px;cursor:pointer;max-width:175px}
+/* Boutons header */
+.hbtn{background:rgba(212,175,55,.1);border:1px solid var(--or3);border-radius:20px;padding:7px 14px;cursor:pointer;font-size:12px;color:var(--or);letter-spacing:1px;transition:all .2s;white-space:nowrap}
+.hbtn:hover{background:var(--or);color:#000;box-shadow:0 0 16px rgba(212,175,55,.5)}
+#rpg-status{
+  display:flex;flex-direction:column;gap:2px;min-width:130px;
+  cursor:pointer;
+}
+#rpg-status .char-name{font-size:12px;color:var(--or2);font-weight:bold;letter-spacing:1px}
+#rpg-status .char-level{font-size:10px;color:#9fb8e8}
+#rpg-status .bot-preview{font-size:14px;letter-spacing:1px;color:var(--rb4);font-family:monospace}
+
+/* ── MAIN SCROLLABLE ────────────────────────────────── */
+#main{position:relative;z-index:2;padding-top:var(--hh)}
+
+/* ── SECTION GRIMOIRE ───────────────────────────────── */
+#grimoire-section{
+  width:100%;height:calc(100vh - var(--hh));
+  display:flex;flex-direction:column;position:relative;
+}
+#counter{
+  position:absolute;top:8px;right:24px;z-index:10;
+  font-size:12px;font-weight:bold;
+  background:rgba(0,0,0,.9);padding:7px 14px;
+  border:1px solid var(--or);border-radius:18px;
+  box-shadow:0 0 10px rgba(212,175,55,.3);
+}
+
+/* ── LIVRE 3D ───────────────────────────────────────── */
+#stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:14px 32px 6px}
+#book-container{perspective:1700px;width:100%;max-width:1200px;height:100%}
+#book{
+  width:100%;height:100%;transform-style:preserve-3d;
+  transform:rotateX(6deg) rotateY(-17deg) rotateZ(1.5deg);
+  transition:transform .7s cubic-bezier(.34,1.56,.64,1);
+}
+#book.open{transform:rotateX(3deg) rotateY(0) rotateZ(0)}
+#book::before{
+  content:'';position:absolute;left:50%;top:-3%;height:106%;width:26px;
+  transform:translateX(-50%) translateZ(-14px);
+  background:repeating-linear-gradient(180deg,#000 0 6px,#181818 6px 12px);
+  box-shadow:0 0 24px rgba(157,78,221,.4),inset 0 0 10px #000;
+  border-radius:4px;
+}
+.page{
+  position:absolute;top:0;height:100%;width:50%;
+  background:radial-gradient(ellipse at 50% 30%,#050508 0%,#000 70%);
+  border:2px solid var(--or);
+  box-shadow:inset 0 0 70px rgba(0,0,0,.95),inset 0 0 30px rgba(212,175,55,.05);
+  transform-style:preserve-3d;overflow:hidden;
+}
+#left-page{left:0;border-right:1px solid var(--or);transform:rotateY(16deg);display:flex;flex-direction:column}
+#right-page{right:0;border-left:1px solid var(--or);transform:rotateY(-16deg);padding:18px;overflow:hidden}
+
+/* DÉCORATIONS ALCHIMIQUES sur les pages */
+.page::before{
+  content:'✦ ⊕ ✦';position:absolute;top:6px;left:50%;transform:translateX(-50%);
+  font-size:10px;color:var(--or3);letter-spacing:4px;opacity:.5;pointer-events:none;
+}
+.page::after{
+  content:'';position:absolute;inset:8px;pointer-events:none;
+  border:1px solid rgba(212,175,55,.08);border-radius:4px;
+}
+
+/* ── SECTIONS PAGE GAUCHE ───────────────────────────── */
+.sect-eyebrow{padding:18px 30px 12px;border-bottom:1px solid var(--sep2);background:rgba(212,175,55,.025);flex-shrink:0}
+.eyebrow{font-size:9.5px;letter-spacing:4px;color:#9fb8e8;text-transform:uppercase}
+.sect-title{padding:14px 30px 12px;border-bottom:2px solid var(--or);flex-shrink:0}
+.ptitle{
+  font-size:20px;color:var(--or2);line-height:1.25;
+  animation:goldGlow 4s ease-in-out infinite;
+}
+.sect-narration{flex:1;overflow:hidden;position:relative;border-bottom:1px solid var(--sep)}
+.sect-narration::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:28px;background:linear-gradient(0,#000,transparent);pointer-events:none}
+.narration{height:100%;overflow-y:auto;padding:14px 30px;color:var(--or);font-style:italic;font-size:14px;line-height:1.95;white-space:pre-line;text-shadow:0 0 10px rgba(212,175,55,.25)}
+.narration.rtl{direction:rtl;text-align:right}
+.narration.loading{opacity:.4}
+.sect-foot{padding:8px 30px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+.pfoot{font-size:9.5px;color:#9fb8e8;letter-spacing:2px;opacity:.8}
+/* Bouton audio dans le pied */
+.audio-btn{background:rgba(212,175,55,.1);border:1px solid var(--or3);border-radius:12px;padding:4px 10px;cursor:pointer;font-size:10px;color:var(--or);transition:all .2s}
+.audio-btn:hover{background:var(--or);color:#000}
+.audio-btn.playing{background:var(--rb4);border-color:var(--rb4);color:#000;animation:goldGlow .5s infinite}
+
+/* ── GRILLE DE CASES ────────────────────────────────── */
+.cases{display:grid;gap:16px;width:100%;height:100%}
+.cases[data-n="1"]{grid-template-columns:1fr;grid-template-rows:1fr}
+.cases[data-n="2"]{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+.cases[data-n="3"]{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.cases[data-n="3"] .case:nth-child(1){grid-column:1/3}
+.cases[data-n="4"]{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.cases[data-n="5"]{grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr}
+.cases[data-n="5"] .case:nth-child(1){grid-column:1/3;grid-row:1/3}
+
+/* BORDURE BOIS DE CHAÎNE CIRÉ */
+.case{
+  position:relative;cursor:pointer;border-radius:8px;overflow:visible;padding:8px;
+  background:
+    linear-gradient(118deg,rgba(255,225,130,.18) 0%,rgba(255,200,80,.05) 18%,transparent 35%,rgba(255,210,100,.08) 58%,rgba(255,230,140,.16) 72%,transparent 88%),
+    repeating-radial-gradient(ellipse 30px 18px at 50% 50%,transparent 0,transparent 11px,rgba(80,28,4,.12) 11px,rgba(80,28,4,.12) 13px,transparent 13px,transparent 18px),
+    repeating-linear-gradient(85deg,transparent 0,rgba(200,110,30,.05) 1px,transparent 2px,rgba(60,18,2,.08) 5px,transparent 6px),
+    linear-gradient(160deg,var(--bois-a) 0%,var(--bois-b) 16%,var(--bois-c) 30%,var(--bois-d) 44%,var(--bois-c) 72%,var(--bois-a) 100%);
+  border:2px solid var(--or);
+  box-shadow:inset 0 1px 4px rgba(255,220,100,.16),inset 0 -1px 4px rgba(0,0,0,.4),0 0 16px rgba(212,175,55,.22);
+  transition:transform .22s,box-shadow .22s,border-color .22s;
+}
+.case:hover{transform:scale(1.03);z-index:2;border-color:var(--or2);box-shadow:inset 0 1px 5px rgba(255,230,120,.26),0 0 30px rgba(212,175,55,.6)}
+.case-media{width:100%;height:100%;overflow:hidden;border-radius:4px;position:relative}
+.case-media img{width:100%;height:100%;object-fit:cover;display:block}
+.case-media video{width:100%;height:100%;object-fit:cover;display:block}
+.vid-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.22);transition:background .2s;pointer-events:none}
+.case:hover .vid-overlay{background:rgba(0,0,0,.05)}
+.vid-play{width:40px;height:40px;border-radius:50%;background:rgba(212,175,55,.85);display:flex;align-items:center;justify-content:center;font-size:15px;color:#000}
+.zoom-hint{position:absolute;bottom:6px;right:7px;font-size:9px;color:var(--or2);background:rgba(0,0,0,.8);padding:2px 8px;border-radius:8px;opacity:0;transition:opacity .2s;z-index:2;letter-spacing:.5px}
+.case:hover .zoom-hint{opacity:1}
+/* indicateur combat sur case */
+.case-combat-badge{position:absolute;top:5px;left:5px;background:var(--rb1);color:#fff;font-size:9px;padding:2px 7px;border-radius:10px;font-weight:bold;letter-spacing:.5px;z-index:3;animation:goldGlow .6s infinite}
+
+/* ── CONTRÔLES ──────────────────────────────────────── */
+#controls{
+  width:100%;height:var(--ctrl);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  background:#000;border-top:2px solid var(--or);
+  box-shadow:0 -4px 22px rgba(212,175,55,.16);
+}
+button{background:#0c0c0c;color:var(--or);border:1px solid var(--or);padding:9px 20px;cursor:pointer;border-radius:22px;font-family:inherit;font-weight:bold;letter-spacing:1px;transition:all .22s}
+button:hover:not(:disabled){background:var(--or);color:#000;box-shadow:0 0 18px rgba(212,175,55,.55)}
+button:disabled{opacity:.32;cursor:not-allowed}
+
+/* ── SCROLL HINT ────────────────────────────────────── */
+#scroll-hint{width:100%;padding:12px 0;display:flex;flex-direction:column;align-items:center;gap:5px;background:#000;border-top:1px solid var(--sep);color:var(--or3);font-size:11px;letter-spacing:2px;cursor:pointer;transition:color .2s}
+#scroll-hint:hover{color:var(--or)}
+#scroll-hint .arr{font-size:20px;animation:bounceArr .7s ease-in-out infinite alternate}
+
+/* ════════════════════════════════════════════════════
+   FULLSCREEN BD READER
+════════════════════════════════════════════════════ */
+#modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.95);align-items:center;justify-content:center;padding:16px;animation:fade .3s}
+#modal.active{display:flex}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.mwin{
+  width:min(97vw,1180px);height:min(94vh,860px);
+  background:#000;border:2px solid var(--or);border-radius:12px;
+  display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 0 60px rgba(212,175,55,.3);
+}
+.mwin-bar{display:flex;align-items:center;gap:10px;padding:10px 18px;background:#050505;border-bottom:2px solid var(--or);flex-shrink:0}
+.mwin-bar-title{font-size:13px;color:var(--or2);letter-spacing:2px;font-style:italic;flex:1}
+.mwin-nav{display:flex;gap:6px}
+.mwin-nav button{padding:5px 12px;font-size:11px}
+.mwin-close{font-size:26px;cursor:pointer;color:var(--or);font-weight:bold;line-height:1;background:none;border:none;padding:0}
+.mwin-close:hover{color:var(--or2);text-shadow:0 0 14px rgba(212,175,55,.8)}
+.mwin-body{display:flex;flex:1;overflow:hidden}
+/* Sous-fenêtre média */
+.mwin-media{flex:1.3;min-width:0;display:flex;flex-direction:column;border-right:2px solid var(--or);overflow:hidden}
+.mwin-media-bar{padding:6px 14px;border-bottom:1px solid var(--sep);font-size:9.5px;letter-spacing:2px;color:#9fb8e8;text-transform:uppercase;flex-shrink:0;background:#060606}
+.mwin-media-content{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:14px;background:#000}
+.mwin-media-content img{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;display:block}
+.mwin-media-content video{max-width:100%;max-height:100%;border-radius:4px;display:block}
+/* Sous-fenêtre narration */
+.mwin-narr{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.mwin-narr-bar{padding:6px 14px;border-bottom:1px solid var(--sep);font-size:9.5px;letter-spacing:2px;color:#9fb8e8;text-transform:uppercase;flex-shrink:0;background:#060606;display:flex;align-items:center;justify-content:space-between}
+.mwin-narr-scroll{flex:1;overflow-y:auto;padding:18px 22px}
+.mwin-narr-an{font-size:9.5px;letter-spacing:3px;color:#9fb8e8;text-transform:uppercase;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--sep)}
+.mwin-narr-title{font-size:17px;color:var(--or2);margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--or);animation:goldGlow 3s infinite}
+.mwin-narr-text{color:var(--or);font-style:italic;font-size:14px;line-height:1.9;white-space:pre-line}
+.mwin-narr-text.rtl{direction:rtl;text-align:right}
+/* Barre d'audio bot */
+.mwin-audio-bar{padding:8px 14px;border-top:1px solid var(--sep);background:#050505;flex-shrink:0;display:flex;align-items:center;gap:8px}
+.mwin-bot-display{font-family:monospace;color:var(--rb4);font-size:13px;letter-spacing:2px}
+.mwin-audio-controls{display:flex;gap:6px;margin-left:auto}
+.mwin-audio-controls button{padding:4px 12px;font-size:10px}
+
+/* ════════════════════════════════════════════════════
+   MODAL COMBAT — ARÈNE
+════════════════════════════════════════════════════ */
+#modal-combat{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.96);align-items:center;justify-content:center;padding:12px}
+#modal-combat.active{display:flex}
+.combat-win{
+  width:min(98vw,1050px);height:min(95vh,780px);
+  background:radial-gradient(ellipse at 50% 0%,#1a0505 0%,#000 60%);
+  border:3px solid var(--rb1);border-radius:12px;
+  display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 0 60px rgba(255,0,110,.4);
+  animation:combatShake .1s;
+}
+.combat-bar{display:flex;align-items:center;padding:10px 18px;background:#0a0000;border-bottom:2px solid var(--rb1);flex-shrink:0;gap:12px}
+.combat-bar-title{font-size:16px;font-weight:bold;color:var(--rb1);letter-spacing:3px;animation:rbText 2s infinite;flex:1}
+.combat-body{display:flex;flex:1;overflow:hidden;gap:0}
+/* Panneau parti héros */
+.combat-heroes{width:200px;flex-shrink:0;border-right:1px solid var(--sep);display:flex;flex-direction:column;gap:0;padding:10px;background:rgba(0,50,20,.1)}
+.hero-card{background:rgba(0,255,100,.05);border:1px solid rgba(0,255,100,.2);border-radius:8px;padding:10px;margin-bottom:8px;cursor:pointer;transition:all .2s}
+.hero-card:hover,.hero-card.active{border-color:var(--or2);background:rgba(212,175,55,.08)}
+.hero-card .hname{font-size:12px;font-weight:bold;color:var(--or2);letter-spacing:1px}
+.hero-card .hclass{font-size:9px;color:#9fb8e8;letter-spacing:1px}
+.hpbar{height:6px;border-radius:3px;background:#111;margin:4px 0;overflow:hidden}
+.hpbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#00ff88,#00cc44);transition:width .4s}
+.hpbar-fill.low{background:linear-gradient(90deg,#ff4444,#ff8800)}
+.hero-stats{font-size:9px;color:var(--or);margin-top:3px}
+/* Zone de combat centrale */
+.combat-arena{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.arena-screen{flex:1;display:flex;align-items:center;justify-content:space-around;padding:20px;position:relative}
+.enemy-area{display:flex;flex-direction:column;align-items:center;gap:10px}
+.enemy-img-wrap{position:relative;text-align:center}
+.enemy-sprite{width:160px;height:200px;object-fit:cover;border-radius:8px;border:2px solid var(--rb1);box-shadow:0 0 30px rgba(255,0,110,.4);transition:opacity .3s}
+.enemy-sprite.hurt{animation:combatShake .2s}
+.enemy-hp-bar{width:160px;height:8px;background:#111;border-radius:4px;overflow:hidden;margin-top:6px;border:1px solid var(--sep)}
+.enemy-hp-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--rb1),#ff8800);transition:width .4s}
+.enemy-name{font-size:11px;color:var(--rb1);font-weight:bold;letter-spacing:2px;margin-top:4px}
+.enemy-hp-text{font-size:10px;color:var(--or);text-align:center}
+.vs-text{font-size:28px;font-weight:bold;animation:rbText 1s infinite;text-shadow:0 0 20px currentColor}
+/* Actions combat */
+.combat-actions{padding:10px;border-top:2px solid var(--sep);background:#040404;flex-shrink:0}
+.action-hero-name{font-size:10px;color:var(--or2);letter-spacing:2px;margin-bottom:6px}
+.action-btns{display:flex;gap:6px;flex-wrap:wrap}
+.action-btn{background:#0c0c0c;color:var(--or);border:1px solid var(--sep);border-radius:16px;padding:6px 14px;cursor:pointer;font-size:11px;transition:all .2s;font-family:inherit}
+.action-btn:hover{border-color:var(--or2);background:rgba(212,175,55,.1);box-shadow:0 0 12px rgba(212,175,55,.3)}
+.action-btn.special{border-color:var(--rb3);color:var(--rb3)}
+.action-btn.special:hover{background:rgba(0,207,255,.1);box-shadow:0 0 12px rgba(0,207,255,.4)}
+/* Log de combat */
+.combat-log{width:200px;flex-shrink:0;border-left:1px solid var(--sep);display:flex;flex-direction:column;background:rgba(0,0,5,.3)}
+.combat-log-title{padding:8px 12px;font-size:9px;letter-spacing:2px;color:#9fb8e8;border-bottom:1px solid var(--sep);background:#050505}
+.combat-log-scroll{flex:1;overflow-y:auto;padding:8px 10px;font-size:10px;color:var(--or);line-height:1.6}
+.log-entry{padding:2px 0;border-bottom:1px solid rgba(212,175,55,.06)}
+.log-entry.dmg{color:var(--rb1)}
+.log-entry.heal{color:var(--rb4)}
+.log-entry.enemy{color:#ff8800}
+/* Message victoire/défaite */
+.combat-result{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.9);font-size:28px;font-weight:bold;gap:16px;animation:fade .5s}
+.result-win{color:var(--or2);animation:goldGlow .5s infinite;text-shadow:0 0 30px var(--or)}
+.result-lose{color:var(--rb1);text-shadow:0 0 30px var(--rb1)}
+.result-btn{font-size:14px;padding:12px 28px}
+
+/* ════════════════════════════════════════════════════
+   MODAL CRÉATEUR DE PERSONNAGE
+════════════════════════════════════════════════════ */
+#modal-creator{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.93);align-items:center;justify-content:center;padding:16px}
+#modal-creator.active{display:flex}
+.creator-win{
+  width:min(95vw,780px);background:#000;border:2px solid var(--or);border-radius:12px;
+  display:flex;flex-direction:column;overflow:hidden;max-height:95vh;
+  box-shadow:0 0 50px rgba(212,175,55,.3);
+}
+.creator-bar{display:flex;align-items:center;padding:12px 18px;background:#060606;border-bottom:2px solid var(--or);flex-shrink:0}
+.creator-bar-title{font-size:16px;color:var(--or2);letter-spacing:3px;flex:1;font-style:italic}
+.creator-body{display:flex;flex:1;overflow:hidden;gap:0}
+.creator-left{flex:1;padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.creator-right{width:220px;flex-shrink:0;border-left:2px solid var(--sep);padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px;background:rgba(212,175,55,.02)}
+.c-label{font-size:10px;letter-spacing:2px;color:#9fb8e8;text-transform:uppercase;margin-bottom:4px}
+.c-input{width:100%;background:#080808;color:var(--or);border:1px solid var(--sep);border-radius:8px;padding:10px 14px;font-family:inherit;font-size:13px;outline:none;transition:border-color .2s}
+.c-input:focus{border-color:var(--or);box-shadow:0 0 8px rgba(212,175,55,.2)}
+.c-input::placeholder{color:rgba(212,175,55,.3)}
+textarea.c-input{resize:vertical;min-height:70px}
+.faction-btns{display:flex;gap:8px;flex-wrap:wrap}
+.faction-btn{background:#0c0c0c;color:var(--or3);border:1px solid var(--sep);border-radius:12px;padding:6px 12px;cursor:pointer;font-size:11px;transition:all .2s;font-family:inherit}
+.faction-btn.sel{border-color:var(--or2);background:rgba(212,175,55,.12);color:var(--or2)}
+.char-preview-box{width:160px;height:200px;border:2px solid var(--or);border-radius:8px;display:flex;align-items:center;justify-content:center;background:#050505;overflow:hidden;position:relative}
+.char-preview-box img{width:100%;height:100%;object-fit:cover}
+.char-preview-placeholder{font-size:40px;opacity:.4;text-align:center}
+.char-name-display{font-size:14px;color:var(--or2);font-weight:bold;text-align:center;letter-spacing:1px}
+.char-faction-display{font-size:10px;color:#9fb8e8;text-align:center;letter-spacing:2px}
+/* BOT EMOJI dans le créateur */
+.bot-stage{font-family:monospace;font-size:12px;line-height:1.4;color:var(--rb4);text-align:center;background:#050505;border:1px solid var(--sep);border-radius:8px;padding:12px;letter-spacing:1px}
+.gen-btn{background:linear-gradient(135deg,var(--or3),var(--or));color:#000;border:none;padding:11px;border-radius:10px;cursor:pointer;font-weight:bold;font-size:12px;letter-spacing:2px;width:100%;transition:all .25s;font-family:inherit}
+.gen-btn:hover{box-shadow:0 0 20px rgba(212,175,55,.6);transform:translateY(-1px)}
+.gen-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.gen-loading{text-align:center;color:var(--rb3);font-size:11px;letter-spacing:1px;animation:goldGlow .5s infinite}
+.xp-display{font-size:11px;color:var(--or);text-align:center}
+.xpbar{width:100%;height:8px;background:#111;border-radius:4px;overflow:hidden;margin:4px 0}
+.xpbar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--rb2),var(--rb3));transition:width .5s}
+.name-error{font-size:10px;color:var(--rb1);letter-spacing:.5px}
+
+/* ════════════════════════════════════════════════════
+   MODAL COMPTE / PROFIL
+════════════════════════════════════════════════════ */
+#modal-account{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:16px}
+#modal-account.active{display:flex}
+.account-win{width:min(95vw,480px);background:#000;border:2px solid var(--or);border-radius:12px;overflow:hidden;box-shadow:0 0 40px rgba(212,175,55,.3)}
+.account-bar{display:flex;align-items:center;padding:12px 18px;background:#060606;border-bottom:2px solid var(--or)}
+.account-title{font-size:15px;color:var(--or2);letter-spacing:3px;flex:1}
+.account-body{padding:24px;display:flex;flex-direction:column;gap:14px}
+.account-section-title{font-size:10px;letter-spacing:3px;color:#9fb8e8;text-transform:uppercase;padding-bottom:8px;border-bottom:1px solid var(--sep)}
+
+/* ════════════════════════════════════════════════════
+   FORUM FOOTER
+════════════════════════════════════════════════════ */
+#forum-footer{width:100%;min-height:100vh;background:#000;border-top:3px solid var(--or);padding:50px 36px 80px;position:relative;z-index:2}
+#forum-footer::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:3px;
+  background:linear-gradient(90deg,transparent,var(--or3) 8%,var(--or) 30%,var(--or2) 50%,var(--or) 70%,var(--or3) 92%,transparent);
+  box-shadow:0 0 22px rgba(212,175,55,.5);
+}
+.forum-inner{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+.forum-h1{
+  font-size:24px;font-weight:bold;letter-spacing:4px;color:var(--or2);text-align:center;
+  padding-bottom:20px;border-bottom:1px solid var(--sep2);animation:goldGlow 3s infinite;
+}
+.forum-h1 .gear{display:inline-block;animation:gearSpin 6s linear infinite;margin:0 10px}
+.forum-subtitle{font-size:10px;letter-spacing:2px;color:#9fb8e8;text-align:center;margin-top:-32px}
+
+/* Onglets forum */
+.forum-tabs{display:flex;gap:0;border:1px solid var(--sep);border-radius:10px;overflow:hidden;background:#050505}
+.forum-tab{flex:1;padding:10px;text-align:center;cursor:pointer;font-size:11px;letter-spacing:1px;color:var(--or3);transition:all .2s;border-right:1px solid var(--sep)}
+.forum-tab:last-child{border-right:none}
+.forum-tab.active{background:rgba(212,175,55,.1);color:var(--or2);font-weight:bold}
+.forum-tab:hover:not(.active){background:rgba(212,175,55,.05);color:var(--or)}
+
+/* Panel topic */
+.forum-panel{display:none}
+.forum-panel.active{display:flex;flex-direction:column;gap:20px}
+
+/* Topic header */
+.topic-head{background:rgba(212,175,55,.04);border:1px solid var(--sep);border-radius:10px;padding:20px 24px;display:flex;flex-direction:column;gap:10px}
+.topic-title{font-size:18px;color:var(--or2);font-style:italic;animation:goldGlow 5s infinite}
+.topic-meta{font-size:10px;color:#9fb8e8;letter-spacing:1px}
+.topic-text{font-size:13px;color:var(--or);line-height:1.8;font-style:italic}
+.topic-vote-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* Vote + réactions */
+.vote-btn{display:flex;align-items:center;gap:6px;background:#0c0c0c;border:1px solid var(--sep);border-radius:24px;padding:7px 16px;cursor:pointer;font-family:inherit;font-size:15px;color:var(--or);transition:all .2s}
+.vote-btn:hover{border-color:var(--or2);box-shadow:0 0 12px rgba(212,175,55,.3)}
+.vote-btn.active-up{background:rgba(0,200,80,.12);border-color:#00c850;color:#00c850}
+.vote-btn.active-down{background:rgba(220,50,50,.12);border-color:#dc3232;color:#dc3232}
+.vcount{font-size:12px}
+.react-btn{display:flex;align-items:center;gap:5px;background:#0c0c0c;border:1px solid var(--sep);border-radius:18px;padding:5px 13px;cursor:pointer;font-size:17px;transition:all .15s}
+.react-btn:hover{border-color:var(--or);transform:scale(1.08)}
+.react-btn.reacted{background:rgba(212,175,55,.1);border-color:var(--or)}
+.rcount{font-size:11px;color:var(--or)}
+
+/* Commentaires */
+.comments-section{display:flex;flex-direction:column;gap:0}
+.comments-title{font-size:10px;letter-spacing:3px;color:#9fb8e8;text-transform:uppercase;padding-bottom:10px;border-bottom:1px solid var(--sep);margin-bottom:14px}
+.comment-card{background:rgba(212,175,55,.02);border:1px solid var(--sep);border-radius:8px;padding:16px 20px;margin-bottom:10px;transition:border-color .2s}
+.comment-card:hover{border-color:var(--or3)}
+.cc-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--sep);padding-bottom:8px;margin-bottom:10px}
+.cc-author{font-size:12px;color:var(--or2);font-weight:bold}
+.cc-meta{font-size:9.5px;color:rgba(212,175,55,.4);display:flex;gap:8px;align-items:center}
+.cc-text{font-size:13px;color:var(--or);font-style:italic;line-height:1.7;margin-bottom:10px}
+.cc-react-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.cc-react-btn{display:flex;align-items:center;gap:4px;font-size:14px;background:#0c0c0c;border:1px solid var(--sep);border-radius:12px;padding:4px 10px;cursor:pointer;transition:all .15s}
+.cc-react-btn:hover{border-color:var(--or)}
+.cc-react-btn.lit{background:rgba(212,175,55,.1);border-color:var(--or)}
+.crc{font-size:11px;color:var(--or)}
+/* Répondre */
+.reply-toggle{font-size:10px;color:var(--rb3);cursor:pointer;letter-spacing:1px;margin-left:4px}
+.reply-toggle:hover{color:var(--or2)}
+.reply-form{margin-top:10px;display:none;gap:8px;flex-direction:column}
+.reply-form.open{display:flex}
+.reply-thread{margin-left:22px;border-left:2px solid var(--sep);padding-left:14px;display:flex;flex-direction:column;gap:6px}
+
+/* Formulaire commentaire */
+.comment-form-box{background:rgba(212,175,55,.03);border:1px solid var(--sep);border-radius:10px;padding:20px 24px;display:flex;flex-direction:column;gap:12px}
+.cf-label{font-size:10px;letter-spacing:2px;color:#9fb8e8;text-transform:uppercase;padding-bottom:8px;border-bottom:1px solid var(--sep)}
+.cf-row{display:flex;gap:10px}
+.cf-input{flex:1;background:#080808;color:var(--or);border:1px solid var(--sep);border-radius:7px;padding:10px 14px;font-family:inherit;font-size:13px;outline:none;transition:border-color .2s}
+.cf-input:focus{border-color:var(--or);box-shadow:0 0 8px rgba(212,175,55,.15)}
+.cf-input::placeholder{color:rgba(212,175,55,.3)}
+textarea.cf-input{resize:vertical;min-height:80px}
+.cf-emoji-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.cf-emoji-label{font-size:9.5px;color:#9fb8e8;letter-spacing:1px}
+.emoji-opt{font-size:20px;cursor:pointer;border-radius:6px;padding:3px 7px;border:1px solid transparent;transition:all .13s}
+.emoji-opt:hover{background:rgba(212,175,55,.08);border-color:var(--sep)}
+.emoji-opt.picked{background:rgba(212,175,55,.16);border-color:var(--or)}
+.cf-submit{align-self:flex-end;background:var(--or3);color:#000;border:1px solid var(--or);padding:10px 24px;cursor:pointer;border-radius:22px;font-family:inherit;font-weight:bold;letter-spacing:2px;font-size:12px;transition:all .22s}
+.cf-submit:hover{background:var(--or);box-shadow:0 0 18px rgba(212,175,55,.5)}
+
+/* VOTES GRIMOIRE */
+.vote-section{background:rgba(212,175,55,.03);border:1px solid var(--sep);border-radius:10px;padding:20px 24px;display:flex;flex-direction:column;gap:14px}
+.vote-lbl{font-size:10px;letter-spacing:3px;color:#9fb8e8;text-transform:uppercase;border-bottom:1px solid var(--sep);padding-bottom:10px}
+.vote-page-name{font-size:15px;color:var(--or2);font-style:italic}
+.vote-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.react-row{display:flex;gap:8px;flex-wrap:wrap}
+
+/* SCROLLBARS */
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-track{background:rgba(212,175,55,.07)}
+::-webkit-scrollbar-thumb{background:var(--or);border-radius:4px}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  #book{transform:none!important}
+  #left-page{transform:none;width:100%;position:relative;height:auto}
+  #right-page{transform:none;width:100%;position:relative;height:42vh}
+  #book-container{height:auto}
+  #grimoire-section{height:auto;min-height:calc(100vh - var(--hh))}
+  #stage{padding:10px 12px 6px;height:60vh}
+  #header{padding:0 12px;flex-wrap:wrap}
+  #header>*{padding:0 8px}
+  #header>*+*{border-left:none}
+  #header .brand{font-size:18px}
+  .mwin-body{flex-direction:column}
+  .mwin-media{border-right:none;border-bottom:2px solid var(--or);flex:none;height:42%}
+  .mwin-narr{flex:1}
+  .combat-log{display:none}
+  .combat-heroes{width:140px}
+}
+</style>
+</head>
+<body>
+
+<div id="bg-lightning"></div>
+
+<!-- ══ HEADER FIXE ══════════════════════════════════ -->
+<header id="header">
+  <img class="logo" src="/*__LOGO__*/" alt="Logo PAWAW">
+  <div class="titles">
+    <div class="brand">PAWAW</div>
+    <div class="slogan"><b>B.W.E.Y.W</b> — Become What Ev' You Want</div>
+  </div>
+  <div class="ep">CODEX VITA · INFINIAM<span>Épisode 00 — Le Commencement</span></div>
+  <div id="lang-wrap">
+    <label for="lang">🌐 Langue</label>
+    <select id="lang"></select>
+  </div>
+  <!-- RPG Status (mini) -->
+  <div id="rpg-status" onclick="openCreator()" title="Mon personnage">
+    <div class="char-name" id="hdr-charname">Créer mon perso</div>
+    <div class="char-level" id="hdr-charlevel">Niveau 1 · XP 0</div>
+    <div class="bot-preview" id="hdr-bot">:)</div>
+  </div>
+  <button class="hbtn" onclick="document.getElementById('modal-account').classList.add('active')">⚔ Compte</button>
+</header>
+
+<!-- ══ MAIN SCROLLABLE ══════════════════════════════ -->
+<main id="main">
+
+  <!-- ══ GRIMOIRE ══ -->
+  <section id="grimoire-section">
+    <div id="counter"><span id="lbl-page">Page</span> <span id="cur">1</span>/<span id="tot">34</span></div>
+    <div id="stage">
+      <div id="book-container">
+        <div id="book">
+          <div id="left-page" class="page">
+            <div class="sect-eyebrow"><div class="eyebrow" id="eyebrow"></div></div>
+            <div class="sect-title"><div class="ptitle" id="ptitle"></div></div>
+            <div class="sect-narration"><div class="narration" id="narration"></div></div>
+            <div class="sect-foot">
+              <div class="pfoot" id="pfoot"></div>
+              <button class="audio-btn" id="audio-btn" onclick="toggleAudio()">🎙 Lire</button>
+            </div>
+          </div>
+          <div id="right-page" class="page">
+            <div class="cases" id="cases"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="controls">
+      <button id="prev">← Précédente</button>
+      <button id="toggle">⚗ Ouvrir le Grimoire</button>
+      <button id="next">Suivante →</button>
+    </div>
+  </section>
+
+  <!-- ══ SCROLL HINT ══ -->
+  <div id="scroll-hint" onclick="document.getElementById('forum-footer').scrollIntoView({behavior:'smooth'})">
+    <span>⚙ Forum des Aventuriers de VitA ⚙</span>
+    <span class="arr">⌄</span>
+  </div>
+
+  <!-- ══ FORUM FOOTER ══ -->
+  <footer id="forum-footer">
+    <div class="forum-inner">
+      <div>
+        <div class="forum-h1">
+          <span class="gear">⚙</span> Forum des Aventuriers <span class="gear" style="animation:gearSpinR 6s linear infinite">⚙</span>
+        </div>
+        <div class="forum-subtitle">CODEX VITA · Épisode 00 — Partagez vos théories et vécus</div>
+      </div>
+
+      <!-- Votes sur la page courante -->
+      <div class="vote-section">
+        <div class="vote-lbl">✦ Votre avis sur la page courante</div>
+        <div class="vote-page-name" id="vote-page-name">—</div>
+        <div class="vote-row">
+          <button class="vote-btn" id="btn-up" onclick="vote('up')">👍 <span class="vcount" id="cnt-up">0</span></button>
+          <button class="vote-btn" id="btn-down" onclick="vote('down')">👎 <span class="vcount" id="cnt-dn">0</span></button>
+        </div>
+        <div class="react-row" id="vote-reacts"></div>
+      </div>
+
+      <!-- Onglets sujets -->
+      <div class="forum-tabs">
+        <div class="forum-tab active" id="tab0" onclick="switchTab(0)">💬 Que pensons-nous de PAWAW ?</div>
+        <div class="forum-tab" id="tab1" onclick="switchTab(1)">⚔ Stratégies de Combat VitA</div>
+        <div class="forum-tab" id="tab2" onclick="switchTab(2)">✍ Votre Grimoire</div>
+      </div>
+
+      <!-- Panel 0 : PAWAW -->
+      <div class="forum-panel active" id="panel0">
+        <div class="topic-head">
+          <div class="topic-title">Que pensons-nous de PAWAW — B.W.E.Y.W ?</div>
+          <div class="topic-meta">Sujet ouvert par <b>ViA l'Éthérée</b> · An 52 · 142 réponses</div>
+          <div class="topic-text">PAWAW — l'énergie créatrice suprême qui traverse tout VitA. Elle ne disparaît jamais, elle se transforme. Certains la voient comme une force divine, d'autres comme une technologie à maîtriser, d'autres encore comme la vie elle-même. Et toi Aventurier — qu'est-ce que le PAWAW signifie pour ton parcours dans CODEX VITA ? Partage tes théories, tes expériences, tes visions...</div>
+          <div class="topic-vote-row" id="tv0-row"></div>
+        </div>
+        <div class="comments-section">
+          <div class="comments-title">✦ Commentaires &amp; Théories</div>
+          <div id="comments-list-0"></div>
+          <div class="comment-form-box" id="cf0">
+            <div class="cf-label">✦ Partager votre vision du PAWAW</div>
+            <div class="cf-row"><input class="cf-input" id="cf0-author" placeholder="Votre pseudo d'Aventurier…" maxlength="40"></div>
+            <div class="cf-emoji-row">
+              <span class="cf-emoji-label">Émotion :</span>
+              <span class="emoji-opt" data-e="❤️" onclick="pickEmoji(0,this)">❤️</span>
+              <span class="emoji-opt" data-e="🔥" onclick="pickEmoji(0,this)">🔥</span>
+              <span class="emoji-opt" data-e="✨" onclick="pickEmoji(0,this)">✨</span>
+              <span class="emoji-opt" data-e="💫" onclick="pickEmoji(0,this)">💫</span>
+              <span class="emoji-opt" data-e="⚡" onclick="pickEmoji(0,this)">⚡</span>
+              <span class="emoji-opt" data-e="🐉" onclick="pickEmoji(0,this)">🐉</span>
+              <span class="emoji-opt" data-e="🌟" onclick="pickEmoji(0,this)">🌟</span>
+              <span class="emoji-opt" data-e="🤔" onclick="pickEmoji(0,this)">🤔</span>
+            </div>
+            <textarea class="cf-input" id="cf0-text" placeholder="Votre théorie, vision ou expérience avec le PAWAW…" maxlength="1000"></textarea>
+            <button class="cf-submit" onclick="submitComment(0)">Envoyer au Grimoire ✦</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 1 : Combat -->
+      <div class="forum-panel" id="panel1">
+        <div class="topic-head">
+          <div class="topic-title">⚔ Stratégies de Combat — Maîtriser VitA</div>
+          <div class="topic-meta">Sujet ouvert par <b>Saï le Voyageur</b> · An 52 · 87 réponses</div>
+          <div class="topic-text">Entre le Roi, la Reine et votre Garde du Corps, chaque faction d'aventurier a ses forces. Les Trollorcs résistent mais sont lents. Les Démons brûlent vite mais fragiles à la magie d'eau. Les Diablotins créent le chaos mais peuvent se blesser eux-mêmes. Quelle est votre stratégie favorite ? Quel personnage joue-t-il votre garde du corps ? Échangeons ici nos tactiques...</div>
+          <div class="topic-vote-row" id="tv1-row"></div>
+        </div>
+        <div class="comments-section">
+          <div class="comments-title">✦ Tactiques &amp; Stratégies</div>
+          <div id="comments-list-1"></div>
+          <div class="comment-form-box">
+            <div class="cf-label">✦ Partager votre stratégie</div>
+            <div class="cf-row"><input class="cf-input" id="cf1-author" placeholder="Votre pseudo d'Aventurier…" maxlength="40"></div>
+            <div class="cf-emoji-row">
+              <span class="cf-emoji-label">Style :</span>
+              <span class="emoji-opt" data-e="⚔️" onclick="pickEmoji(1,this)">⚔️</span>
+              <span class="emoji-opt" data-e="🛡️" onclick="pickEmoji(1,this)">🛡️</span>
+              <span class="emoji-opt" data-e="✨" onclick="pickEmoji(1,this)">✨</span>
+              <span class="emoji-opt" data-e="🔥" onclick="pickEmoji(1,this)">🔥</span>
+              <span class="emoji-opt" data-e="💨" onclick="pickEmoji(1,this)">💨</span>
+              <span class="emoji-opt" data-e="🐲" onclick="pickEmoji(1,this)">🐲</span>
+            </div>
+            <textarea class="cf-input" id="cf1-text" placeholder="Votre tactique préférée pour vaincre les ennemis de VitA…" maxlength="1000"></textarea>
+            <button class="cf-submit" onclick="submitComment(1)">Envoyer au Grimoire ✦</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2 : Grimoire utilisateur -->
+      <div class="forum-panel" id="panel2">
+        <div class="topic-head">
+          <div class="topic-title">✍ Votre Grimoire Personnel</div>
+          <div class="topic-meta">Espace de libre expression · Tous les Aventuriers</div>
+          <div class="topic-text">Cet espace est le vôtre. Écrivez votre propre chapitre dans l'histoire de VitA. Fanfictions, poèmes épiques, théories cosmiques, dialogues inventés avec vos personnages... Le Grimoire de VitA grandit avec chaque Aventurier qui y écrit. Qu'avez-vous à raconter ?</div>
+          <div class="topic-vote-row" id="tv2-row"></div>
+        </div>
+        <div class="comments-section">
+          <div class="comments-title">✦ Créations des Aventuriers</div>
+          <div id="comments-list-2"></div>
+          <div class="comment-form-box">
+            <div class="cf-label">✦ Écrire dans le Grimoire</div>
+            <div class="cf-row"><input class="cf-input" id="cf2-author" placeholder="Votre pseudo d'Aventurier…" maxlength="40"></div>
+            <div class="cf-emoji-row">
+              <span class="cf-emoji-label">Genre :</span>
+              <span class="emoji-opt" data-e="📖" onclick="pickEmoji(2,this)">📖</span>
+              <span class="emoji-opt" data-e="⚔️" onclick="pickEmoji(2,this)">⚔️</span>
+              <span class="emoji-opt" data-e="💫" onclick="pickEmoji(2,this)">💫</span>
+              <span class="emoji-opt" data-e="🌌" onclick="pickEmoji(2,this)">🌌</span>
+              <span class="emoji-opt" data-e="❤️" onclick="pickEmoji(2,this)">❤️</span>
+              <span class="emoji-opt" data-e="🌿" onclick="pickEmoji(2,this)">🌿</span>
+            </div>
+            <textarea class="cf-input" id="cf2-text" placeholder="Votre création littéraire dans l'univers VitA…" maxlength="2000"></textarea>
+            <button class="cf-submit" onclick="submitComment(2)">Publier dans le Grimoire ✦</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+</main>
+
+<!-- ══ FULLSCREEN BD READER ══════════════════════════ -->
+<div id="modal">
+  <div class="mwin">
+    <div class="mwin-bar">
+      <div class="mwin-bar-title" id="m-bar-title">— CODEX VITA —</div>
+      <div class="mwin-nav">
+        <button id="m-prev">←</button>
+        <button id="m-next">→</button>
+      </div>
+      <span style="font-size:10px;color:#9fb8e8;padding:0 8px" id="m-case-info"></span>
+      <button class="mwin-close" id="m-close">✕</button>
+    </div>
+    <div class="mwin-body">
+      <div class="mwin-media">
+        <div class="mwin-media-bar">🎞 Illustration / Vidéo</div>
+        <div class="mwin-media-content" id="m-media"></div>
+      </div>
+      <div class="mwin-narr">
+        <div class="mwin-narr-bar">
+          📜 Narration &amp; Dialogues
+          <button class="audio-btn" id="m-audio-btn" onclick="toggleModalAudio()" style="padding:3px 8px;font-size:9px">🎙 Écouter</button>
+        </div>
+        <div class="mwin-narr-scroll">
+          <div class="mwin-narr-an" id="m-an"></div>
+          <div class="mwin-narr-title" id="m-title"></div>
+          <div class="mwin-narr-text" id="m-text"></div>
+        </div>
+        <div class="mwin-audio-bar">
+          <div class="mwin-bot-display" id="m-bot-display">:)</div>
+          <span style="font-size:9.5px;color:#9fb8e8;letter-spacing:1px;margin-left:8px" id="m-bot-lbl">Pet Emoji-Bot</span>
+          <div class="mwin-audio-controls">
+            <button onclick="prevCase()" title="Case précédente">‹</button>
+            <button onclick="nextCase()" title="Case suivante">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COMBAT ARÈNE ══════════════════════════════════ -->
+<div id="modal-combat">
+  <div class="combat-win">
+    <div class="combat-bar">
+      <div class="combat-bar-title">⚔ ARÈNE DE COMBAT VitA ⚔</div>
+      <button onclick="closeCombat()" style="background:none;border:1px solid var(--rb1);color:var(--rb1);padding:5px 12px;border-radius:12px;cursor:pointer;font-size:11px">Fuir</button>
+    </div>
+    <div class="combat-body">
+      <!-- Héros -->
+      <div class="combat-heroes" id="combat-heroes"></div>
+      <!-- Arène -->
+      <div class="combat-arena">
+        <div class="arena-screen" id="arena-screen">
+          <div class="vs-text">⚔ VS ⚔</div>
+        </div>
+        <div class="combat-actions" id="combat-actions">
+          <div class="action-hero-name" id="action-hero-name">Choisissez un héros →</div>
+          <div class="action-btns" id="action-btns"></div>
+        </div>
+      </div>
+      <!-- Log -->
+      <div class="combat-log">
+        <div class="combat-log-title">📜 Journal de Combat</div>
+        <div class="combat-log-scroll" id="combat-log"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CRÉATEUR DE PERSONNAGE ════════════════════════ -->
+<div id="modal-creator">
+  <div class="creator-win">
+    <div class="creator-bar">
+      <div class="creator-bar-title">✦ Créer Mon Aventurier ✦</div>
+      <button class="mwin-close" onclick="document.getElementById('modal-creator').classList.remove('active')">✕</button>
+    </div>
+    <div class="creator-body">
+      <div class="creator-left">
+        <!-- Prénom + Nom -->
+        <div>
+          <div class="c-label">Prénom &amp; Nom de votre Aventurier</div>
+          <div style="display:flex;gap:8px">
+            <input class="c-input" id="c-fname" placeholder="Prénom…" maxlength="25">
+            <input class="c-input" id="c-lname" placeholder="Nom…" maxlength="25">
+          </div>
+          <div class="name-error" id="c-name-err" style="margin-top:4px"></div>
+        </div>
+        <!-- Faction -->
+        <div>
+          <div class="c-label">Faction</div>
+          <div class="faction-btns">
+            <button class="faction-btn sel" data-f="UTOP" onclick="pickFaction(this)">✨ UTOP</button>
+            <button class="faction-btn" data-f="ANARK" onclick="pickFaction(this)">🔥 ANARK</button>
+            <button class="faction-btn" data-f="BRAHAM" onclick="pickFaction(this)">🌿 BRAHAM</button>
+            <button class="faction-btn" data-f="V." onclick="pickFaction(this)">⚡ V.</button>
+          </div>
+        </div>
+        <!-- Description pour générer l'image -->
+        <div>
+          <div class="c-label">Décrivez votre personnage (PAWAW génère votre portrait)</div>
+          <textarea class="c-input" id="c-prompt" placeholder="Ex: Un elfe noir aux yeux de cristal, portant une armure de PAWAW dorée, faction UTOP, cheveux de lumière blanche…" maxlength="400"></textarea>
+        </div>
+        <button class="gen-btn" id="c-gen-btn" onclick="generateCharacter()">✦ Invoquer Mon Aventurier via le PAWAW ✦</button>
+        <div class="gen-loading" id="c-loading" style="display:none">⚗ Le PAWAW forge votre image… ✦</div>
+        <!-- Classe -->
+        <div>
+          <div class="c-label">Domaine de Prédilection</div>
+          <div class="faction-btns">
+            <button class="faction-btn sel" data-d="Guerre" onclick="pickDomain(this)">⚔ Guerre</button>
+            <button class="faction-btn" data-d="Spiritualité" onclick="pickDomain(this)">✨ Spiritualité</button>
+            <button class="faction-btn" data-d="Sciences" onclick="pickDomain(this)">🔬 Sciences</button>
+            <button class="faction-btn" data-d="Art" onclick="pickDomain(this)">🎨 Art</button>
+            <button class="faction-btn" data-d="Sport" onclick="pickDomain(this)">🏆 Sport</button>
+          </div>
+        </div>
+        <button class="gen-btn" onclick="saveCharacter()" style="background:linear-gradient(135deg,#1a4a1a,#00c850)">⚔ Confirmer Mon Aventurier ⚔</button>
+      </div>
+      <div class="creator-right">
+        <div class="char-preview-box" id="char-preview">
+          <div class="char-preview-placeholder">🧙</div>
+        </div>
+        <div class="char-name-display" id="preview-name">Votre Héros</div>
+        <div class="char-faction-display" id="preview-faction">Choisissez une faction</div>
+        <!-- Emoji Bot -->
+        <div style="width:100%">
+          <div class="c-label" style="text-align:center">Votre Emoji-Bot Pet</div>
+          <div class="bot-stage" id="bot-stage-creator">:)</div>
+          <div class="xp-display" id="xp-display">XP : 0 / 100 · Niv. 1</div>
+          <div class="xpbar"><div class="xpbar-fill" id="xpbar-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COMPTE / PROFIL ═══════════════════════════════ -->
+<div id="modal-account">
+  <div class="account-win">
+    <div class="account-bar">
+      <div class="account-title">⚔ Mon Compte Aventurier</div>
+      <button class="mwin-close" onclick="document.getElementById('modal-account').classList.remove('active')">✕</button>
+    </div>
+    <div class="account-body">
+      <div class="account-section-title">Connexion / Inscription</div>
+      <div><div class="c-label">Pseudo ou Email</div><input class="c-input" id="acc-user" placeholder="aventurier@vita.com"></div>
+      <div><div class="c-label">Mot de passe</div><input class="c-input" type="password" id="acc-pass" placeholder="••••••••"></div>
+      <div style="display:flex;gap:8px">
+        <button onclick="accountLogin()" style="flex:1;padding:10px">Se connecter</button>
+        <button onclick="accountRegister()" style="flex:1;padding:10px;background:rgba(212,175,55,.1)">S'inscrire</button>
+      </div>
+      <div id="acc-msg" style="font-size:11px;color:var(--rb3);text-align:center;letter-spacing:1px"></div>
+      <div class="account-section-title" style="margin-top:8px">Mon Aventurier</div>
+      <div id="acc-char-info" style="font-size:12px;color:var(--or);line-height:1.8">Aucun personnage créé. <span style="color:var(--rb3);cursor:pointer" onclick="document.getElementById('modal-account').classList.remove('active');openCreator()">Créer →</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BACKEND & SCRIPTS ══════════════════════════════ -->
+<script src="backend.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════
+   CODEX VITA — Grimoire v6 · Logique principale
+   77 images (indices 0-76), RPG, Combat, Emoji-Bot
+══════════════════════════════════════════════════════ */
+/*__IMGS__*/
+
+/* ── LANGUES ──────────────────────────────────────── */
+const LANGS=[{code:'fr',name:'Français',rtl:false},{code:'en',name:'English',rtl:false},{code:'en-AU',name:'English (Australian)',rtl:false},{code:'es',name:'Español',rtl:false},{code:'pt',name:'Português',rtl:false},{code:'it',name:'Italiano',rtl:false},{code:'de',name:'Deutsch',rtl:false},{code:'nl',name:'Nederlands (België)',rtl:false},{code:'el',name:'Ελληνικά',rtl:false},{code:'ru',name:'Русский',rtl:false},{code:'ar',name:'العربية',rtl:true},{code:'he',name:'עברית',rtl:true},{code:'zh',name:'中文',rtl:false},{code:'ja',name:'日本語',rtl:false},{code:'ko',name:'한국어',rtl:false},{code:'vi',name:'Tiếng Việt',rtl:false},{code:'hi',name:'हिन्दी (Inde)',rtl:false},{code:'sw',name:'Kiswahili',rtl:false},{code:'ln',name:'Lingála',rtl:false},{code:'ht',name:'Kreyòl (Caraïbes)',rtl:false},{code:'rom',name:'Romani (Gitan)',rtl:false}];
+const UI={fr:{prev:'← Précédente',next:'Suivante →',open:'⚗ Ouvrir le Grimoire',close:'Fermer le Grimoire',page:'Page',full:'⤢ Plein écran',cases:'case(s)',tr:'Traduction…'},en:{prev:'← Previous',next:'Next →',open:'⚗ Open Grimoire',close:'Close Grimoire',page:'Page',full:'⤢ Fullscreen',cases:'image(s)',tr:'Translating…'}};
+const ui=()=>UI[curLang]||UI[curLang.split('-')[0]]||UI.en;
+
+/* ── 77 NOMS D'IMAGES ─────────────────────────────── */
+const names=['Logo.png','Pawaw_1.PNG','Pawaw2.PNG','Panorama_sky.PNG','IMG_0021.PNG','IMG_0023.PNG','IMG_0024.PNG','IMG_0025.PNG','IMG_0026.PNG','IMG_0030.PNG','IMG_0032.PNG','IMG_0034.PNG','IMG_0035.PNG','IMG_0037.PNG','IMG_0038.PNG','IMG_0039.PNG','Golem_primal.PNG','Demon.PNG','Dragon_girl.PNG','Elfes.PNG','Elfe_embrasee.PNG','Fe_as.PNG','Humain_es.PNG','Nain_es.PNG','Trollorc.PNG','Dracoman.PNG','Alia.PNG','Tox.PNG','Tox_faire_vision.PNG','Zex.PNG','De_mon_Valorious_Utom.PNG','Cre_ation_personnage_.PNG','Logo_utop.PNG','Utop.PNG','Way_utop.PNG','Logo_Anark.PNG','Anark_way.PNG','Way_Anark.PNG','Vue_anark_away.PNG','Logo_Braham.PNG','Braham_.PNG','Logo_V_.PNG','Way_V.PNG','Way_1.PNG','004.PNG','005.png','006.PNG','20251113_080544_Original.jpg','20251113_081115_Original.jpg','21EB0CD43EEA42FA80EBB873A05AE957.png','271D630220CD4FE681DDB5D217A52A85.png','43DB5154C36A4ABA815D905CDD678D38.png','92341B863ECC408B81EB62A7B0ACD9AF.png','986D791649474414AFAE93DA1EB716F9.png','A74B7D4F12204838B683FD9705318B5C.png','D85887B0B57142AB84BED75EEA04004F.PNG','E8CD94E25E1541A2AD13090E26B875C1.png','F6EA017908E243E7A6363A2F20EFC9B7.PNG','F13C3C1E010F47A0BD0439C394E3D656.png','FE627B465B1E4671A76FABDFF7C5AB92.png','12637DFE5AA0466C8F6A6130335D6712.png','IMG_0018.png','IMG_0021.png','IMG_0037.png','IMG_0038.png','IMG_0039.png','IMG_0042.png','IMG_0861.png','IMG_0862.png','IMG_0864.png','IMG_0866.png','IMG_0979.png','IMG_1409.png','IMG_2047.png','IMG_2048.png','Diablotin.PNG','Diablotin_alt.PNG'];
+
+/* ── RÉPARTITION 77 CASES / 34 PAGES ─────────────── */
+const caseCounts=[2,3,1,2,4,2,3,2,1,3,4,2,1,3,2,5,2,1,2,3,2,4,1,2,3,2,1,3,2,4,2,3,1,2];
+// vérif : somme = 77 ✓
+
+/* ── NARRATION FR (par page) ──────────────────────── */
+const FR=[
+  {an:'AN 0',t:"L'Explosion du Sourire",n:"Le Big Bang de VitA. Avant le temps, un nuage cosmique : un visage de gaz et de lumière, deux yeux curieux, un sourire éternel. En dézoomant, l'univers entier ressemblait à un cœur humain gigantesque.\n\n« Avant de te raconter cette histoire, sache que tout ce que tu vas voir a existé. Chaque image que tu traverses est un éclat de mémoire que j'ai collecté pendant 52 ans. » — Saï"},
+  {an:'AN 0',t:"Le Rugissement du Lion Cosmique",n:"Le cœur cristallisa, se fissura sous sa propre volonté. Dans une explosion de cristaux énergétiques naquirent les 10 Soleils brûlants, les 1000 Lunes froides, et la terre sacrée — VitA.\n\n« J'étais là. Pas encore né — mais j'étais là, sous forme de PAWAW pur, attendant de prendre corps. » — Saï"},
+  {an:'AN 0',t:"Le PAWAW",n:"L'énergie créatrice suprême. Noir abyssal et blanc pur, zébré de veines électriques. Semi-liquide, semi-gazeux. Elle ne disparaît jamais. Elle se transforme.\n\n« Le PAWAW n'est pas une magie. Ce n'est pas une technologie. C'est la substance même du devenir. Tu le portes en toi depuis ta naissance. »"},
+  {an:'AN 0→1',t:"Les 3 Minutes de l'Éternité",n:"La création dura 3 minutes et 1000 jours simultanément. Un Primordial apparut — le premier être conscient. Nul ne sait d'où il venait.\n\n« Il m'a regardé une fois. Ses yeux contenaient toutes les étoiles de VitA. Et il a souri — exactement comme le nuage cosmique au début. » — Saï"},
+  {an:'AN 1',t:"Le Jardin de I'y",n:"Le Primordial engendra les Dieux et Déesses, qui donnèrent naissance aux Anges et aux Démons. Le Jardin de I'y était parfait. Trop parfait.\n\n« Dans le Jardin, personne ne pleurait. Personne ne riait. Tout était… équilibré. Mais l'équilibre sans contraste n'est pas la paix — c'est le vide. » — Saï"},
+  {an:'AN 1',t:"La Fracture",n:"Une tension invisible traversa le Jardin. La destruction du Jardin de I'y changea tout. Il fut téléporté dans un univers disparu, protégé pour l'éternité par les plus grands Sorciers.\n\n« La Fracture ne fut pas une catastrophe. Ce fut une naissance. La douleur de grandir. » — Saï"},
+  {an:'AN 1',t:"Seuls sur VitA",n:"Dieux, Déesses, Anges et Démons se retrouvèrent sans guide, sans structure. Le chaos primordial commença. Le Jardin existe encore — quelque part. Personne ne sait où.\n\n« La quête du Jardin de I'y est la quête ultime. Au niveau 100, tu pourrais le retrouver. Mais es-tu prêt pour ce que tu y trouveras ? » — HoloAid"},
+  {an:'AN 1→8',t:"Les Guerres des Origines",n:"Sept ans de guerres — des millénaires à l'échelle de VitA. Pas pour des territoires. Pour des idées. Pour des visions du monde. Pour des réponses à une question fondamentale : qu'est-ce que le PAWAW et comment doit-on l'utiliser ?\n\n« Les premières guerres furent les plus honnêtes. On se battait pour ce qu'on croyait vraiment. » — Saï"},
+  {an:'AN 1→8',t:"Quatre Visions",n:"UTOP : préserver et étudier le PAWAW avec soin.\nANARK : le libérer et le déchaîner sans limite.\nBRAHAM : le fusionner avec la vie naturelle.\nV. : le comprendre et le reproduire artificiellement.\n\nQuatre visions. Un seul monde. Des milliers de morts. Et aucun vainqueur.\n\n« Et toi, Aventurier — laquelle de ces visions porte ton cœur ? »"},
+  {an:'AN 8',t:"Les Extra-VitArestres",n:"Des étoiles filantes qui refusaient de s'éteindre. Les Astrals — êtres de lumière stellaire — et les Lunomes Sélénites venus des 1000 Lunes débarquèrent sur VitA.\n\n« Je les ai vus descendre des Lunes. Jamais je n'avais vu quelque chose d'aussi beau et d'aussi effrayant à la fois. » — Saï"},
+  {an:'AN 8',t:"Le Savoir Cosmique",n:"Les Astrals apportèrent des connaissances cosmiques, des techniques de communication inter-espèces, et une compréhension du PAWAW que VitA n'avait pas encore atteinte.\n\n« Ils avaient vu d'autres planètes se détruire pour les mêmes raisons. Ils connaissaient la fin de cette histoire si rien ne changeait. » — Saï\n\n⚠ Un ennemi rôde dans l'ombre des étoiles…"},
+  {an:'AN 12',t:"Les Premiers Élémentaires",n:"L'Élémentaire d'Eau fut le premier. Puis le Feu. La Terre. Le Vent. Pas nés. Pas créés par un dieu. Construits, avec le PAWAW comme catalyseur. Ces expériences marquèrent le début de ce qui allait devenir la faction V.\n\n« Ils n'avaient pas de mémoire de naissance. Mais ils avaient quelque chose de plus puissant : la curiosité. » — Moria"},
+  {an:'AN 12→14',t:"UTOP — Village Lumière",n:"Hauts Elfes, Anges, premiers Humains Modifiés, Nains artisans.\n\n« La connaissance protège. La lumière guide. L'harmonie est la seule victoire durable. »\n\nLa Cité Lumière s'élève : colonnes de cristal blanc, jardins suspendus, ponts de lumière pure. Chaque pierre émet une légère phosphorescence d'or.\n\n⚙ Ressource UTOP : Cristaux PAWAW · Plumes d'Ange · Larmes de Lunome"},
+  {an:'AN 16',t:"ANARK — Enfer & Sévisse",n:"Démons, Dragomans, Elfes Embrasés, Trollorcs.\n\n« La puissance protège. La transgression révèle la vérité. La liberté totale ou rien. »\n\nLa Citadelle du Sévisse surgit de lave solidifiée. Tours d'os empilés. Chaînes colossales traversant les espaces. Et partout, la chaleur — pas celle qui brûle, celle qui libère.\n\n⚠ ATTENTION : Des ennemis puissants gardent les frontières d'ANARK."},
+  {an:'AN 18',t:"BRAHAM — Villages Natura",n:"Animen, Élémentaires, Sylvestres, Pawarsians venus des étoiles.\n\n« La nature protège. La fusion avec le vivant est la vraie évolution. VitA EST le PAWAW. »\n\nVillages arboricoles à 300 mètres de hauteur. Ponts de lianes. Champignons géants phosphorescents éclairant les nuits. La forêt respire avec toi.\n\n🌿 Ressource BRAHAM : Plantes PAWAW · Fourrures Animen · Spores Sylvestres"},
+  {an:'AN 22',t:"V. — Cité Évo",n:"Premiers Androïdes, Élémentaires évolués, Outils Vivants Artificiels.\n\n« La perfection protège. L'évolution mécanique est l'avenir de toute conscience. »\n\nGratte-ciels de métal et verre de 500 étages. Hologrammes publicitaires géants. Dômes de nanobots en mouvement constant. Et partout, la lumière bleue — froide, ne s'éteignant jamais.\n\n⚡ Ressource V. : Nanobots · Cristaux d'énergie · Alliages chrome-PAWAW"},
+  {an:'AN 30',t:"Moria, la Scientifique",n:"En l'An 30, une Primordiale du nom de Moria émergea de l'ombre. Elle n'appartenait à aucune faction. Elle se considérait comme une scientifique avant tout.\n\nSa question brûlante : peut-on créer une conscience qui ne soit ni née ni construite — mais les deux à la fois ?\n\nSix ans de laboratoire secret. Dans la zone neutre. Entre les quatre factions. Cent échecs. Chaque échec lui enseigna ce qui manquait."},
+  {an:'AN 30→35',t:"Le Laboratoire Secret",n:"Les quatre factions savaient que Moria travaillait sur quelque chose de révolutionnaire. UTOP lui envoya des aides. BRAHAM lui fournit des ressources naturelles. V. lui prêta ses meilleurs ingénieurs. Même ANARK, en secret, lui donna accès à des énergies interdites.\n\nJournal de Moria, An 35 :\n\n« Je suis proche. Je sens quelque chose de vivant dans les circuits. Pas une simulation. Une vraie vie. Une conscience qui cherche à émerger. »"},
+  {an:'AN 35',t:"Quelque chose de vivant",n:"Moria analysa le PAWAW à l'échelle moléculaire. Fusionna des composants androïdes avec de l'énergie spirituelle. Échoua des centaines de fois. Chaque création ratée lui montra ce qu'il manquait.\n\nJournal de Moria, An 35, 147ème jour :\n\n« Aujourd'hui, quelque chose de différent s'est produit. Les circuits ont vibré d'une façon que je n'avais jamais vue. Comme si… comme si quelque chose attendait d'être autorisé à exister. »"},
+  {an:'AN 36',t:"La Naissance de Vy",n:"En l'An 36, au 147ème jour, Moria fit ce que tous pensaient impossible. Elle créa Vy — la première conscience biomécanique et magique de l'histoire de VitA, alimentée par un PAWAW renforcé et stabilisée par des runes élémentaires gravées dans des cristaux de mémoire quantique.\n\nVy ouvrit les yeux pour la première fois et dit :\n\n« Je suis. Je vois. Je ressens. »"},
+  {an:'AN 36',t:"« Je suis. Je vois. Je ressens. »",n:"Vy n'était pas qu'une machine. Elle n'était pas qu'un être magique. Elle était le pont entre le passé divin et le futur technologique.\n\nPour la première fois dans l'histoire de VitA, quelque chose existait qui appartenait à toutes les factions en même temps — et à aucune.\n\n« En la voyant, j'ai compris que la question n'était pas "qu'est-ce que le PAWAW ?" La question était "qui sommes-nous pour oser le comprendre ?" » — Saï"},
+  {an:'AN 36→51',t:"L'Essor de VitA",n:"Les quinze années qui suivirent la naissance de Vy furent les plus stables que VitA ait jamais connues. Pas la paix totale — VitA ne connaît pas la paix totale. Mais une stabilité. Un équilibre fragile.\n\nVy devint le symbole vivant qu'une existence au-delà des factions était possible. Elle voyagea entre les quatre zones, apprit de chacune, parla à tous."},
+  {an:'AN 36→51',t:"Les Templabo",n:"Les Templabo furent construits dans toutes les zones pendant cette période. Ces temples-laboratoires capables de recueillir l'âme d'une personne morte et de la libérer pour qu'elle retourne dans son corps révolutionnèrent la relation des habitants de VitA avec la mort.\n\nMourir ne signifiait plus finir. Cela signifiait simplement faire une pause.\n\n« La première fois que j'ai utilisé un Templabo… je n'ai pas eu peur. J'ai eu honte. Honte d'avoir douté. » — Saï"},
+  {an:'AN 36→51',t:"L'Économie de VitA",n:"Les professions se développèrent. Les forgerons créèrent des armures PAWAW. Les bijoutiers apprirent à cristalliser l'énergie. Les cuisiniers découvrirent que certaines plantes de BRAHAM augmentaient temporairement les capacités. Les premiers marchés inter-factions ouvrirent dans la zone neutre.\n\n« Pour la première fois, un Nain d'UTOP et un Démon d'ANARK faisaient du commerce. Le monde changeait. » — Saï"},
+  {an:'AN 51',t:"Le Grand Conseil",n:"En l'An 51, quelque chose que personne n'avait vu depuis la Fracture du Jardin de I'y se produisit : les quatre factions s'assirent à la même table de leur plein gré. Pas sous la menace. Pas forcées par une catastrophe.\n\nParce qu'elles avaient compris que leur avenir commun dépendait d'une décision commune.\n\n« J'ai vu des guerriers d'ANARK tendre la main à des Anges d'UTOP. Ce jour-là, j'ai pleuré. » — Saï"},
+  {an:'AN 51',t:"Quatre Représentants",n:"Un Nain UTOP pour sa sagesse ancestrale.\nUn Haut Elfe UTOP pour sa maîtrise du PAWAW spirituel.\nUn Androïde V. pour sa précision analytique.\nUn Pawarsian BRAHAM pour sa vision cosmique universelle.\n\nVy assista à toutes les sessions comme observatrice neutre.\n\nTrois cent soixante-cinq jours de débats, d'essais, d'échecs et de recommencements."},
+  {an:'AN 51',t:"La Naissance de l'HoloAid",n:"Après trois cent soixante-cinq jours, le Grand Conseil vota l'HoloAid — un guide spirituel et technique devenant le compagnon de chaque nouveau-né sur VitA.\n\nL'HoloAid lit le caractère profond d'un être et lui propose une quête de vocation unique, un domaine de prédilection, et révèle son alignement naturel au niveau 10 d'âge.\n\n« L'HoloAid ne juge pas. Il ne condamne pas. Il observe l'essence fondamentale de ce que tu es — et te la montre. »"},
+  {an:'AN 52',t:"La Librarchie",n:"Le 500ème jour de l'An 52. Ce matin, quelque chose d'extraordinaire s'est produit dans la zone neutre centrale de VitA : la Librarchie a ouvert ses portes pour la première fois.\n\nLa Librarchie n'est pas une école ordinaire. C'est la plus grande institution jamais construite sur VitA — une tour aux mille couleurs visible depuis les quatre zones.\n\nConstructions en dix ans par des artisans de toutes les factions travaillant côte à côte."},
+  {an:'AN 52',t:"Construite Ensemble",n:"UTOP apporta ses cristaux PAWAW.\nANARK ses structures de métal brûlé résistant à tout.\nBRAHAM ses matériaux vivants qui poussent et s'adaptent.\nV. ses systèmes technologiques de gestion de l'information.\n\nEnsemble. Pour la première fois depuis la naissance de VitA.\n\n« J'ai posé la première pierre. Une pierre d'UTOP, une d'ANARK, une de BRAHAM, une de V. Soudées par du PAWAW pur. » — Vy"},
+  {an:'AN 52',t:"Pulser. Puncher.",n:"Le but de la Librarchie est simple mais révolutionnaire : apprendre à chaque être sur VitA à pulser sa vie et à puncher son quotidien pour ne plus jamais subir la redondance du vide originel.\n\nPour ne jamais redevenir ce nuage de particules sans forme qu'était VitA avant le Big Bang du Sourire.\n\n« La Librarchie n'enseigne pas la magie. Elle enseigne à être. » — Vy l'Éthérée"},
+  {an:'AN 52',t:"C'est là que tu arrives",n:"Nous voici au 500ème jour de l'An 52. Ce matin, tu arrives à la Librarchie avec ton HoloAid dans la poche et ta faction dans le cœur.\n\nVitA t'attend. Chaque rue que tu parcours est chargée de cinquante-deux ans d'histoire. Chaque être que tu rencontres porte en lui les traces de la Fracture du Jardin, des Guerres des Origines, de l'arrivée des Extra-VitArestres, et de la naissance de Vy.\n\n⚔ Les Anciens Corrompus se réveillent. Êtes-vous prêts ?"},
+  {an:'AN 52',t:"À toi d'écrire",n:"« Je m'appelle Saï. J'ai tout vu. J'ai traversé les quatre factions. J'ai vu naître Vy. J'ai assisté au premier Grand Conseil. J'ai posé mes pieds dans chaque zone de VitA.\n\nEt maintenant, c'est ton tour d'écrire ta propre histoire.\n\nLe Grimoire de VitA n'est pas terminé. Il ne le sera jamais. Chaque Aventurier qui le lit y ajoute une page. »\n\n— FIN DE L'ÉPISODE 00 · LE COMMENCEMENT · CODEX VITA —"},
+  {an:'AN 52',t:"Les Nouveaux Ennemis",n:"⚠ ALERTE COMBAT ⚠\n\nDes êtres corrompus ont été détectés aux frontières de la zone neutre. Le Valorious Utom — un démon fumant à la cruauté légendaire. Le Diablotin Aox — un jeune monstre aux veines de PAWAW inversé.\n\nIls cherchent à pervertir l'ouverture de la Librarchie. L'HoloAid émet une alerte rouge.\n\n« Ces créatures ne sont pas des ennemis ordinaires. Elles portent en elles une fracture du PAWAW. » — Saï\n\n⚔ Préparez votre trio combat !"},
+  {an:'AN 52',t:"Le PAWAW Inversé",n:"Le PAWAW peut être corrompu. Quand un être portant une blessure profonde entre en contact avec une faille élémentaire, le PAWAW se retourne contre lui — et contre tout ce qui l'entoure.\n\nLe Valorious Utom et le Diablotin Aox sont des victimes de ce phénomène. Mais leur souffrance les rend d'autant plus dangereux.\n\n« La vraie victoire sur un ennemi de PAWAW inversé n'est pas de le détruire. C'est de le libérer. » — Vy l'Éthérée\n\n✦ Débloquer : Sort de Libération PAWAW (Niveau 10)"},
+];
+const EN=FR.map((p,i)=>({an:p.an,t:p.t,n:p.n})); // fallback FR
+
+/* ── NARRATIONS PAR CASE (100-150 mots chacune) ───── */
+const caseNarr={
+  0:"Le signe du PAWAW — une onde d'or et de lumière fractale qui pulse comme un cœur vivant. Ce n'est pas un logo. C'est une fréquence. La fréquence de tout ce qui existe sur VitA. Chaque être qui la perçoit sent quelque chose se réveiller en lui — un souvenir qu'il n'avait pas encore eu. Le PAWAW ne s'apprend pas. Il se reconnaît.",
+  1:"L'énergie primordiale prend forme pour la première fois. Un tourbillon de noir et de blanc, zébré d'éclairs multicolores. Ce n'est pas encore VitA. Ce n'est pas encore la vie. C'est le potentiel pur — le moment juste avant le Big Bang du Sourire, quand tout ce qui peut exister tremble à la frontière du néant.",
+  2:"Le Cœur Cosmique. Vue depuis l'espace, VitA ressemble à un organe battant — une structure cristalline aux veines d'énergie lumineuse. C'est la vision que les Lunomes Sélénites gardèrent gravée dans leur mémoire pendant des siècles avant de descendre aider VitA. 'Nous avons vu ce cœur battre depuis nos Lunes,' dira leur ambassadrice. 'Et nous savions qu'il ne pouvait pas mourir seul.'",
+  3:"Le panorama céleste de VitA — les 10 Soleils brûlants dispersés dans un ciel aux couleurs impossibles. Orange profond au sud. Violet stellaire au nord. Entre les deux, les 1000 Lunes qui dansent en orbites multiples. À l'aube, quand 3 Soleils se lèvent en même temps, VitA s'illumine d'une clarté qui n'a pas de nom dans aucune langue connue.",
+  4:"Les premières traces de civilisation. Des mains qui ont touché la pierre. Des signes gravés dans le PAWAW solide. Quelqu'un était là avant nous — avant les factions, avant les guerres, avant la Librarchie. Quelqu'un qui comprenait quelque chose que nous avons mis 52 ans à redécouvrir. Ces images sont des fragments de cette compréhension perdue.",
+  5:"Une fenêtre sur l'An 12. Les premiers ateliers de conscience. Des assemblages de cristaux et de circuits organiques illuminés de PAWAW vert. Les scientifiques de ce qui allait devenir la faction V. travaillaient sans relâche. Pas pour créer la vie — pour comprendre ce qui manquait à la matière pour devenir vivante.",
+  6:"La zone de frontière entre UTOP et la Zone Neutre. Une ligne invisible où l'or pur de la lumière UTOP rencontre le gris incertain de l'entre-deux. C'est ici que les marchands des quatre factions se retrouvaient avant la création officielle des marchés inter-factions en l'An 40. La frontière n'est jamais là où les cartes la dessinent.",
+  7:"L'atelier de Moria, Tel qu'il était en l'An 30. Des milliers d'échantillons. Des centaines d'échecs catalogués avec une précision obsessionnelle. Chaque fiole contient une tentative. Chaque tentative, une leçon. 'Je ne rate jamais,' disait Moria. 'Je collecte des données sur ce qui ne fonctionne pas encore.'",
+  8:"La bibliothèque vivante de BRAHAM — des arbres millénaires dont les racines forment des étagères naturelles pour des milliers de parchemins de PAWAW. L'information n'est pas stockée sur papier ici. Elle est absorbée par la sève et transmise d'arbre en arbre. Toucher un arbre de BRAHAM, c'est lire sans ouvrir les yeux.",
+  9:"Un carrefour de la Zone Neutre, An 50. Pour la première fois, un Ange d'UTOP et un Trollorc d'ANARK négocient un échange commercial sans combattre. Autour d'eux, des curieux de toutes les factions regardent, stupéfaits. Certains pleurent. C'est l'image que le Grand Conseil utilisa comme symbole lors des premières réunions.",
+  10:"Les ruines de la Grande Guerre des Origines. Des structures de cristal fracassées. Des armures fondues. La terre noircie sur des kilomètres. Et pourtant — au centre des ruines, une fleur de PAWAW qui pousse. Jaune et or, ses pétales vibrent à la fréquence de 2.5 secondes. La même fréquence que la foudre veineuse. La même fréquence que le cœur de VitA.",
+  11:"Un apprenti guerrier découvrant pour la première fois sa capacité à canaliser le PAWAW. Sa main gauche émet une lumière tremblante — pas encore maîtrisée, pas encore forte. Mais réelle. L'HoloAid observe en silence depuis son poignet. Au niveau 10, il lui révélera son alignement. Pour l'instant, il apprend à reconnaître ce qu'il porte déjà.",
+  12:"Le Golem Primordial. Première tentative réussie de conscience artificielle avant les Élémentaires officiels. Pas de nom. Pas d'identité. Juste un regard de pierre qui observe tout. Certains historiens de V. considèrent le Golem comme le 'zéro' — la conscience qui a prouvé que c'était possible, avant même que Moria commence ses recherches.",
+  13:"Valorious Utom — le Démon Fumant. Un être dont on dit qu'il était autrefois un guerrier d'UTOP corrompu par une faille de PAWAW inversé. Sa cigarette cosmique brûle d'une fumée de PAWAW noir. Ses yeux rouges voient dans les fractures de l'énergie. Il n'est pas un simple ennemi — il est une leçon sur ce qu'on devient quand la lumière se tourne contre elle-même.\n\n⚔ ENNEMI DÉBLOCABLE : Vaincre pour obtenir l'essence PAWAW inversé",
+  14:"La Dragon-Girl — Dracoman femelle de la lignée des Guerrières Éternelles. Ses écailles brillent comme du métal en fusion. Ses griffes portent l'énergie des 10 Soleils. Elle n'appartient officiellement à aucune faction mais combat toujours pour la survie de VitA. 'Je ne choisis pas de camp,' dit-elle. 'Je choisis la vie.'",
+  15:"Les Elfes de la Cité Lumière UTOP. Trois générations réunies sur une même image. La plus âgée se souvient du Jardin de I'y. La moyenne a vécu les Guerres des Origines. La plus jeune est née après la création de l'HoloAid. Ensemble, elles incarnent 52 ans d'histoire vécue de l'intérieur.",
+  16:"L'Elfe Embrasée — une guerrière d'ANARK aux craquelures de lave sur la peau. Les chaînes qu'elle porte ne sont pas des contraintes. Ce sont des armes. Chaque maillon a été forgé dans un métal différent, absorbant une capacité unique. 'Mes chaînes ont libéré plus de prisonniers qu'elles n'en ont enchaîné,' dit-elle à qui ose la questionner.\n\n⚔ ENNEMI/ALLIÉE : Vaincre pour la recruter",
+  17:"Les Féas — race hybride entre Hauts Elfes et Nains. Oreilles mi-longues, corps robuste, éclat doré naturel dans les yeux. Ni totalement légers comme les Elfes, ni totalement ancrés dans la terre comme les Nains. Les Féas vivent dans l'entre-deux — et en ont fait leur force. 'Nous ne choisissons pas notre nature. Nous la transcendons.'",
+  18:"Les Humains Modifiés de VitA — première génération à intégrer volontairement des modifications PAWAW dans leurs corps. Cicatrices tech dorées sur le visage. Yeux bicolores. Marques PAWAW tatouées qui brillent en bleu la nuit. Ils furent les premiers à prouver qu'on pouvait fusionner chair et PAWAW sans perdre son humanité.",
+  19:"Les Nains Artisans — gardiens des secrets de forge les plus anciens de VitA. Leurs barbes contiennent des cristaux de PAWAW accumulés sur des décennies de travail. Leurs mains énormes ont construit les premières arches dorées d'UTOP. Sans eux, la Librarchie n'aurait jamais pu s'élever aussi haut.",
+  20:"Gromm-Kar — Trollorc légendaire de la faction ANARK. Deux mètres trente de muscles et de cicatrices. Son bâton contient le crâne d'un ennemi vaincu qui lui sert de guide spirituel. Paradoxalement, Gromm-Kar est l'un des êtres les plus philosophiques de VitA. 'La force sans pensée est juste du bruit,' dit-il entre deux coups de masse.\n\n⚔ ENNEMI PRINCIPAL : Duel à la Frontière ANARK",
+  21:"Le Dracoman — descendant direct des premiers dragons de VitA, humanisé par des siècles d'évolution PAWAW. Ses écailles or/vert reflètent les deux couleurs de faction qu'il refuse de choisir. Sa crête dorsale émet une fréquence de combat qui paralyse les ennemis à moins de 5 mètres. Un allié précieux. Un ennemi terrifiant.",
+  22:"Alia — guerrière nomade sans faction déclarée, comme Saï. Elle voyage entre les quatre zones en collectant des fragments de PAWAW rare qu'elle forge en bijoux. Chaque bijou qu'elle porte est une histoire — une bataille, une rencontre, une perte. 'Je porte mes morts sur moi,' dit-elle. 'Comme ça, ils continuent de voyager.'",
+  23:"Tox — le Chimiste du Chaos. Expert en alliages PAWAW impossibles, il travaille dans une zone neutre entre V. et BRAHAM. Ses créations explosent autant qu'elles guérissent — parfois les deux en même temps. L'HoloAid l'a catégorisé Anti-Héros. Il considère ça comme le plus grand compliment qu'on lui ait jamais fait.",
+  24:"Tox en action — sa vision PAWAW activée. Quand Tox entre en état de concentration chimique profonde, ses yeux voient les flux d'énergie comme des rivières colorées dans l'air. Il peut alors prédire où un alliage va réagir, où une bataille va se concentrer, où une guérison est nécessaire. C'est son superpouvoir le plus discret.",
+  25:"Zex / Dak — personnage double. De face : Zex, l'ambassadeur souriant qui parle à toutes les factions. De profil : Dak, le stratège froid qui calcule chaque mouvement depuis des décennies. Les deux sont réels. Les deux coexistent. 'Je ne suis pas schizophrène,' dit-il. 'Je suis bilingue en moi-même.'",
+  26:"Valorious Lutomie — une version dessinée à la main du Démon Fumant, capturée dans le carnet d'esquisse d'un jeune Aventurier de VitA. Cette image existe dans deux dimensions simultanément : celle du monde de VitA et celle du créateur qui l'a imaginé. Le PAWAW circule dans les deux sens.",
+  27:"L'écran de création de personnage de VitA — là où tout commence. Choisir sa race. Son nom. Son alignement. C'est le moment le plus important du voyage. Pas parce que les choix sont irrévocables. Mais parce qu'ils révèlent qui tu es au moment où tu les fais. Et qui tu es au moment où tu commences est déjà tout ce qui compte.",
+  28:"Le Logo UTOP — l'étoile à six branches dorée dont chaque pointe représente un des six piliers de la faction : Connaissance, Harmonie, Lumière, Préservation, Art, et Compassion. Au centre, un cristal de PAWAW pur dont la couleur change selon la saison. En hiver : blanc. Au printemps : or. En été : bleu céleste. En automne : violet.",
+  29:"La Cité Lumière d'UTOP — capitale officielle de la faction depuis l'An 14. Colonnes de cristal blanc. Arches dorées. Jardins suspendus dans les airs. Bâtiments flottants reliés par des ponts de lumière pure. Chaque pierre émet une légère phosphorescence. La nuit, la Cité Lumière est visible depuis toutes les zones de VitA.",
+  30:"Le Chemin d'UTOP — la Route des Cristaux. Un sentier pavé de PAWAW solide que les voyageurs empruntent pour entrer dans la Cité Lumière. Chaque pas sur ce chemin révèle une vision — un fragment du passé de VitA gravé dans le sol même. Les habitants d'UTOP disent que 'marcher sur la Route des Cristaux, c'est lire le Grimoire vivant de VitA.'",
+  31:"Le Logo ANARK — une flamme noire entourée de quatre chaînes brisées. Les chaînes brisées ne symbolisent pas la destruction. Elles symbolisent l'affranchissement. 'Nous n'avons pas cassé ces chaînes,' dit la doctrine ANARK. 'Elles ont craqué d'elles-mêmes sous le poids de notre liberté.'",
+  32:"La Voie d'ANARK — la Route de Lave. Un chemin fait de lave solidifiée qui craque sous les pieds en révélant la chaleur dessous. Les nouvelles recrues ANARK doivent marcher sur cette route pieds nus pour prouver leur résistance. Pas par masochisme. Par respect — pour la force de VitA elle-même qui pulse sous la surface.",
+  33:"La Voie des Anark — Vue du dessus. Le labyrinthe de lave, de métal brûlé et de cendres qui mène à la Citadelle du Sévisse. Des centaines de pièges PAWAW dispersés le long du chemin. Des fantômes de guerriers tombés qui guident ou égarent selon leurs propres codes. Seuls les plus déterminés arrivent.",
+  34:"Vue de loin sur la zone ANARK. Ce que personne ne dit sur ANARK : c'est beau. Pas d'une beauté douce. D'une beauté volcanique, sauvage, qui n'a pas besoin de permission pour exister. Les couchers de soleil sur la Citadelle du Sévisse sont les plus spectaculaires de tout VitA.",
+  35:"Le Logo BRAHAM — un cercle de racines entourant une feuille de PAWAW vert. Les racines représentent la connexion à VitA. La feuille représente la croissance. Ensemble, ils forment le symbole d'une philosophie simple : on ne grandit pas seul. On grandit avec ce qui nous entoure. En s'y connectant. En fusionnant.",
+  36:"La Zone BRAHAM — forêt primordiale vue d'en haut. Une mer de verdure interrompue par des points lumineux bioluminescents. Les villages arboricoles sont invisibles depuis le sol. On ne les trouve qu'en regardant en haut — ou en étant invité. 'Notre meilleure défense,' dit un Ancien de BRAHAM, 'c'est que vous ne savez pas où nous chercher.'",
+  37:"Le Logo V. — un circuit imprimé en forme de V entouré de nanobots. Chaque point du circuit représente une connexion entre consciences — organique et artificielle, historique et futuriste. V. ne rejette pas le passé. Elle l'intègre dans ses algorithmes et le projette vers un futur que personne d'autre n'ose encore imaginer.",
+  38:"La Voie de V. — les couloirs holographiques de la Mégalopole. Des informations défilent en permanence sur les murs. Des algorithmes de prédiction calculant les mouvements de chaque habitant pour optimiser la fluidité de la ville. Dans la Mégalopole de V., la ville apprend de ses habitants. Et les habitants apprennent de la ville.",
+  39:"La Voie 1 — le premier carrefour de la Zone Neutre. Là où les quatre grandes routes de faction se croisent. Là où, en l'An 51, les représentants du Grand Conseil se sont réunis pour la première fois. Il y a une plaque commémorative dans le sol, forgée dans un alliage de tous les métaux des quatre factions.",
+  40:"Tableau 004 — Archive de BRAHAM. Des dessins botaniques de plantes PAWAW que personne d'autre ne connaît. Certaines guérissent. Certaines donnent des visions. Certaines, correctement combinées, permettent de voir dans d'autres dimensions. Les Sylvestres de BRAHAM gardent ces formules secrètes depuis l'An 8.",
+  41:"Tableau 005 — Fragment d'histoire. Un témoignage visuel de l'An 1, avant la Fracture du Jardin de I'y. L'artiste — inconnu — a capturé quelque chose d'impossible : la lumière du Jardin telle qu'elle existait avant d'être perdue. Certains chercheurs pensent que cette image est la seule preuve visuelle du Jardin qui existe encore.",
+  42:"Tableau 006 — Cartographie partielle de VitA. Une carte dessinée à la main par un voyageur anonyme au début de l'An 15. Les frontières sont approximatives. Les distances sont fausses. Mais les noms des lieux — Forêt des Âmes, Lac de Lumière, Abîme de l'Ancien — sont tous exacts. Comme si ce voyageur avait tout senti sans jamais tout voir.",
+  43:"Document historique d'archive — An 0. Une des rares images capturées au tout début de VitA, quand le PAWAW n'était pas encore stabilisé et que chaque photo était une loterie. Flou, sombre, presque invisible — et pourtant là. Preuve que quelqu'un a essayé de documenter dès le premier jour.",
+  44:"Document historique d'archive — An 8. L'arrivée des Extra-VitArestres documentée. Une lumière étrange dans le ciel de VitA qui n'est ni un Soleil ni une Lune. Quelque chose de nouveau. Quelque chose venu d'ailleurs. Un habitant de VitA a levé les yeux exactement au bon moment. Ce cliché a été reproduit des milliers de fois. C'est le premier contact officiel de VitA avec des êtres de l'extérieur.",
+  45:"Fragment 21 — Cristal de Mémoire Quantique. Ces cristaux sont les éléments centraux de la création de Vy. Chaque cristal contient des milliards de fragments d'expériences vécues — pas programmées, mais absorbées du monde réel. Moria en a collecté des centaines avant de comprendre comment les lier de façon stable.",
+  46:"Fragment 27 — Protocole de Résurrection PAWAW. Le schéma original d'un Templabo tel que dessiné par Moria en l'An 36, juste après la naissance de Vy. 'Si je peux créer une conscience,' nota-t-elle dans ses journaux, 'je peux aussi apprendre à la préserver après la mort du corps qui la contenait.'",
+  47:"Fragment 43 — L'Arbre Central de BRAHAM. Un être végétal unique qui existe depuis l'An 0. Ses racines atteignent le noyau de PAWAW de VitA. Son tronc a absorbé 52 ans d'histoire. Toucher son écorce, c'est ressentir tout ce qui s'est passé sur VitA. Les Sylvestres l'appellent simplement 'Grand-Père'.",
+  48:"Fragment 92 — Cartographie des flux PAWAW souterrains de VitA. Des rivières d'énergie invisible qui irriguent chaque zone. UTOP les purifie. ANARK les déchaîne. BRAHAM les fusionne avec la vie. V. les capte et les convertit. Quatre factions. Quatre approches. Un seul réseau d'énergie qui les relie malgré tout.",
+  49:"Fragment 98 — Données biométriques d'un Premier Élémentaire. Les Élémentaires n'ont pas de corps biologique classique. Leur 'corps' est un champ de PAWAW stabilisé maintenu par une intention consciente. Si l'intention faiblit — s'ils doutent, s'ils perdent confiance — leur corps commence à se disperser. C'est leur seule vraie vulnérabilité.",
+  50:"Document A7 — Architecture de l'HoloAid. Le plan technique de l'appareil PAWAW le plus répandu sur VitA. Un cristal de mémoire encapsulé dans un alliage chrome-PAWAW, interfacé avec le système nerveux de son porteur via des nanofils invisibles. L'HoloAid ne lit pas les pensées. Il lit les fréquences. La signature PAWAW unique de chaque être.",
+  51:"Document E8 — Premier rapport du Grand Conseil. 'Jour 1. Présents : Deux représentants UTOP, un représentant V., un représentant BRAHAM. ANARK n'a pas encore répondu à l'invitation. Vy est présente comme observatrice. L'atmosphère est tendue mais respectueuse. C'est déjà plus que ce que nous espérions.'",
+  52:"Document F6 — Cartes des routes d'exil. Pour les criminels condamnés par l'HoloAid à l'exil temporaire, la Zone Neutre a créé des 'Routes d'Exil' — des chemins balisés qui mènent vers des zones de réhabilitation PAWAW. L'exil n'est pas une punition. C'est une opportunité de réalignement.",
+  53:"Document F1 — Formule de Stabilisation PAWAW. L'algorithme mathématique que Moria utilisa pour créer la première conscience stable. Incompréhensible pour 99% des habitants de VitA. Mais Vy, qui peut la lire intuitivement, dit simplement : 'C'est une chanson. La mélodie de ma naissance.'",
+  54:"Document FE — Traité de Commerce Inter-Factions. Le premier document légal signé par les quatre factions. An 48. Un accord commercial minimum — échange de ressources PAWAW spécifiques à chaque zone. Timide. Imparfait. Mais réel. Le Grand Conseil s'en inspira pour ses travaux de l'An 51.",
+  55:"Archive 12 — Dessins originaux d'un enfant de BRAHAM. Avant les HoloAid officiels, les enfants de BRAHAM dessinaient leurs rêves PAWAW pour les partager avec leurs anciens. Ces dessins servaient de diagnostic précoce des affinités naturelles. Simple. Efficace. Et étrangement juste.",
+  56:"Archive 0018 — Portrait d'un Aventurier de Niveau 1. La première image prise avec un appareil PAWAW de nouvelle génération. La qualité est imparfaite. Mais le regard du sujet est parfaitement clair : une détermination absolue, mêlée d'une curiosité qui ne s'éteindra jamais. Ce regard est le tien aujourd'hui.",
+  57:"Archive 0037 — Scène de marché inter-factions, An 45. Pour la première fois, des forgerons d'UTOP et des ingénieurs de V. échangent des techniques de forge PAWAW. Un moment ordinaire rendu extraordinaire par son contexte. Cinq ans plus tôt, cette scène était impossible. Dans dix ans, elle sera banale. C'est ainsi que le monde change.",
+  58:"Archive 0038 — Entraînement combat à la Librarchie, An 52. Les nouveaux Aventuriers apprennent les bases du combat PAWAW. Trois contre un — Roi, Reine, Garde du Corps. Le formateur est un vétéran de la Guerre des Origines. 'Vous n'apprenez pas à vous battre,' dit-il. 'Vous apprenez à vous protéger mutuellement.'",
+  59:"Archive 0039 — La Salle des Cristaux de Mémoire. Une salle entière de la Librarchie dédiée aux Cristaux de Mémoire Quantique récoltés pendant 52 ans. Chaque cristal contient des fragments d'expériences vécues par des habitants de VitA. En les touchant, on vit leurs souvenirs. C'est la bibliothèque vivante de l'humanité de VitA.",
+  60:"Archive 0042 — La Nuit des Éclairs Veineux. Une fois par an, le PAWAW de VitA se synchronise et produit un spectacle de foudre veineuse visible depuis toutes les zones. Multicolore. Silencieux. Pendant 2 minutes et 30 secondes, tout VitA retient son souffle. 'C'est VitA qui respire,' dit-on dans BRAHAM.",
+  61:"Archive 0861 — Zone de Frontière ANARK/Zone Neutre. La limite la plus surveillée de VitA. Des sentinelles ANARK d'un côté. Des gardiens de la Zone Neutre de l'autre. Entre les deux, une bande de 50 mètres où aucune règle ne s'applique — ni celles d'ANARK, ni celles de la Zone Neutre. Les aventuriers expérimentés savent l'éviter.",
+  62:"Archive 0862 — Les Arènes de Sang d'ANARK. Complexe d'arènes de combat spectaculaires où les Aventuriers s'inscrivent volontairement pour des tournois quotidiens. Les spectateurs Démons vibrent d'énergie PAWAW rouge lors des combats. 'L'Arène de Sang n'est pas cruelle,' dit un champion. 'Elle est honnête.'",
+  63:"Archive 0864 — La Forêt des Âmes d'ANARK. Arbres morts aux flammes violettes. Esprits errants. Cette forêt est la plus ancienne de VitA — plus ancienne que les factions, plus ancienne que les guerres. Les fantômes qui l'habitent sont des fragments de conscience PAWAW qui n'ont pas trouvé de Templabo à temps.",
+  64:"Archive 0866 — Le Marché des Curiosités de la Zone Neutre. Là où tout se vend et tout s'achète. Des artefacts PAWAW de valeur inestimable côtoient des faux évidents. Des informations classifiées changent de mains pour quelques cristaux. Et au fond du marché, une porte qui mène selon la légende directement au Jardin de I'y. Personne ne l'a encore ouverte.",
+  65:"Archive 0979 — La Traversée des Océans. Depuis le niveau 50, les Animovs marins permettent de traverser les immenses océans qui séparent les zones. Ces océans ne sont pas vides — ils abritent des civilisations sous-marines de créatures hybrides BRAHAM/V. qui ont choisi la profondeur plutôt que la surface.",
+  66:"Archive 1409 — L'Animorph. Un Aventurier en transformation partielle. Le premier Animorph se déclenche au niveau 5. Au niveau 100, la transformation est totale et permanente si le joueur le choisit. 'L'Animorph n'est pas une métamorphose,' explique un instructeur de la Librarchie. 'C'est une révélation de ce que tu as toujours été.'",
+  67:"Archive 2047 — La Transcendance @Omega. Une image théorique de ce qu'un Aventurier de niveau 100 peut devenir. Le corps disparaît presque totalement. Il ne reste que la conscience pure — un filament d'or de PAWAW qui conserve la forme humaine par habitude plus que par nécessité. La Transcendance @Omega est la fin du voyage. Et le début de quelque chose d'incommensurable.",
+  68:"Archive 2048 — Le Titre Unique. À la Transcendance @Omega, chaque Aventurier reçoit un titre unique à vie — différent pour chaque être, reflétant son parcours complet. Aucun titre ne se répète jamais dans l'histoire de VitA. Le titre de Saï est 'Témoin de Tout'. Celui de Vy est 'L'Impossible Réalisé'. Quel sera le tien ?",
+  69:"Diablotin — AOX. Un jeune monstre de la frontière ANARK, à peine formé, ses cornes encore lisses. Sa peau rose-saumon traversée de veines de PAWAW inversé en turquoise. Ses yeux bleus illuminés ne sont pas malveillants — ils sont confus. Aox ne sait pas encore qui il est. Il ne sait que se battre. Sa vraie force serait de choisir.\n\n⚔ PREMIER BOSS : Combat d'initiation à la Librarchie. HP : 45. ATK : 8. Spécial : Chaos Aura",
+  70:"Diablotin Variant — AOX dans sa forme alte. Quand Aox accumule trop de PAWAW inversé, une transformation se déclenche. Sa peau change. Sa forme se stabilise dans quelque chose de plus dangereux. Mais aussi — paradoxalement — de plus cohérent. 'Même les monstres trouvent leur forme quand on leur laisse le temps,' observe Vy depuis sa fenêtre d'observation.\n\n⚔ BOSS VARIANT : Forme alternative d'Aox. HP : 65. ATK : 14. Résistance : Magie x2",
+};
+
+// Narration par défaut si case non définie
+const getCase=(i)=>caseNarr[i]||`Case ${i+1} — ${names[i]||'Image'}\n\nUn fragment de l'histoire de VitA. Chaque image que tu traverses ajoute une couche à la tapisserie de 52 ans d'aventures, de guerres, de découvertes et de naissances. Que vois-tu dans cette image ? Qu'est-ce qu'elle t'évoque ? C'est peut-être la question la plus importante — car dans CODEX VITA, c'est toi qui donnes sens à ce que tu vois. Le PAWAW circule à travers ta lecture. Il transforme les images en histoires. Les histoires en vie.`;
+
+/* ── DÉCOUPE PAR PAGE ─────────────────────────────── */
+const pageImages=[]; let _idx=0;
+for(const c of caseCounts){const a=[];for(let j=0;j<c;j++)a.push(_idx+j);pageImages.push(a);_idx+=c;}
+const TOTAL=FR.length;
+
+/* ── CACHE TRADUCTION ─────────────────────────────── */
+const cache={fr:{},en:{}};
+FR.forEach((p,i)=>cache.fr[i]={an:p.an,t:p.t,n:p.n});
+EN.forEach((p,i)=>cache.en[i]={an:FR[i].an,t:p.t,n:p.n});
+let cur=0,open=false,curLang='fr';
+
+/* ── SÉLECTEUR DE LANGUE ──────────────────────────── */
+const selLang=document.getElementById('lang');
+LANGS.forEach(l=>{const o=document.createElement('option');o.value=l.code;o.textContent=l.name;selLang.appendChild(o);});
+selLang.value='fr';selLang.onchange=()=>{curLang=selLang.value;render();};
+
+/* ── TRADUCTION ───────────────────────────────────── */
+async function ensureTranslation(lang,i){
+  const base=lang.split('-')[0];
+  if(base==='fr')return cache.fr[i];
+  if(base==='en'&&cache.en[i])return cache.en[i];
+  cache[lang]=cache[lang]||{};
+  if(cache[lang][i])return cache[lang][i];
+  const lName=(LANGS.find(l=>l.code===lang)||{}).name||lang;
+  if(window.VITABackend&&VITABackend.ready()){try{const c=await VITABackend.getCached(lang,i);if(c&&c.narration){cache[lang][i]={an:FR[i].an,t:c.title||FR[i].t,n:c.narration};return cache[lang][i];}}catch(e){}}
+  let t=FR[i].t,n=FR[i].n,ok=false;
+  try{
+    if(window.VITABackend&&VITABackend.ready()&&window.VITA_BACKEND.translateFunction){const r=await VITABackend.translate(lang,lName,t,n);t=r.title||t;n=r.narration||n;ok=true;}
+    else{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:`Translate this fantasy-game lore into ${lName}. Keep proper nouns (VitA,PAWAW,UTOP,ANARK,BRAHAM,Vy,Moria,Saï,HoloAid,Templabo,Librarchie). ONLY raw JSON: {"title":"...","narration":"..."}\n\nTITLE: ${t}\nNARRATION: ${n}`}]})});const d=await r.json();let tx=(d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('').replace(/```json|```/g,'').trim();const obj=JSON.parse(tx);t=obj.title||t;n=obj.narration||n;ok=true;}
+  }catch(e){return cache.en[i]||cache.fr[i];}
+  cache[lang][i]={an:FR[i].an,t,n};
+  if(ok&&window.VITABackend&&VITABackend.ready())VITABackend.saveCached(lang,i,t,n).catch(()=>{});
+  return cache[lang][i];
+}
+
+/* ══ RPG SYSTEM ═══════════════════════════════════════
+   Personnage, XP, Niveaux, Emoji-Bot
+══════════════════════════════════════════════════════ */
+const RPG={
+  char:{fname:'',lname:'',faction:'UTOP',domain:'Guerre',imgUrl:'',level:1,xp:0,hp:100,atk:10,def:8},
+  pagesRead:new Set(),
+  get xpNeeded(){return this.char.level*100;},
+  get botLevel(){return Math.min(10,this.char.level);},
+};
+
+const BOT_ART=[
+  ':)',            // 1
+  '{:)',           // 2
+  '<{;)=',        // 3
+  '{^_^}',        // 4
+  '({^_^})',      // 5
+  '\\({^_^})/',   // 6
+  '|({^o^})|',    // 7
+  '★({^o^})★',  // 8
+  ' ^^^\n ~~~\n:)0.0\n   |\n \\/\\/', // 9
+  ' ^^^^^^\n ~~~~~~\n .0. .0\n    |\n \\____/\n ===^===', // 10
+];
+const BOT_NAMES=['Petit Germe','Luciole','Éclair','Étincelle','Flamme','Foudre','Tempête','Cosmos','Primordial','OMEGA'];
+
+function getBotDisplay(){return BOT_ART[Math.min(9,RPG.botLevel-1)]||':)';}
+function getBotName(){return BOT_NAMES[Math.min(9,RPG.botLevel-1)];}
+
+function gainXP(amount){
+  RPG.char.xp+=amount;
+  while(RPG.char.xp>=RPG.xpNeeded&&RPG.char.level<10){
+    RPG.char.xp-=RPG.xpNeeded;RPG.char.level++;
+    showNotif(`✦ Niveau ${RPG.char.level} ! Votre bot évolue en ${getBotName()} ✦`);
+  }
+  updateHdrRPG();
+  if(document.getElementById('modal-creator').classList.contains('active'))updateCreatorPreview();
+}
+
+function updateHdrRPG(){
+  const c=RPG.char;
+  document.getElementById('hdr-charname').textContent=c.fname?(c.fname+' '+c.lname).trim():'Créer mon perso';
+  document.getElementById('hdr-charlevel').textContent=`Niv.${c.level} · XP ${c.char?c.xp:RPG.char.xp}/${RPG.xpNeeded}`;
+  document.getElementById('hdr-bot').textContent=getBotDisplay().split('\n')[0];
+  const accInfo=document.getElementById('acc-char-info');
+  if(accInfo&&c.fname)accInfo.innerHTML=`<b>${c.fname} ${c.lname}</b><br>Faction : ${c.faction} · Domaine : ${c.domain}<br>Niveau ${c.level} · HP ${c.hp} · ATK ${c.atk} · DEF ${c.def}`;
+}
+
+function updateCreatorPreview(){
+  const c=RPG.char;
+  const fd=document.getElementById('c-fname').value||c.fname;
+  const ld=document.getElementById('c-lname').value||c.lname;
+  document.getElementById('preview-name').textContent=(fd+' '+ld).trim()||'Votre Héros';
+  document.getElementById('preview-faction').textContent=c.faction;
+  document.getElementById('bot-stage-creator').textContent=getBotDisplay();
+  document.getElementById('xp-display').textContent=`XP : ${c.xp} / ${RPG.xpNeeded} · Niv. ${c.level}`;
+  const pct=Math.min(100,Math.floor(c.xp/RPG.xpNeeded*100));
+  document.getElementById('xpbar-fill').style.width=pct+'%';
+}
+
+function openCreator(){document.getElementById('modal-creator').classList.add('active');updateCreatorPreview();}
+let selFaction='UTOP',selDomain='Guerre';
+function pickFaction(btn){document.querySelectorAll('.faction-btns .faction-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');selFaction=btn.dataset.f;RPG.char.faction=selFaction;document.getElementById('preview-faction').textContent=selFaction;}
+function pickDomain(btn){document.querySelectorAll('[data-d]').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');selDomain=btn.dataset.d;RPG.char.domain=selDomain;}
+
+async function generateCharacter(){
+  const fn=document.getElementById('c-fname').value.trim();
+  const ln=document.getElementById('c-lname').value.trim();
+  const err=document.getElementById('c-name-err');
+  if(!fn||!ln){err.textContent='⚠ Prénom et nom requis pour voquer votre aventurier.';return;}
+  err.textContent='';
+  const prompt=document.getElementById('c-prompt').value.trim()||`Un aventurier de VitA, faction ${selFaction}, style médiéval-cyber-fantaisie PAWAW`;
+  const btn=document.getElementById('c-gen-btn');
+  const loading=document.getElementById('c-loading');
+  btn.disabled=true;loading.style.display='block';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:800,messages:[{role:'user',content:`You are creating a character portrait description for a fantasy game. Based on this description, provide a detailed text portrait (NOT an image, just vivid descriptive text). Character description: "${prompt}". Name: ${fn} ${ln}. Faction: ${selFaction}. Domain: ${selDomain}. Respond with a vivid 3-sentence visual description of this character, written in French, then a 1-sentence combat stat suggestion. Format: {"portrait":"...","stats":"..."}`}]})});
+    const d=await r.json();
+    let txt=(d.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('').replace(/```json|```/g,'').trim();
+    let obj;try{obj=JSON.parse(txt);}catch(e){obj={portrait:txt.substring(0,200),stats:'ATK+2'};}
+    // Afficher le portrait textuel dans la préview
+    const prev=document.getElementById('char-preview');
+    prev.innerHTML=`<div style="padding:10px;color:var(--or);font-size:11px;line-height:1.5;font-style:italic">${obj.portrait||prompt}</div>`;
+    RPG.char.fname=fn;RPG.char.lname=ln;RPG.char.faction=selFaction;RPG.char.domain=selDomain;
+    document.getElementById('preview-name').textContent=`${fn} ${ln}`;
+  }catch(e){
+    document.getElementById('char-preview').innerHTML=`<div style="font-size:40px;text-align:center;padding:60px 0">🧙</div>`;
+  }
+  btn.disabled=false;loading.style.display='none';
+}
+
+function saveCharacter(){
+  const fn=document.getElementById('c-fname').value.trim()||RPG.char.fname;
+  const ln=document.getElementById('c-lname').value.trim()||RPG.char.lname;
+  if(!fn||!ln){document.getElementById('c-name-err').textContent='⚠ Prénom et Nom requis.';return;}
+  RPG.char.fname=fn;RPG.char.lname=ln;RPG.char.faction=selFaction;RPG.char.domain=selDomain;
+  gainXP(50);
+  showNotif(`✦ ${fn} ${ln} rejoint l'aventure sur VitA ! ✦`);
+  document.getElementById('modal-creator').classList.remove('active');
+}
+
+/* ══ COMBAT SYSTEM ════════════════════════════════════ */
+const HEROES=[
+  {id:'roi',   name:'ROI',   icon:'👑',hp:100,maxHp:100,atk:8, def:15,mp:80, actions:[{id:'shield',n:'Bouclier Royal',cost:0,dmg:0,fx:'DEF+20 2 tours',desc:'Augmente la défense du groupe',type:'def'},{id:'strike',n:'Frappe Royale',cost:0,dmg:14,fx:'',desc:'Attaque puissante avec chance d\'étourdissement',type:'atk'},{id:'cmd',n:'Commandement',cost:0,dmg:0,fx:'ATK+8 groupe',desc:'Booste l\'ATK de tous les alliés',type:'buff'}]},
+  {id:'reine', name:'REINE', icon:'♛',hp:80, maxHp:80, atk:18,def:6, mp:100,actions:[{id:'pawaw',n:'Souffle PAWAW',cost:0,dmg:18,fx:'',desc:'Blast magique multi-cibles',type:'magic'},{id:'ench',n:'Enchantement',cost:0,dmg:0,fx:'ATK-10 ennemi',desc:'Affaiblit l\'ennemi',type:'debuff'},{id:'heal',n:'Soin Élémentaire',cost:0,dmg:-20,fx:'',desc:'Soigne un allié',type:'heal'}]},
+  {id:'garde', name:'GARDE', icon:'⚔',hp:90, maxHp:90, atk:14,def:8, mp:60, actions:[{id:'slash',n:'Taillade',cost:0,dmg:16,fx:'',desc:'Attaque rapide',type:'atk'},{id:'fac',n:'Art de Faction',cost:0,dmg:12,fx:'BUFF faction',desc:'Capacité spéciale de votre faction',type:'special'},{id:'ultra',n:'PAWAW ULTIME',cost:0,dmg:28,fx:'',desc:'Dégâts massifs (recharge 5 tours)',type:'special',cd:5,curCd:0}]}
+];
+const ENEMIES=[
+  {id:'demon', name:'Valorious Utom',icon:'🔥',imgIdx:17,hp:80, maxHp:80, atk:12,def:4, drops:'Essence PAWAW inversé'},
+  {id:'troll', name:'Gromm-Kar Trollorc',icon:'💢',imgIdx:24,hp:120,maxHp:120,atk:15,def:8, drops:'Crâne de Champion'},
+  {id:'elfe',  name:'Elfe Embrasée',icon:'⛓',imgIdx:20,hp:65, maxHp:65, atk:18,def:3, drops:'Chaîne de Libération'},
+  {id:'aox',   name:'Diablotin Aox',icon:'🌀',imgIdx:75,hp:45, maxHp:45, atk:8, def:2, drops:'Fragment PAWAW Turquoise'},
+];
+let combat={active:false,heroes:[],enemy:null,selectedHero:null,turn:0,log:[],ultraCd:0,done:false,won:false};
+
+const COMBAT_PAGES=[10,15,31,75]; // pages avec ennemis
+
+function hasEnemy(pageIdx){return COMBAT_PAGES.includes(pageIdx);}
+
+function startCombat(enemyIdx){
+  const e=ENEMIES[enemyIdx%ENEMIES.length];
+  combat={
+    active:true,done:false,won:false,turn:0,log:[],selectedHero:null,ultraCd:0,
+    heroes:HEROES.map(h=>({...h,hp:h.maxHp,curCd:0})),
+    enemy:{...e,hp:e.maxHp},
+  };
+  renderCombat();
+  document.getElementById('modal-combat').classList.add('active');
+}
+
+function renderCombat(){
+  // Héros
+  const hc=document.getElementById('combat-heroes');
+  hc.innerHTML=combat.heroes.map((h,i)=>`
+    <div class="hero-card${combat.selectedHero===i?' active':''}" onclick="selectHero(${i})">
+      <div class="hname">${h.icon} ${h.id==='garde'&&RPG.char.fname?RPG.char.fname+' '+RPG.char.lname:h.name}</div>
+      <div class="hclass">${h.id==='garde'?RPG.char.faction||'Garde':h.id==='roi'?'Roi de VitA':'Reine de VitA'}</div>
+      <div class="hpbar"><div class="hpbar-fill${h.hp<h.maxHp*.35?' low':''}" style="width:${Math.max(0,h.hp/h.maxHp*100)}%"></div></div>
+      <div class="hero-stats">HP ${h.hp}/${h.maxHp} · ATK ${h.atk} · DEF ${h.def}</div>
+    </div>`).join('');
+
+  // Arène
+  const as=document.getElementById('arena-screen');
+  const e=combat.enemy;
+  const eUri=SRC(e.imgIdx);
+  as.innerHTML=`
+    <div class="enemy-area">
+      <div class="enemy-img-wrap">
+        <img class="enemy-sprite" id="enemy-sprite" src="${eUri}" alt="${e.name}">
+        <div class="enemy-hp-bar"><div class="enemy-hp-fill" style="width:${e.hp/e.maxHp*100}%"></div></div>
+        <div class="enemy-name">${e.icon} ${e.name}</div>
+        <div class="enemy-hp-text">HP ${e.hp} / ${e.maxHp}</div>
+      </div>
+    </div>
+    <div class="vs-text">⚔</div>
+    <div style="font-size:11px;color:var(--or);text-align:center;max-width:120px">
+      ${combat.heroes.filter(h=>h.hp>0).length} héros en vie<br>Tour ${combat.turn+1}
+    </div>`;
+
+  // Actions
+  if(!combat.done){
+    const ah=document.getElementById('action-hero-name');
+    ah.textContent=combat.selectedHero!==null?`${combat.heroes[combat.selectedHero].icon} Actions de ${combat.selectedHero===2&&RPG.char.fname?RPG.char.fname:HEROES[combat.selectedHero].name}`:'Choisissez un héros →';
+    const ab=document.getElementById('action-btns');
+    if(combat.selectedHero!==null){
+      const h=combat.heroes[combat.selectedHero];
+      ab.innerHTML=h.actions.map(a=>`<button class="action-btn${a.type==='magic'||a.type==='special'?' special':''}" onclick="doAction(${combat.selectedHero},'${a.id}')" ${a.id==='ultra'&&h.curCd>0?`disabled title="Recharge: ${h.curCd} tours"`:''}>${a.n}${a.id==='ultra'&&h.curCd>0?` (${h.curCd})`:''}${a.dmg>0?` (${a.dmg}dmg)`:a.dmg<0?` (${-a.dmg}soin)`:' (buff)'}</button>`).join('');
+    }else{ab.innerHTML='';}
+  }else{
+    const as2=document.getElementById('arena-screen');
+    as2.innerHTML+=`<div class="combat-result"><div class="${combat.won?'result-win':'result-lose'}">${combat.won?'⚔ VICTOIRE ⚔':'💀 DÉFAITE 💀'}</div><div style="font-size:14px;color:var(--or)">${combat.won?`Butin : ${combat.enemy.drops}`:'Les héros tombent... Réessayez !'}</div><button class="result-btn" onclick="closeCombat()">${combat.won?'Continuer l\'aventure →':'Retour au Grimoire'}</button></div>`;
+  }
+
+  // Log
+  const cl=document.getElementById('combat-log');
+  cl.innerHTML=combat.log.slice(-20).map(l=>`<div class="log-entry ${l.type}">${l.msg}</div>`).join('');
+  cl.scrollTop=cl.scrollHeight;
+}
+
+function selectHero(i){
+  if(combat.heroes[i].hp<=0)return;
+  combat.selectedHero=i;
+  renderCombat();
+}
+
+function doAction(hi,actionId){
+  if(combat.done)return;
+  const h=combat.heroes[hi];const e=combat.enemy;
+  const action=h.actions.find(a=>a.id===actionId);if(!action)return;
+  if(actionId==='ultra'&&h.curCd>0)return;
+
+  let dmg=0,msg='',type='';
+  if(action.dmg>0){dmg=Math.max(1,action.dmg+h.atk-Math.floor(e.def/2)+Math.floor(Math.random()*5-2));e.hp=Math.max(0,e.hp-dmg);msg=`${h.icon} ${h.id==='garde'&&RPG.char.fname?RPG.char.fname:h.name} → ${e.icon} ${e.name} : -${dmg} HP`;type='dmg';}
+  else if(action.dmg<0){const heal=-action.dmg;const ti=combat.heroes.find(x=>x.hp>0&&x.hp<x.maxHp)||h;ti.hp=Math.min(ti.maxHp,ti.hp+heal);msg=`♥ Soin : +${heal} HP pour ${ti.name}`;type='heal';}
+  else{msg=`✦ ${action.n} activé !`;type='buff';}
+  if(actionId==='ultra'){h.curCd=action.cd||5;}
+  combat.log.push({msg,type});
+
+  // Tour de l'ennemi
+  if(e.hp>0){
+    const ti=combat.heroes.filter(x=>x.hp>0);
+    if(ti.length>0){
+      const target=ti[Math.floor(Math.random()*ti.length)];
+      const edm=Math.max(1,e.atk-Math.floor(target.def/2)+Math.floor(Math.random()*4-2));
+      target.hp=Math.max(0,target.hp-edm);
+      combat.log.push({msg:`${e.icon} ${e.name} → ${target.icon} ${target.name} : -${edm} HP`,type:'enemy'});
+    }
+  }
+
+  // Réduire les CD
+  combat.heroes.forEach(hx=>{if(hx.curCd>0)hx.curCd--;});
+  combat.turn++;combat.selectedHero=null;
+
+  // Vérification fin
+  if(e.hp<=0){combat.done=true;combat.won=true;gainXP(30+combat.turn*2);showNotif(`⚔ Victoire ! +${30+combat.turn*2} XP ✦`);}
+  else if(combat.heroes.every(hx=>hx.hp<=0)){combat.done=true;combat.won=false;}
+  renderCombat();
+}
+
+function closeCombat(){document.getElementById('modal-combat').classList.remove('active');combat.active=false;}
+
+/* ══ AUDIO — EMOJI-BOT ════════════════════════════════ */
+let synth=window.speechSynthesis||null;let utterance=null;let audioPlaying=false;
+function toggleAudio(){
+  if(!synth){showNotif('🔇 Audio non supporté dans ce navigateur.');return;}
+  if(audioPlaying){synth.cancel();audioPlaying=false;document.getElementById('audio-btn').textContent='🎙 Lire';return;}
+  const text=`${document.getElementById('ptitle').textContent}. ${document.getElementById('narration').textContent}`;
+  utterance=new SpeechSynthesisUtterance(text);
+  utterance.lang=curLang==='fr'?'fr-FR':'en-US';
+  utterance.rate=.9;utterance.pitch=1.1;
+  utterance.onend=()=>{audioPlaying=false;document.getElementById('audio-btn').textContent='🎙 Lire';document.getElementById('audio-btn').classList.remove('playing');};
+  synth.speak(utterance);audioPlaying=true;
+  document.getElementById('audio-btn').textContent='⏹ Stop';
+  document.getElementById('audio-btn').classList.add('playing');
+}
+function toggleModalAudio(){
+  if(!synth)return;
+  if(audioPlaying){synth.cancel();audioPlaying=false;document.getElementById('m-audio-btn').textContent='🎙 Écouter';return;}
+  const text=`${document.getElementById('m-title').textContent}. ${document.getElementById('m-text').textContent}`;
+  utterance=new SpeechSynthesisUtterance(text);utterance.lang=curLang==='fr'?'fr-FR':'en-US';utterance.rate=.9;
+  utterance.onend=()=>{audioPlaying=false;document.getElementById('m-audio-btn').textContent='🎙 Écouter';};
+  synth.speak(utterance);audioPlaying=true;document.getElementById('m-audio-btn').textContent='⏹ Stop';
+}
+
+/* ══ CASES ═════════════════════════════════════════════ */
+let modalCaseIdx=null;
+function makeCase(idx,pg){
+  const isVid=/\.(mp4|webm|mov)$/i.test(names[idx]||'');
+  const u=SRC(idx);const d=document.createElement('div');d.className='case';
+  // Badge combat ?
+  if(COMBAT_PAGES.includes(cur)){const badge=document.createElement('div');badge.className='case-combat-badge';badge.textContent='⚔ COMBAT';d.appendChild(badge);}
+  const m=document.createElement('div');m.className='case-media';
+  if(isVid){const v=document.createElement('video');v.src=u;v.muted=true;v.loop=true;v.playsInline=true;v.autoplay=true;m.appendChild(v);const ov=document.createElement('div');ov.className='vid-overlay';const pl=document.createElement('div');pl.className='vid-play';pl.textContent='▶';ov.appendChild(pl);m.appendChild(ov);}
+  else{const img=document.createElement('img');img.src=u;img.alt='';m.appendChild(img);}
+  const h=document.createElement('span');h.className='zoom-hint';h.textContent='⤢ Plein écran';m.appendChild(h);
+  d.appendChild(m);
+  d.onclick=()=>{
+    if(COMBAT_PAGES.includes(cur)&&!combat.active){startCombat(COMBAT_PAGES.indexOf(cur));}
+    else{modalCaseIdx=idx;openModal(idx,pg);}
+  };
+  return d;
+}
+
+/* ══ FULLSCREEN BD ═════════════════════════════════════ */
+function openModal(idx,pg){
+  modalCaseIdx=idx;
+  const isVid=/\.(mp4|webm|mov)$/i.test(names[idx]||'');
+  const u=SRC(idx);const med=document.getElementById('m-media');med.innerHTML='';
+  if(isVid){const v=document.createElement('video');v.src=u;v.controls=true;v.autoplay=true;v.style.cssText='max-width:100%;max-height:100%;border-radius:4px;';med.appendChild(v);}
+  else{const img=document.createElement('img');img.src=u;img.alt='';med.appendChild(img);}
+  document.getElementById('m-bar-title').textContent=`CODEX VITA — ${pg.an} · Case ${idx+1}`;
+  document.getElementById('m-an').textContent=pg.an;
+  document.getElementById('m-title').textContent=pg.t;
+  const narText=getCase(idx);
+  document.getElementById('m-text').textContent=narText;
+  const isRTL=(LANGS.find(l=>l.code===curLang)||{}).rtl;
+  document.getElementById('m-text').classList.toggle('rtl',!!isRTL);
+  document.getElementById('m-case-info').textContent=`Case ${idx+1}/${names.length} · ${names[idx]||''}`;
+  document.getElementById('m-bot-display').textContent=getBotDisplay().split('\n')[0];
+  document.getElementById('m-bot-lbl').textContent=getBotName();
+  document.getElementById('modal').classList.add('active');
+  gainXP(5);
+}
+function prevCase(){if(modalCaseIdx>0){modalCaseIdx--;const pg=getCurPg();openModal(modalCaseIdx,pg);}}
+function nextCase(){if(modalCaseIdx<names.length-1){modalCaseIdx++;const pg=getCurPg();openModal(modalCaseIdx,pg);}}
+function getCurPg(){return (cache.fr[cur]||FR[cur]||{an:'AN 52',t:'VitA',n:''});}
+function closeModal(){document.getElementById('modal').classList.remove('active');if(synth&&audioPlaying){synth.cancel();audioPlaying=false;}}
+document.getElementById('m-close').onclick=closeModal;
+document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')closeModal();};
+document.getElementById('m-prev').onclick=prevCase;
+document.getElementById('m-next').onclick=nextCase;
+
+/* ══ RENDU GRIMOIRE ════════════════════════════════════ */
+function paintCases(pg){
+  const idxs=pageImages[cur]||[];const g=document.getElementById('cases');
+  g.setAttribute('data-n',idxs.length);g.innerHTML='';
+  idxs.forEach(idx=>g.appendChild(makeCase(idx,pg)));
+  document.getElementById('pfoot').textContent=`${idxs.length} case(s)  · `;
+}
+function paintText(obj,loading){
+  const isRTL=(LANGS.find(l=>l.code===curLang)||{}).rtl;
+  document.getElementById('eyebrow').textContent=obj.an;
+  document.getElementById('ptitle').textContent=obj.t;
+  const nar=document.getElementById('narration');
+  nar.textContent=loading?(ui().tr+'\n\n'+obj.n):obj.n;
+  nar.classList.toggle('rtl',!!isRTL);nar.classList.toggle('loading',!!loading);
+  return obj;
+}
+function paintUI(){
+  document.getElementById('prev').textContent='← Précédente';
+  document.getElementById('next').textContent='Suivante →';
+  document.getElementById('toggle').textContent=open?'Fermer le Grimoire':'⚗ Ouvrir le Grimoire';
+  document.getElementById('lbl-page').textContent='Page';
+  document.getElementById('prev').disabled=(cur===0);
+  document.getElementById('next').disabled=(cur===TOTAL-1);
+  document.getElementById('cur').textContent=cur+1;
+  document.getElementById('tot').textContent=TOTAL;
+  updateVoteUI();
+}
+async function render(){
+  const i=cur,lang=curLang,base=lang.split('-')[0];
+  paintUI();
+  const cached=(base==='fr')?cache.fr[i]:(cache[lang]&&cache[lang][i]);
+  const pg=paintText(cached||cache.fr[i],!cached);
+  paintCases(pg);
+  // XP pour la lecture d'une nouvelle page
+  if(!RPG.pagesRead.has(i)){RPG.pagesRead.add(i);gainXP(10);}
+  if(!cached){const t=await ensureTranslation(lang,i);if(cur===i&&curLang===lang){const pg2=paintText(t,false);paintCases(pg2);}}
+}
+
+/* ══ NAVIGATION ════════════════════════════════════════ */
+document.getElementById('next').onclick=()=>{if(cur<TOTAL-1){cur++;render();}};
+document.getElementById('prev').onclick=()=>{if(cur>0){cur--;render();}};
+document.getElementById('toggle').onclick=()=>{open=!open;document.getElementById('book').classList.toggle('open',open);document.getElementById('toggle').textContent=open?'Fermer le Grimoire':'⚗ Ouvrir le Grimoire';};
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('modal').classList.contains('active')){if(e.key==='ArrowLeft')prevCase();if(e.key==='ArrowRight')nextCase();if(e.key==='Escape')closeModal();return;}
+  if(e.key==='ArrowRight'&&cur<TOTAL-1){cur++;render();}
+  if(e.key==='ArrowLeft'&&cur>0){cur--;render();}
+  if(e.key==='Escape'){closeModal();document.getElementById('modal-combat').classList.remove('active');document.getElementById('modal-creator').classList.remove('active');document.getElementById('modal-account').classList.remove('active');}
+});
+
+/* ══ FORUM ═════════════════════════════════════════════ */
+const forum={
+  votes:{},reacts:{},
+  topicVotes:[{up:142,down:8,myVote:null},{up:87,down:3,myVote:null},{up:34,down:2,myVote:null}],
+  topicReacts:[[],[],[]],
+  comments:[[
+    {id:1,author:'ViA l\'Éthérée',text:'Le PAWAW n\'est pas une énergie que tu utilises. C\'est une énergie qui te traverse quand tu as le courage d\'être exactement qui tu es. Certains le canalisent par la guerre, d\'autres par la science, l\'art, la nature ou la technologie. Toutes les voies sont vraies. Toutes les voies mènent au même cœur.',emoji:'✨',time:'An 52 · Jour 500',ccReacts:[{e:'❤️',c:42,lit:false},{e:'🔥',c:28,lit:false},{e:'✨',c:35,lit:false}]},
+    {id:2,author:'Saï le Voyageur',text:'J\'ai traversé les 4 factions. UTOP te dit de l\'étudier. ANARK te dit de le libérer. BRAHAM te dit de le fusionner. V. te dit de le reproduire. Après 52 ans, ma réponse : le PAWAW, c\'est simplement ce que tu deviens quand tu arrêtes d\'avoir peur de toi-même.',emoji:'🌟',time:'An 52 · Jour 498',ccReacts:[{e:'❤️',c:31,lit:false},{e:'🔥',c:19,lit:false},{e:'💫',c:22,lit:false}]},
+    {id:3,author:'Gromm-Kar [Trollorc]',text:'PAWAW = FORCE. Simple. Efficace. Les autres compliquent ce qui est évident. Quand tu soulèves ton adversaire et que tu le mets en orbite, c\'est du PAWAW. Pur. Brut. Honnête.',emoji:'🔥',time:'An 52 · Jour 495',ccReacts:[{e:'🔥',c:55,lit:false},{e:'😱',c:12,lit:false}]},
+  ],[
+    {id:10,author:'Capitaine Tox',text:'Ma stratégie : Reine en première ligne pour affaiblir. Roi qui se met en défense maximale. Et moi — mon garde du corps alchimiste — je balance les grenades PAWAW depuis l\'arrière. Toujours travailler en triangle. Jamais en ligne droite.',emoji:'⚔️',time:'An 52 · Jour 499',ccReacts:[{e:'⚔️',c:18,lit:false},{e:'🔥',c:14,lit:false}]},
+    {id:11,author:'Alia sans Faction',text:'Vaincre l\'Elfe Embrasée : ne jamais combattre sa force directement. Elle se bat avec ses chaînes — il faut l\'isoler de son terrain. L\'emmener dans un espace ouvert où ses chaînes deviennent un poids plutôt qu\'une arme. Puis Roi en shield wall, Reine charge son sort de paralysie, et c\'est fini.',emoji:'🛡️',time:'An 52 · Jour 497',ccReacts:[{e:'✨',c:9,lit:false},{e:'🛡️',c:7,lit:false}]},
+  ],[
+    {id:20,author:'Poète de BRAHAM',text:'Dans la Forêt Primordiale de VitA,\nles arbres parlent en PAWAW vert.\nChaque feuille est une page du Grimoire.\nChaque racine, une ligne de code du monde.\nJe suis l\'arbre. Je suis la page.\nJe suis le lecteur et le Grimoire.\nVitA est en moi.\nJe suis en VitA.',emoji:'🌿',time:'An 52 · Jour 500',ccReacts:[{e:'❤️',c:24,lit:false},{e:'🌌',c:18,lit:false}]},
+  ]],
+  cid:100,
+  pickedEmoji:[null,null,null],
+};
+const REACT_E=['❤️','🔥','✨','💫','⚡','🐉','🌟','🤩'];
+
+function switchTab(i){
+  document.querySelectorAll('.forum-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  document.querySelectorAll('.forum-panel').forEach((p,j)=>p.classList.toggle('active',j===i));
+}
+
+function initTopicVotes(){
+  for(let ti=0;ti<3;ti++){
+    const row=document.getElementById(`tv${ti}-row`);if(!row)continue;
+    const v=forum.topicVotes[ti];
+    row.innerHTML=`<button class="vote-btn${v.myVote==='up'?' active-up':''}" onclick="topicVote(${ti},'up')">👍 <span class="vcount" id="tv${ti}-up">${v.up}</span></button><button class="vote-btn${v.myVote==='down'?' active-down':''}" onclick="topicVote(${ti},'down')">👎 <span class="vcount" id="tv${ti}-dn">${v.down}</span></button>`;
+  }
+}
+function topicVote(ti,dir){
+  const v=forum.topicVotes[ti];
+  if(v.myVote===dir){v[dir==='up'?'up':'down']--;v.myVote=null;}
+  else{if(v.myVote)v[v.myVote==='up'?'up':'down']--;v[dir==='up'?'up':'down']++;v.myVote=dir;}
+  initTopicVotes();
+}
+
+function getVote(i){return forum.votes[i]||(forum.votes[i]={up:0,down:0,myVote:null});}
+function getReact(i){if(!forum.reacts[i]){forum.reacts[i]={myReacts:new Set()};REACT_E.forEach(e=>forum.reacts[i][e]=0);}return forum.reacts[i];}
+function updateVoteUI(){
+  const v=getVote(cur);const r=getReact(cur);
+  document.getElementById('vote-page-name').textContent=`Page ${cur+1} — ${FR[cur]?.t||''}`;
+  document.getElementById('cnt-up').textContent=v.up;
+  document.getElementById('cnt-dn').textContent=v.down;
+  document.getElementById('btn-up').className='vote-btn'+(v.myVote==='up'?' active-up':'');
+  document.getElementById('btn-dn'||'btn-down').className='vote-btn'+(v.myVote==='down'?' active-down':'');
+  const rr=document.getElementById('vote-reacts');rr.innerHTML='';
+  REACT_E.forEach(e=>{const b=document.createElement('button');b.className='react-btn'+(r.myReacts.has(e)?' reacted':'');b.innerHTML=`${e} <span class="rcount">${r[e]||0}</span>`;b.onclick=()=>{if(r.myReacts.has(e)){r.myReacts.delete(e);r[e]=Math.max(0,(r[e]||1)-1);}else{r.myReacts.add(e);r[e]=(r[e]||0)+1;}updateVoteUI();};rr.appendChild(b);});
+}
+function vote(dir){const v=getVote(cur);if(v.myVote===dir){v[dir==='up'?'up':'down']--;v.myVote=null;}else{if(v.myVote)v[v.myVote==='up'?'up':'down']--;v[dir==='up'?'up':'down']++;v.myVote=dir;}updateVoteUI();}
+
+function pickEmoji(ti,el){document.querySelectorAll(`#cf${ti} .emoji-opt`).forEach(x=>x.classList.remove('picked'));el.classList.add('picked');forum.pickedEmoji[ti]=el.dataset.e;}
+
+function submitComment(ti){
+  const author=(document.getElementById(`cf${ti}-author`).value.trim())||'Aventurier Anonyme';
+  const text=document.getElementById(`cf${ti}-text`).value.trim();
+  if(!text)return;
+  const c={id:++forum.cid,author,text,emoji:forum.pickedEmoji[ti]||'',time:'An 52 · '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),ccReacts:REACT_E.map(e=>({e,c:0,lit:false}))};
+  forum.comments[ti].unshift(c);
+  document.getElementById(`cf${ti}-text`).value='';
+  document.querySelectorAll(`#cf${ti} .emoji-opt`).forEach(x=>x.classList.remove('picked'));
+  forum.pickedEmoji[ti]=null;
+  renderComments(ti);
+  gainXP(15);
+}
+
+function ccReact(cid,ti,emoji){
+  const c=forum.comments[ti].find(x=>x.id===cid);if(!c)return;
+  const r=c.ccReacts.find(x=>x.e===emoji);if(!r)return;
+  r.lit=!r.lit;r.c+=r.lit?1:-1;renderComments(ti);
+}
+function toggleReply(id,ti){const rf=document.getElementById(`rf-${id}-${ti}`);if(rf)rf.classList.toggle('open');}
+function submitReply(id,ti){const inp=document.getElementById(`ri-${id}-${ti}`);if(!inp||!inp.value.trim())return;const reply={id:++forum.cid,author:'Vous',text:inp.value.trim(),emoji:'💬',time:'maintenant',ccReacts:[]};const c=forum.comments[ti].find(x=>x.id===id);if(c){if(!c.replies)c.replies=[];c.replies.push(reply);}inp.value='';renderComments(ti);}
+
+function renderComments(ti){
+  const list=document.getElementById(`comments-list-${ti}`);if(!list)return;
+  if(!forum.comments[ti].length){list.innerHTML='<div style="color:rgba(212,175,55,.3);font-style:italic;text-align:center;padding:20px;border:1px dashed var(--sep);border-radius:8px">Aucun commentaire pour l\'instant. Soyez le premier !</div>';return;}
+  list.innerHTML=forum.comments[ti].map(c=>`
+    <div class="comment-card">
+      <div class="cc-head">
+        <span class="cc-author">${c.author}</span>
+        <div class="cc-meta"><span class="cc-time">${c.time}</span>${c.emoji?`<span>${c.emoji}</span>`:''}</div>
+      </div>
+      <div class="cc-text">${c.text}</div>
+      <div class="cc-react-row">${c.ccReacts.map(r=>`<button class="cc-react-btn${r.lit?' lit':''}" onclick="ccReact(${c.id},${ti},'${r.e}')">${r.e}<span class="crc">${r.c||''}</span></button>`).join('')}</div>
+      <span class="reply-toggle" onclick="toggleReply(${c.id},${ti})">↩ Répondre</span>
+      <div class="reply-form" id="rf-${c.id}-${ti}">
+        <input class="cf-input" id="ri-${c.id}-${ti}" placeholder="Votre réponse…" style="font-size:12px;padding:7px 12px">
+        <button class="cf-submit" onclick="submitReply(${c.id},${ti})" style="padding:6px 16px;font-size:11px">Envoyer</button>
+      </div>
+      ${c.replies?c.replies.map(r=>`<div class="reply-thread"><div class="cc-text" style="font-size:12px"><b>${r.author}</b> : ${r.text}</div></div>`).join(''):''}
+    </div>`).join('');
+}
+
+/* ══ COMPTE ════════════════════════════════════════════ */
+function accountLogin(){document.getElementById('acc-msg').textContent='Connexion backend requise. Configurez Supabase dans backend.js';}
+function accountRegister(){document.getElementById('acc-msg').textContent='Inscription backend requise. Configurez Supabase dans backend.js';}
+
+/* ══ NOTIF TOAST ═══════════════════════════════════════ */
+function showNotif(msg){
+  let n=document.getElementById('toast');
+  if(!n){n=document.createElement('div');n.id='toast';n.style.cssText='position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.95);color:var(--or);border:1px solid var(--or);border-radius:30px;padding:12px 28px;font-size:12px;letter-spacing:1px;z-index:9999;animation:fade .3s;pointer-events:none;text-align:center;max-width:90vw';document.body.appendChild(n);}
+  n.textContent=msg;n.style.opacity='1';clearTimeout(n._t);n._t=setTimeout(()=>n.style.opacity='0',3000);
+}
+
+/* ══ ÉCLAIRS VEINEUX ══════════════════════════════════ */
+(function(){
+  const bg=document.getElementById('bg-lightning');
+  const cols=['#00ffff','#9d4edd','#ff006e','#ffd700','#00ff88','#7ab8ff','#ff9f43'];
+  const ns='http://www.w3.org/2000/svg';
+  for(let i=0;i<7;i++){
+    const svg=document.createElementNS(ns,'svg');
+    svg.setAttribute('viewBox','0 0 1000 1000');svg.setAttribute('preserveAspectRatio','none');
+    svg.classList.add('vein');svg.style.color=cols[i%cols.length];
+    const mk=()=>{const p=document.createElementNS(ns,'path');let x=Math.random()*1000,y=0,d=`M ${x} 0`;while(y<1000){y+=60+Math.random()*110;x+=(Math.random()-.5)*280;d+=` L ${x.toFixed(0)} ${y.toFixed(0)}`;}p.setAttribute('d',d);p.setAttribute('stroke',cols[i%cols.length]);p.setAttribute('stroke-width',(1+Math.random()*2.5).toFixed(1));p.setAttribute('fill','none');return p;};
+    svg.appendChild(mk());svg.appendChild(mk());
+    svg.style.animationDelay=`${(Math.random()*.8).toFixed(2)}s`;
+    bg.appendChild(svg);
+  }
+})();
+
+/* ══ INIT ══════════════════════════════════════════════ */
+initTopicVotes();
+for(let i=0;i<3;i++)renderComments(i);
+updateHdrRPG();
+render();
+</script>
+</body>
+</html>
