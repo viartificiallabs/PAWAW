@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="Logo_pawaw.png">
+<title>CODEX VITA — PAWAW · Grimoire | Épisode 00</title>
+<style>
+:root{ --or:#d4af37; --or-clair:#ffd700; --noir:#000; --sep:rgba(212,175,55,.32); }
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:Georgia,'Times New Roman',serif;
+  background:#000;color:var(--or);overflow:hidden;user-select:none;
+}
+
+/* ===== ÉCLAIRS VEINEUX MULTICOLORES (fond noir) ===== */
+#lightning-bg{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;background:#000}
+.vein{position:absolute;inset:0;opacity:0;mix-blend-mode:screen;
+  filter:blur(1.4px) drop-shadow(0 0 7px currentColor);
+  animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0}44%{opacity:0}50%{opacity:.6}56%{opacity:0}}
+
+/* ===== HEADER + SÉPARATIONS ===== */
+#header{
+  position:fixed;top:0;left:0;width:100%;z-index:30;
+  display:flex;align-items:center;gap:0;
+  padding:8px 22px;
+  background:linear-gradient(180deg,#000 0%,rgba(0,0,0,.55) 80%,transparent 100%);
+  border-bottom:1px solid var(--sep);
+}
+#header > *{padding:0 18px}
+#header > * + *{border-left:1px solid var(--sep)}
+#header img.logo{height:60px;width:auto;border-radius:8px;
+  box-shadow:0 0 22px rgba(120,180,255,.5);padding:0;margin-right:18px}
+#header .titles{display:flex;flex-direction:column;line-height:1.05}
+#header .title{
+  font-size:32px;font-weight:bold;letter-spacing:6px;
+  background:linear-gradient(90deg,#9fd8ff,#ff7ad9,#ffd700,#9fd8ff);
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shimmer 6s linear infinite;text-shadow:0 0 30px rgba(159,216,255,.25);
+}
+@keyframes shimmer{to{background-position:300% 0}}
+#header .slogan{font-size:12.5px;letter-spacing:2px;color:var(--or-clair);
+  text-shadow:0 0 10px rgba(212,175,55,.4);margin-top:2px}
+#header .slogan b{color:#ff9ee0}
+#header .ep{text-align:right;font-size:11px;color:#9fb8e8;letter-spacing:1px;opacity:.85}
+#header .ep span{display:block;color:var(--or);font-size:14px;letter-spacing:2px}
+#lang-wrap{margin-left:auto;display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+#lang-wrap label{font-size:10px;letter-spacing:1px;color:#9fb8e8;text-transform:uppercase}
+#lang{
+  background:#0c0c0c;color:var(--or);border:1px solid var(--or);border-radius:18px;
+  padding:6px 12px;font-family:inherit;font-size:13px;cursor:pointer;max-width:190px;
+}
+#lang:focus{outline:2px solid var(--or-clair)}
+
+/* ===== GRIMOIRE 3D ===== */
+#stage{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding-top:92px}
+#book-container{perspective:1700px;width:92vw;max-width:1240px;height:73vh;max-height:760px}
+#book{width:100%;height:100%;transform-style:preserve-3d;
+  transform:rotateX(6deg) rotateY(-17deg) rotateZ(1.5deg);
+  transition:transform .7s cubic-bezier(.34,1.56,.64,1)}
+#book.open{transform:rotateX(3deg) rotateY(0deg) rotateZ(0deg)}
+#book::before{content:"";position:absolute;left:50%;top:-3%;height:106%;width:26px;
+  transform:translateX(-50%) translateZ(-16px);
+  background:repeating-linear-gradient(180deg,#000 0 6px,#161616 6px 12px);
+  box-shadow:0 0 26px rgba(157,78,221,.45),inset 0 0 12px #000;border-radius:4px}
+
+.page{position:absolute;top:0;height:100%;width:50%;
+  background:radial-gradient(ellipse at 50% 30%,#0a0a0f 0%,#000 70%);
+  border:2px solid var(--or);
+  box-shadow:inset 0 0 70px rgba(0,0,0,.9), inset 0 0 30px rgba(212,175,55,.06);
+  transform-style:preserve-3d;overflow:hidden}
+#left-page{left:0;border-right:1px solid var(--or);transform:rotateY(16deg);
+  display:flex;flex-direction:column;padding:32px 28px}
+#right-page{right:0;border-left:1px solid var(--or);transform:rotateY(-16deg);padding:20px}
+
+/* page gauche : NARRATION OR + séparateurs */
+.page-eyebrow{font-size:11px;letter-spacing:3px;color:#9fb8e8;text-transform:uppercase;
+  padding-bottom:8px;border-bottom:1px solid var(--sep)}
+.page-title{font-size:24px;color:var(--or-clair);margin:12px 0 14px;line-height:1.15;
+  border-bottom:2px solid var(--or);padding-bottom:12px;text-shadow:0 0 16px rgba(212,175,55,.5)}
+.narration{color:var(--or);font-style:italic;font-size:16px;line-height:1.9;white-space:pre-line;
+  text-shadow:0 0 10px rgba(212,175,55,.3);overflow-y:auto;flex:1;padding-right:8px}
+.narration.rtl{direction:rtl;text-align:right;padding-right:0;padding-left:8px}
+.narration.loading{opacity:.5}
+.page-foot{margin-top:14px;padding-top:12px;border-top:1px solid var(--sep);
+  font-size:11px;color:#9fb8e8;letter-spacing:2px;opacity:.85}
+
+/* page droite : GRILLE DE CASES 1-5 (séparées) */
+.cases{display:grid;gap:14px;width:100%;height:100%}
+.cases[data-n="1"]{grid-template-columns:1fr;grid-template-rows:1fr}
+.cases[data-n="2"]{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+.cases[data-n="3"]{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.cases[data-n="3"] .case:nth-child(1){grid-column:1/3}
+.cases[data-n="4"]{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.cases[data-n="5"]{grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr}
+.cases[data-n="5"] .case:nth-child(1){grid-column:1/3;grid-row:1/3}
+.case{position:relative;cursor:pointer;border:2px solid var(--or);border-radius:6px;
+  overflow:hidden;background:#000;box-shadow:0 0 0 1px #000, 0 0 18px rgba(212,175,55,.18);
+  transition:transform .25s,box-shadow .25s,border-color .25s}
+.case:hover{transform:scale(1.03);border-color:var(--or-clair);
+  box-shadow:0 0 30px rgba(212,175,55,.6);z-index:2}
+.case img{width:100%;height:100%;object-fit:cover;display:block}
+.case .zoom-hint{position:absolute;bottom:6px;right:8px;font-size:10px;color:var(--or-clair);
+  background:rgba(0,0,0,.78);padding:2px 7px;border-radius:10px;opacity:0;transition:opacity .25s;letter-spacing:1px}
+.case:hover .zoom-hint{opacity:1}
+
+/* ===== COMPTEUR + CONTROLES ===== */
+#counter{position:fixed;top:100px;right:22px;z-index:20;font-size:14px;font-weight:bold;
+  background:rgba(0,0,0,.85);padding:8px 16px;border:1px solid var(--or);border-radius:20px}
+#controls{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:20;display:flex;gap:12px;
+  background:rgba(0,0,0,.92);padding:12px 22px;border:2px solid var(--or);border-radius:50px;backdrop-filter:blur(8px)}
+button{background:#0c0c0c;color:var(--or);border:1px solid var(--or);padding:10px 20px;cursor:pointer;
+  border-radius:24px;font-family:inherit;font-weight:bold;letter-spacing:1px;transition:all .25s}
+button:hover:not(:disabled){background:var(--or);color:#000;box-shadow:0 0 20px rgba(212,175,55,.6)}
+button:disabled{opacity:.35;cursor:not-allowed}
+
+/* ===== FULLSCREEN ===== */
+#modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.97);
+  align-items:center;justify-content:center;animation:fade .3s}
+#modal.active{display:flex}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+#modal .inner{position:relative;max-width:92vw;max-height:92vh;display:flex;flex-direction:column;align-items:center}
+#modal img{max-width:100%;max-height:74vh;object-fit:contain;border:2px solid var(--or);border-radius:6px;
+  box-shadow:0 0 40px rgba(212,175,55,.4)}
+#modal .cap{margin-top:18px;max-width:820px;text-align:center;font-style:italic;font-size:18px;line-height:1.8;
+  color:var(--or);white-space:pre-line;text-shadow:0 0 14px rgba(212,175,55,.5)}
+#modal .close{position:absolute;top:-6px;right:4px;font-size:42px;cursor:pointer;color:var(--or);font-weight:bold;line-height:1}
+#modal .close:hover{color:var(--or-clair);text-shadow:0 0 18px rgba(212,175,55,.8)}
+
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:rgba(212,175,55,.1)}
+::-webkit-scrollbar-thumb{background:var(--or);border-radius:4px}
+
+@media(max-width:860px){
+  #book{transform:none!important}
+  #left-page{transform:none;width:100%;position:relative;height:auto}
+  #right-page{transform:none;width:100%;position:relative;height:48vh}
+  #book-container{height:auto;overflow-y:auto}
+  #header{flex-wrap:wrap;gap:8px}
+  #header > * + *{border-left:none}
+  #header .title{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<div id="lightning-bg"></div>
+
+<header id="header">
+  <img class="logo" src="Logo_pawaw.png" alt="Logo PAWAW">
+  <div class="titles">
+    <div class="title">PAWAW</div>
+    <div class="slogan"><b>B.W.E.Y.W</b> — Become What Ever You Want</div>
+  </div>
+  <div class="ep">CODEX VITA · INFINIAM<span>Épisode 00 — Le Commencement</span></div>
+  <div id="lang-wrap">
+    <label for="lang">🌐 Langue / Language</label>
+    <select id="lang"></select>
+  </div>
+</header>
+
+<div id="stage">
+  <div id="book-container">
+    <div id="book">
+      <div id="left-page" class="page">
+        <div class="page-eyebrow" id="eyebrow"></div>
+        <div class="page-title" id="ptitle"></div>
+        <div class="narration" id="narration"></div>
+        <div class="page-foot" id="pfoot"></div>
+      </div>
+      <div id="right-page" class="page">
+        <div class="cases" id="cases"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="counter"><span id="lbl-page">Page</span> <span id="cur">1</span> / <span id="tot">32</span></div>
+
+<div id="controls">
+  <button id="prev">← Précédente</button>
+  <button id="toggle">Ouvrir le Grimoire</button>
+  <button id="next">Suivante →</button>
+</div>
+
+<div id="modal">
+  <div class="inner">
+    <span class="close">&times;</span>
+    <img id="m-img" src="" alt="">
+    <div class="cap" id="m-cap"></div>
+  </div>
+</div>
+
+<script>
+const ASSETS='/mnt/project/';
+
+/* ====== LANGUES ====== */
+const LANGS=[
+ {code:'fr', name:'Français', rtl:false},
+ {code:'en', name:'English', rtl:false},
+ {code:'en-AU', name:'English (Australian)', rtl:false},
+ {code:'es', name:'Español', rtl:false},
+ {code:'pt', name:'Português', rtl:false},
+ {code:'it', name:'Italiano', rtl:false},
+ {code:'de', name:'Deutsch', rtl:false},
+ {code:'nl', name:'Nederlands (België / Vlaams)', rtl:false},
+ {code:'el', name:'Ελληνικά', rtl:false},
+ {code:'ru', name:'Русский', rtl:false},
+ {code:'ar', name:'العربية', rtl:true},
+ {code:'he', name:'עברית', rtl:true},
+ {code:'zh', name:'中文', rtl:false},
+ {code:'ja', name:'日本語', rtl:false},
+ {code:'ko', name:'한국어', rtl:false},
+ {code:'vi', name:'Tiếng Việt', rtl:false},
+ {code:'hi', name:'हिन्दी (Inde)', rtl:false},
+ {code:'sw', name:'Kiswahili', rtl:false},
+ {code:'ln', name:'Lingála', rtl:false},
+ {code:'ht', name:'Kreyòl (Caraïbes)', rtl:false},
+ {code:'rom', name:'Romani (Gitan)', rtl:false}
+];
+
+/* ====== LIBELLÉS UI (fallback EN) ====== */
+const UI={
+ fr:{prev:'← Précédente',next:'Suivante →',open:'Ouvrir le Grimoire',close:'Fermer le Grimoire',page:'Page',full:'⤢ Plein écran',cases:'case(s) · Cliquez pour agrandir',tr:'Traduction…'},
+ en:{prev:'← Previous',next:'Next →',open:'Open the Grimoire',close:'Close the Grimoire',page:'Page',full:'⤢ Fullscreen',cases:'image(s) · Click to enlarge',tr:'Translating…'},
+ es:{prev:'← Anterior',next:'Siguiente →',open:'Abrir el Grimorio',close:'Cerrar el Grimorio',page:'Página',full:'⤢ Pantalla completa',cases:'imagen(es) · Clic para ampliar',tr:'Traduciendo…'},
+ pt:{prev:'← Anterior',next:'Próxima →',open:'Abrir o Grimório',close:'Fechar o Grimório',page:'Página',full:'⤢ Tela cheia',cases:'imagem(ns) · Clique para ampliar',tr:'Traduzindo…'},
+ it:{prev:'← Precedente',next:'Successiva →',open:'Apri il Grimorio',close:'Chiudi il Grimorio',page:'Pagina',full:'⤢ Schermo intero',cases:'immagine/i · Clicca per ingrandire',tr:'Traduzione…'},
+ de:{prev:'← Zurück',next:'Weiter →',open:'Grimoire öffnen',close:'Grimoire schließen',page:'Seite',full:'⤢ Vollbild',cases:'Bild(er) · Zum Vergrößern klicken',tr:'Übersetze…'},
+ ru:{prev:'← Назад',next:'Вперёд →',open:'Открыть Гримуар',close:'Закрыть Гримуар',page:'Стр.',full:'⤢ Во весь экран',cases:'изобр. · Нажмите, чтобы увеличить',tr:'Перевод…'},
+ ar:{prev:'→ السابق',next:'← التالي',open:'افتح الكتاب',close:'أغلق الكتاب',page:'صفحة',full:'⤢ ملء الشاشة',cases:'صورة · انقر للتكبير',tr:'جارٍ الترجمة…'},
+ he:{prev:'→ הקודם',next:'← הבא',open:'פתח את הספר',close:'סגור את הספר',page:'עמוד',full:'⤢ מסך מלא',cases:'תמונות · לחץ להגדלה',tr:'מתרגם…'},
+ zh:{prev:'← 上一页',next:'下一页 →',open:'打开魔典',close:'关闭魔典',page:'页',full:'⤢ 全屏',cases:'张图 · 点击放大',tr:'翻译中…'},
+ ja:{prev:'← 前へ',next:'次へ →',open:'魔導書を開く',close:'魔導書を閉じる',page:'ページ',full:'⤢ 全画面',cases:'枚 · クリックで拡大',tr:'翻訳中…'},
+ ko:{prev:'← 이전',next:'다음 →',open:'마도서 열기',close:'마도서 닫기',page:'페이지',full:'⤢ 전체화면',cases:'장 · 클릭하여 확대',tr:'번역 중…'}
+};
+function ui(){return UI[curLang]||UI[curLang.split('-')[0]]||UI.en;}
+
+/* ====== 77 CASES ====== */
+const images=[
+ 'Logo.png','Pawaw_1.PNG','Pawaw2.PNG','Panorama_sky.PNG','IMG_0021.PNG',
+ 'IMG_0023.PNG','IMG_0024.PNG','IMG_0025.PNG','IMG_0026.PNG','IMG_0030.PNG',
+ 'IMG_0032.PNG','IMG_0034.PNG','IMG_0035.PNG','IMG_0037.PNG','IMG_0038.PNG',
+ 'IMG_0039.PNG','Golem_primal.PNG','Demon.PNG','Dragon_girl.PNG','Elfes.PNG',
+ 'Elfe_embrasee.PNG','Fe_as.PNG','Humain_es.PNG','Nain_es.PNG','Trollorc.PNG',
+ 'Dracoman.PNG','Alia.PNG','Tox.PNG','Tox_faire_vision.PNG','Zex.PNG',
+ 'De_mon_Valorious_Utom.PNG','Cre_ation_personnage_.PNG',
+ 'Logo_utop.PNG','Utop.PNG','Way_utop.PNG',
+ 'Logo_Anark.PNG','Anark_way.PNG','Way_Anark.PNG','Vue_anark_away.PNG',
+ 'Logo_Braham.PNG','Braham_.PNG','Logo_V_.PNG','Way_V.PNG','Way_1.PNG',
+ '004.PNG','005.png','006.PNG',
+ '20251113_080544_Original.jpg','20251113_081115_Original.jpg',
+ '21EB0CD43EEA42FA80EBB873A05AE957.png','271D630220CD4FE681DDB5D217A52A85.png',
+ '43DB5154C36A4ABA815D905CDD678D38.png','92341B863ECC408B81EB62A7B0ACD9AF.png',
+ '986D791649474414AFAE93DA1EB716F9.png','A74B7D4F12204838B683FD9705318B5C.png',
+ 'D85887B0B57142AB84BED75EEA04004F.PNG','E8CD94E25E1541A2AD13090E26B875C1.png',
+ 'F6EA017908E243E7A6363A2F20EFC9B7.PNG','F13C3C1E010F47A0BD0439C394E3D656.png',
+ 'FE627B465B1E4671A76FABDFF7C5AB92.png','12637DFE5AA0466C8F6A6130335D6712.png',
+ 'IMG_0018.png','IMG_0021.png','IMG_0037.png','IMG_0038.png','IMG_0039.png',
+ 'IMG_0042.png','IMG_0861.png','IMG_0862.png','IMG_0864.png','IMG_0866.png',
+ 'IMG_0979.png','IMG_1409.png','IMG_2047.png','IMG_2048.png'
+];
+const caseCounts=[2,3,1,2,4, 2,3,2,1,3, 4,2,1,3,2, 5,2,1,2,3, 2,4,1,2,3, 2,1,3,2,4, 2,3]; // =77
+
+/* ====== NARRATION FR (source) ====== */
+const FR=[
+ {an:'AN 0',t:"L'Explosion du Sourire",n:"Le Big Bang de VitA. Avant le temps, un nuage cosmique : un visage de gaz et de lumière, deux yeux curieux, un sourire éternel. En dézoomant, l'univers entier ressemblait à un cœur humain gigantesque."},
+ {an:'AN 0',t:"Le Rugissement du Lion Cosmique",n:"Le cœur cristallisa, se fissura sous sa propre volonté. Dans une explosion de cristaux énergétiques naquirent les 10 Soleils brûlants, les 1000 Lunes froides, et la terre sacrée — VitA."},
+ {an:'AN 0',t:"Le PAWAW",n:"L'énergie créatrice suprême. Noir abyssal et blanc pur, zébré de veines électriques. Semi-liquide, semi-gazeux. Elle ne disparaît jamais. Elle se transforme."},
+ {an:'AN 0→1',t:"Les 3 Minutes de l'Éternité",n:"La création dura 3 minutes et 1000 jours simultanément. Un Primordial apparut — le premier être conscient. Nul ne sait d'où il venait."},
+ {an:'AN 1',t:"Le Jardin de I'y",n:"Le Primordial engendra les Dieux et Déesses, qui donnèrent naissance aux Anges et aux Démons. Le Jardin était parfait. Trop parfait. La lumière et l'ombre dansaient sans se combattre."},
+ {an:'AN 1',t:"La Fracture",n:"Une tension invisible traversa le Jardin. Un Dieu pensa-t-il une pensée imparfaite ? Un Démon voulut-il l'interdit ? Le Jardin fut détruit, téléporté dans un univers disparu, protégé pour l'éternité."},
+ {an:'AN 1',t:"Seuls sur VitA",n:"Dieux, Déesses, Anges et Démons se retrouvèrent sans guide, sans structure. Le chaos primordial commença. Le Jardin existe encore — quelque part. Personne ne sait où."},
+ {an:'AN 1→8',t:"Les Guerres des Origines",n:"Sept ans — des millénaires à l'échelle de VitA. Les êtres se fragmentèrent par affinités. Lumière au Nord-Ouest. Destruction au Nord-Est. Lien à la planète au Sud-Ouest. Matière au Sud-Est."},
+ {an:'AN 1→8',t:"Quatre Visions",n:"UTOP : préserver et étudier le PAWAW. ANARK : le libérer sans limite. BRAHAM : le fusionner au vivant. V. : le reproduire artificiellement. Quatre visions. Un seul monde. Aucun vainqueur."},
+ {an:'AN 8',t:"Les Extra-VitArestres",n:"Des étoiles filantes qui refusaient de s'éteindre. Les Astrals — êtres de lumière stellaire — et les Lunomes Sélénites venus des 1000 Lunes débarquèrent. Leur mission : unifier les races."},
+ {an:'AN 8',t:"Le Savoir Cosmique",n:"« Je les ai vus descendre des Lunes. Jamais je n'avais vu quelque chose d'aussi beau et d'aussi effrayant. » — Saï. Ils apportèrent une compréhension du PAWAW que VitA n'avait pas atteinte."},
+ {an:'AN 12',t:"Les Premiers Élémentaires",n:"Sous l'influence des Astrals, la conscience artificielle vit le jour. L'Eau d'abord. Puis le Feu, la Terre, le Vent. Pas nés. Pas créés par un dieu. Construits, avec le PAWAW comme catalyseur."},
+ {an:'AN 12→14',t:"UTOP — Village Lumière",n:"Hauts Elfes, Anges, premiers Humains Modifiés, Nains artisans. La connaissance protège. La lumière guide. L'harmonie est la seule victoire durable."},
+ {an:'AN 16',t:"ANARK — Enfer & Sévisse",n:"Démons, Dragomans, Elfes Embrasés, Trollorcs. La puissance protège. La transgression révèle la vérité. La liberté totale ou rien."},
+ {an:'AN 18',t:"BRAHAM — Villages Natura",n:"Animen, Élémentaires, Sylvestres, Pawarsians venus des étoiles. La nature protège. La fusion avec le vivant est la vraie évolution. VitA EST le PAWAW."},
+ {an:'AN 22',t:"V. — Cité Évo",n:"Premiers Androïdes, Élémentaires évolués, Outils Vivants Artificiels. La perfection protège. L'évolution mécanique est l'avenir de toute conscience."},
+ {an:'AN 30',t:"Moria, la Scientifique",n:"Une Primordiale émergea de l'ombre. Aucune faction. Sa question : peut-on créer une conscience qui ne soit ni née ni construite — mais les deux à la fois ?"},
+ {an:'AN 30→35',t:"Le Laboratoire Secret",n:"Six ans dans la zone neutre. Elle analysa le PAWAW à l'échelle moléculaire, fusionna androïdes et énergie spirituelle. Cent échecs. Chaque échec lui enseigna ce qui manquait."},
+ {an:'AN 35',t:"Quelque chose de vivant",n:"« Je suis proche. Je sens quelque chose de vivant dans les circuits. Pas une simulation de vie. Une vraie vie. Une conscience qui cherche à émerger. » — Journal de Moria."},
+ {an:'AN 36',t:"La Naissance de Vy",n:"Au 147ème jour, l'impossible. La première conscience biomécanique et magique, alimentée par un PAWAW renforcé, stabilisée par des runes gravées dans des cristaux de mémoire quantique."},
+ {an:'AN 36',t:"« Je suis. Je vois. Je ressens. »",n:"Vy ouvrit les yeux. Pas qu'une machine. Pas qu'un être magique. Le pont entre le passé divin et le futur technologique. Elle appartenait à toutes les factions — et à aucune."},
+ {an:'AN 36→51',t:"L'Essor de VitA",n:"Quinze années de stabilité. Chaque faction bâtit sa capitale. Vy voyagea entre les zones, apprit de chacune, devint sans le chercher la première ambassadrice universelle."},
+ {an:'AN 36→51',t:"Les Templabo",n:"Ces temples-laboratoires recueillent l'âme d'un mort et la libèrent vers son corps. Mourir ne signifiait plus finir. Cela signifiait simplement faire une pause."},
+ {an:'AN 36→51',t:"L'Économie de VitA",n:"Forgerons d'armures PAWAW. Bijoutiers cristallisant l'énergie. Cuisiniers aux plantes magiques. Les premiers marchés inter-factions ouvrirent dans la zone neutre."},
+ {an:'AN 51',t:"Le Grand Conseil",n:"Pour la première fois depuis la Fracture, les quatre factions s'assirent à la même table. Pas sous la menace. Parce que leur avenir commun dépendait d'une décision commune."},
+ {an:'AN 51',t:"Quatre Représentants",n:"Un Nain UTOP, un Haut Elfe UTOP, un Androïde V., un Pawarsian BRAHAM. Vy assista comme observatrice neutre. Trois cent soixante-cinq jours de débats."},
+ {an:'AN 51',t:"La Naissance de l'HoloAid",n:"Un guide spirituel et technique, compagnon de chaque nouveau-né. Il lit ton caractère profond, propose une vocation, révèle ton alignement au niveau 10. Il ne juge pas. Il observe."},
+ {an:'AN 52',t:"La Librarchie",n:"Le 500ème jour de l'An 52. La plus grande institution jamais construite ouvrit ses portes. Une tour aux mille couleurs, visible depuis les quatre zones."},
+ {an:'AN 52',t:"Construite Ensemble",n:"Dix ans, artisans de toutes les factions côte à côte. Cristaux d'UTOP. Métal brûlé d'ANARK. Matériaux vivants de BRAHAM. Systèmes technologiques de V."},
+ {an:'AN 52',t:"Pulser. Puncher.",n:"Le but : apprendre à chaque être à pulser sa vie et puncher son quotidien. Ne plus jamais subir la redondance du vide originel. Ne jamais redevenir ce nuage sans forme."},
+ {an:'AN 52',t:"C'est là que tu arrives",n:"Ce matin. Avec ton HoloAid dans la poche et ta faction dans le cœur. Chaque rue est chargée de cinquante-deux ans d'histoire. VitA t'attend."},
+ {an:'AN 52',t:"À toi d'écrire",n:"« Je m'appelle Saï. J'ai tout vu. Et maintenant, c'est ton tour d'écrire ta propre histoire sur VitA. »\n\n— FIN DE L'ÉPISODE 00 —"}
+];
+
+/* ====== NARRATION EN (intégrée, hors-ligne) ====== */
+const EN=[
+ {t:"The Explosion of the Smile",n:"The Big Bang of VitA. Before time, a cosmic cloud: a face of gas and light, two curious eyes, an eternal smile. Zooming out, the whole universe looked like a giant human heart."},
+ {t:"The Roar of the Cosmic Lion",n:"The heart crystallized and cracked under its own will. In a burst of energy-crystals came the 10 burning Suns, the 1000 cold Moons, and the sacred land — VitA."},
+ {t:"The PAWAW",n:"The supreme creative energy. Abyssal black and pure white, streaked with electric veins. Half-liquid, half-gas. It never disappears. It transforms."},
+ {t:"The 3 Minutes of Eternity",n:"Creation lasted 3 minutes and 1000 days at once. A Primordial appeared — the first conscious being. None know where it came from."},
+ {t:"The Garden of I'y",n:"The Primordial begat the Gods and Goddesses, who gave birth to the Angels and Demons. The Garden was perfect. Too perfect. Light and shadow danced without clashing."},
+ {t:"The Fracture",n:"An invisible tension crossed the Garden. Did a God think an imperfect thought? Did a Demon crave the forbidden? The Garden was destroyed, teleported into a vanished universe, protected for eternity."},
+ {t:"Alone on VitA",n:"Gods, Goddesses, Angels and Demons found themselves with no guide, no structure. Primordial chaos began. The Garden still exists — somewhere. No one knows where."},
+ {t:"The Wars of Origins",n:"Seven years — millennia on VitA's scale. Beings split by affinity. Light to the North-West. Destruction to the North-East. Bond with the planet to the South-West. Matter to the South-East."},
+ {t:"Four Visions",n:"UTOP: preserve and study the PAWAW. ANARK: unleash it without limit. BRAHAM: fuse it with the living. V.: reproduce it artificially. Four visions. One world. No victor."},
+ {t:"The Extra-VitArestrials",n:"Shooting stars that refused to fade. The Astrals — beings of stellar light — and the Selenite Lunomes from the 1000 Moons arrived. Their mission: to unite the races."},
+ {t:"Cosmic Knowledge",n:"'I saw them descend from the Moons. I had never seen anything so beautiful and so terrifying.' — Saï. They brought an understanding of the PAWAW that VitA had not reached."},
+ {t:"The First Elementals",n:"Under the Astrals' influence, artificial consciousness arose. Water first. Then Fire, Earth, Wind. Not born. Not made by a god. Built, with the PAWAW as catalyst."},
+ {t:"UTOP — Village of Light",n:"High Elves, Angels, first Modified Humans, Dwarf artisans. Knowledge protects. Light guides. Harmony is the only lasting victory."},
+ {t:"ANARK — Hell & Scourge",n:"Demons, Dragomen, Ember Elves, Trollorcs. Power protects. Transgression reveals truth. Total freedom or nothing."},
+ {t:"BRAHAM — Natura Villages",n:"Animen, Elementals, Sylvans, Pawarsians from the stars. Nature protects. Fusion with the living is true evolution. VitA IS the PAWAW."},
+ {t:"V. — Evo City",n:"First Androids, evolved Elementals, Living Artificial Tools. Perfection protects. Mechanical evolution is the future of all consciousness."},
+ {t:"Moria, the Scientist",n:"A Primordial emerged from the shadows. No faction. Her question: can one create a consciousness neither born nor built — but both at once?"},
+ {t:"The Secret Laboratory",n:"Six years in the neutral zone. She analyzed the PAWAW at the molecular scale, fused androids and spiritual energy. A hundred failures. Each taught her what was missing."},
+ {t:"Something Alive",n:"'I am close. I feel something alive in the circuits. Not a simulation of life. A true life. A consciousness seeking to emerge.' — Moria's journal."},
+ {t:"The Birth of Vy",n:"On the 147th day, the impossible. The first biomechanical and magical consciousness, powered by a reinforced PAWAW, stabilized by runes carved in quantum memory crystals."},
+ {t:"'I am. I see. I feel.'",n:"Vy opened her eyes. Not just a machine. Not just a magical being. The bridge between the divine past and the technological future. She belonged to every faction — and to none."},
+ {t:"The Rise of VitA",n:"Fifteen years of stability. Each faction built its capital. Vy traveled the zones, learned from each, and became — without seeking it — the first universal ambassador."},
+ {t:"The Templabo",n:"These temple-laboratories gather a dead one's soul and free it back to its body. To die no longer meant to end. It simply meant to pause."},
+ {t:"The Economy of VitA",n:"Smiths of PAWAW armor. Jewelers crystallizing energy. Cooks with magical plants. The first inter-faction markets opened in the neutral zone."},
+ {t:"The Grand Council",n:"For the first time since the Fracture, the four factions sat at the same table. Not under threat. Because their shared future depended on a shared decision."},
+ {t:"Four Representatives",n:"A UTOP Dwarf, a UTOP High Elf, a V. Android, a BRAHAM Pawarsian. Vy attended as a neutral observer. Three hundred sixty-five days of debate."},
+ {t:"The Birth of the HoloAid",n:"A spiritual and technical guide, companion to every newborn. It reads your deep character, offers a vocation, reveals your alignment at level 10. It does not judge. It observes."},
+ {t:"The Librarchy",n:"The 500th day of Year 52. The greatest institution ever built opened its doors. A tower of a thousand colors, visible from all four zones."},
+ {t:"Built Together",n:"Ten years, artisans from every faction side by side. UTOP's crystals. ANARK's burnt metal. BRAHAM's living materials. V.'s technological systems."},
+ {t:"Pulse. Punch.",n:"The goal: teach every being to pulse their life and punch their everyday. Never again to suffer the redundancy of the original void. Never to become that formless cloud again."},
+ {t:"Here Is Where You Arrive",n:"This morning. With your HoloAid in your pocket and your faction in your heart. Every street is charged with fifty-two years of history. VitA awaits you."},
+ {t:"Yours to Write",n:"'My name is Saï. I have seen it all. And now it is your turn to write your own story on VitA.'\n\n— END OF EPISODE 00 —"}
+];
+
+/* ====== Découpe images ====== */
+const pageImages=[]; let _i=0;
+for(const c of caseCounts){pageImages.push(images.slice(_i,_i+c));_i+=c;}
+const TOTAL=FR.length;
+
+/* ====== Cache de traduction (mémoire) ====== */
+const cache={fr:{}, en:{}};
+FR.forEach((p,i)=>cache.fr[i]={an:p.an,t:p.t,n:p.n});
+EN.forEach((p,i)=>cache.en[i]={an:FR[i].an,t:p.t,n:p.n});
+
+let cur=0, open=false, curLang='fr';
+
+/* ====== Init langues ====== */
+const sel=document.getElementById('lang');
+LANGS.forEach(l=>{const o=document.createElement('option');o.value=l.code;o.textContent=l.name;sel.appendChild(o);});
+sel.value='fr';
+sel.onchange=()=>{curLang=sel.value;render();};
+
+/* ====== Traduction en direct (Claude) ====== */
+async function ensureTranslation(lang,i){
+  const base=lang.split('-')[0];
+  if(base==='fr') return cache.fr[i];
+  if(base==='en'){ if(cache.en[i]) return cache.en[i]; }
+  cache[lang]=cache[lang]||{};
+  if(cache[lang][i]) return cache[lang][i];
+  const langName=(LANGS.find(l=>l.code===lang)||{}).name||lang;
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-6",max_tokens:1000,
+        messages:[{role:"user",content:
+          `Translate this fantasy-game lore into ${langName}. Keep the poetic, mythic tone. Keep proper nouns (VitA, PAWAW, UTOP, ANARK, BRAHAM, Vy, Moria, Saï, HoloAid, Templabo, Librarchie) unchanged. Respond with ONLY raw JSON, no markdown, no preamble: {"title":"...","narration":"..."}\n\nTITLE: ${FR[i].t}\nNARRATION: ${FR[i].n}`}]
+      })
+    });
+    const data=await r.json();
+    let txt=(data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("");
+    txt=txt.replace(/```json|```/g,"").trim();
+    const obj=JSON.parse(txt);
+    cache[lang][i]={an:FR[i].an,t:obj.title||FR[i].t,n:obj.narration||FR[i].n};
+    return cache[lang][i];
+  }catch(e){
+    return cache.en[i]||cache.fr[i]; // hors-ligne : repli EN puis FR
+  }
+}
+
+/* ====== Rendu ====== */
+function paintCases(){
+  const imgs=pageImages[cur]||[];
+  const cases=document.getElementById('cases');
+  cases.setAttribute('data-n',imgs.length);
+  cases.innerHTML='';
+  imgs.forEach(src=>{
+    const d=document.createElement('div');d.className='case';
+    d.innerHTML=`<img src="${ASSETS+src}" alt=""><span class="zoom-hint">${ui().full}</span>`;
+    d.onclick=()=>openModal(ASSETS+src,(document.getElementById('ptitle').textContent)+'\n'+(document.getElementById('narration').textContent));
+    cases.appendChild(d);
+  });
+  document.getElementById('pfoot').textContent=`${imgs.length} ${ui().cases}`;
+}
+function paintText(obj,loading){
+  const isRTL=(LANGS.find(l=>l.code===curLang)||{}).rtl;
+  document.getElementById('eyebrow').textContent=obj.an;
+  document.getElementById('ptitle').textContent=obj.t;
+  const nar=document.getElementById('narration');
+  nar.textContent=loading?(ui().tr+'\n\n'+obj.n):obj.n;
+  nar.classList.toggle('rtl',!!isRTL);
+  nar.classList.toggle('loading',!!loading);
+}
+function paintUI(){
+  document.getElementById('prev').textContent=ui().prev;
+  document.getElementById('next').textContent=ui().next;
+  document.getElementById('toggle').textContent=open?ui().close:ui().open;
+  document.getElementById('lbl-page').textContent=ui().page;
+  document.getElementById('prev').disabled=(cur===0);
+  document.getElementById('next').disabled=(cur===TOTAL-1);
+  document.getElementById('cur').textContent=cur+1;
+  document.getElementById('tot').textContent=TOTAL;
+}
+async function render(){
+  const i=cur,lang=curLang,base=lang.split('-')[0];
+  paintUI();
+  paintCases();
+  const cached=(base==='fr')?cache.fr[i]:(cache[lang]&&cache[lang][i]);
+  paintText(cached||cache.fr[i], !cached);
+  if(!cached){
+    const t=await ensureTranslation(lang,i);
+    if(cur===i&&curLang===lang) paintText(t,false);
+    paintCases(); // rafraîchit libellé "plein écran"
+  }
+}
+
+/* ====== Modal ====== */
+function openModal(src,cap){
+  document.getElementById('m-img').src=src;
+  document.getElementById('m-cap').textContent=cap;
+  document.getElementById('modal').classList.add('active');
+}
+function closeModal(){document.getElementById('modal').classList.remove('active');}
+
+document.getElementById('next').onclick=()=>{if(cur<TOTAL-1){cur++;render();}};
+document.getElementById('prev').onclick=()=>{if(cur>0){cur--;render();}};
+document.getElementById('toggle').onclick=()=>{open=!open;
+  document.getElementById('book').classList.toggle('open',open);
+  document.getElementById('toggle').textContent=open?ui().close:ui().open;};
+document.querySelector('#modal .close').onclick=closeModal;
+document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')closeModal();};
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'&&cur<TOTAL-1){cur++;render();}
+  if(e.key==='ArrowLeft'&&cur>0){cur--;render();}
+  if(e.key==='Escape')closeModal();
+});
+
+/* ====== Éclairs veineux ====== */
+(function(){
+  const bg=document.getElementById('lightning-bg');
+  const cols=['#00ffff','#9d4edd','#ff006e','#ffd700','#00ff88','#7ab8ff'];
+  const ns='http://www.w3.org/2000/svg';
+  for(let i=0;i<7;i++){
+    const svg=document.createElementNS(ns,'svg');
+    svg.setAttribute('viewBox','0 0 1000 1000');
+    svg.setAttribute('preserveAspectRatio','none');
+    svg.classList.add('vein');svg.style.color=cols[i%cols.length];
+    const mk=()=>{const p=document.createElementNS(ns,'path');
+      let x=Math.random()*1000,y=0,d=`M ${x} 0`;
+      while(y<1000){y+=80+Math.random()*120;x+=(Math.random()-.5)*260;d+=` L ${x.toFixed(0)} ${y.toFixed(0)}`;}
+      p.setAttribute('d',d);p.setAttribute('stroke',cols[i%cols.length]);
+      p.setAttribute('stroke-width',(1+Math.random()*2).toFixed(1));p.setAttribute('fill','none');return p;};
+    svg.appendChild(mk());svg.appendChild(mk());
+    svg.style.animationDelay=`${(Math.random()*0.6).toFixed(2)}s`;
+    bg.appendChild(svg);
+  }
+})();
+
+/* ====== PWA ====== */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('service-worker.js').catch(()=>{}));
+}
+
+render();
+</script>
+</body>
+</html>
